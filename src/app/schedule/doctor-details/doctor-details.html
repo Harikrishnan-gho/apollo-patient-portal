@@ -1,3 +1,100 @@
-<p>
-   {{doctor['Doctor']}}
-</p>
+<style>
+   .doctor-card {
+      width: 100%;
+      max-width: 260px;
+      height: 320px;
+      padding: 16px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+   }
+
+   .doctor-card mat-card-footer {
+      margin-top: auto;
+   }
+
+   .doctor-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+   }
+
+   .fallback-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #e0e0e0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+   }
+
+   .fallback-img mat-icon {
+
+      color: #777;
+   }
+
+   mat-card-title {
+      font-size: 16px;
+      font-weight: 600;
+   }
+
+   .designation {
+      font-size: 14px;
+      color: #666;
+      margin: 0;
+   }
+
+   .available-slots {
+      background-color: #c7d9e6;
+      border-radius: 20px;
+      font-size: smaller;
+   }
+
+   .star-yellow {
+      color: rgb(229, 229, 16);
+   }
+</style>
+<div class="row">
+   <div class="col-sm-4 d-flex justify-content-center mb-3">
+
+      <mat-card appearance="outlined" class="doctor-card text-center">
+
+         <div class="mb-3 d-flex justify-content-center">
+            @if (docinfo._url) {
+            <img [src]="docinfo._url" alt="Doctor" class="doctor-img" />
+            } @else {
+            <div class="fallback-img">
+               <mat-icon>person</mat-icon>
+            </div>
+            }
+         </div>
+
+         <mat-card-header class="justify-content-center p-0 mb-2">
+            <mat-card-title>{{ docinfo.Doctor }}</mat-card-title>
+         </mat-card-header>
+
+         <mat-card-content class="p-0">
+            <p class="designation">{{ docinfo.Designation }}</p>
+         </mat-card-content>
+
+
+         <mat-card-footer>
+            <div class="d-flex align-items-center justify-content-center gap-1">
+               <mat-icon class="star-yellow">star</mat-icon>
+               <span>{{ docinfo.Rating }}</span>
+            </div>
+            <p class="available-slots">{{ docinfo.AvailableSlots }} slots available</p>
+
+         </mat-card-footer>
+
+      </mat-card>
+
+   </div>
+   <div class="col-sm-8">
+      detail goes here
+   </div>
+</div>

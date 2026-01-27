@@ -8,11 +8,15 @@ import { catchError } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { BookAppointmentDialog } from './book-appointment-dialog/book-appointment-dialog';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { DoctorDetails } from './doctor-details/doctor-details';
+import { DoctorSchedule } from './doctor-schedule/doctor-schedule';
+
 
 @Component({
   selector: 'app-schedule',
-  imports: [MatCardModule, CommonModule, MatButtonModule],
+  imports: [MatCardModule, CommonModule, MatButtonModule, MatTabsModule, MatIconModule,DoctorDetails,DoctorSchedule],
   templateUrl: './schedule.html',
 })
 export class Schedule implements OnInit {
@@ -25,6 +29,9 @@ export class Schedule implements OnInit {
   tv: tags[] = [];
   res: ghoresult = new ghoresult();
   patientId: string;
+  tbidx: number = 0;
+  selectedDoc: any;
+  docid:string="";
 
   private service = inject(GHOService);
   router = inject(Router)
@@ -37,16 +44,9 @@ export class Schedule implements OnInit {
   doctorList: any = [];
 
   onAppointmentClick(doctor: any) {
-    const headerHeight = 0;
-    const dialogRef = this.dialog.open(BookAppointmentDialog, {
-      data: doctor,
-      height: `calc(100vh - ${headerHeight}px)`,
-      position: { right: '10', top: `${headerHeight}px` },
-      panelClass: 'right-dialog-panel',
-      enterAnimationDuration: '250ms',
-      exitAnimationDuration: '200ms',
-    });
-
+    this.tbidx = 1
+    this.selectedDoc = doctor;
+    this.docid = doctor["ID"]
   }
 
   getDoctorList() {

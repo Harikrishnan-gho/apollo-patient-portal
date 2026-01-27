@@ -1,25 +1,117 @@
-<div class="row">
-    @for (item of doctorList; track item) {
-    <div class="col-sm-3 center v100">
+<style>
+  .doctor-card {
+    width: 100%;
+    max-width: 260px;
+    height: 320px;
+    padding: 16px;
 
-        <mat-card appearance="outlined" class="p10">
-            <div>
-                <img style="width: 50%; border-radius: 50%;" src="{{item._url}}" alt="">
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .doctor-card mat-card-footer {
+    margin-top: auto;
+  }
+
+  .doctor-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .fallback-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #e0e0e0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fallback-img mat-icon {
+
+    color: #777;
+  }
+
+  mat-card-title {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .designation {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+  }
+
+  .available-slots {
+    background-color: #c7d9e6;
+    border-radius: 20px;
+    font-size: smaller;
+  }
+
+  .star-yellow {
+    color: rgb(229, 229, 16);
+  }
+</style>
+<div class="row">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="border-round" [(selectedIndex)]="tbidx">
+
+    <mat-tab label="Doctor List">
+      <div class="row mt-3">
+        @for (item of doctorList; track item) {
+        <div class="col-sm-3 d-flex justify-content-center mb-3">
+
+          <mat-card appearance="outlined" class="doctor-card text-center">
+
+            <div class="mb-3 d-flex justify-content-center">
+              @if (item._url) {
+              <img [src]="item._url" alt="Doctor" class="doctor-img" />
+              } @else {
+              <div class="fallback-img">
+                <mat-icon>person</mat-icon>
+              </div>
+              }
             </div>
 
-            <mat-card-header>
-                <mat-card-title>{{item.Doctor}}</mat-card-title>
+            <mat-card-header class="justify-content-center p-0 mb-2">
+              <mat-card-title>{{ item.Doctor }}</mat-card-title>
             </mat-card-header>
 
-            <mat-card-content>
-                <p>{{item.Designation}}</p>
+            <mat-card-content class="p-0">
+              <p class="designation">{{ item.Designation }}</p>
             </mat-card-content>
 
-            <mat-card-footer>
-                <button (click)="onAppointmentClick(item)">Book Appointment</button>
-            </mat-card-footer>
-        </mat-card>
 
-    </div>
-    }
+            <mat-card-footer>
+              <div class="d-flex align-items-center justify-content-center gap-1">
+                <mat-icon class="star-yellow">star</mat-icon>
+                <span>{{ item.Rating }}</span>
+              </div>
+              <p class="available-slots">{{ item.AvailableSlots }} slots available</p>
+              <button mat-raised-button color="primary" (click)="onAppointmentClick(item)">
+                Book Appointment
+              </button>
+            </mat-card-footer>
+
+          </mat-card>
+
+        </div>
+        }
+
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Timings">
+
+      <doctor-details [docinfo]='selectedDoc'></doctor-details>
+      <doctor-schedule [doctor]="docid"></doctor-schedule>
+    </mat-tab>
+
+  </mat-tab-group>
 </div>
