@@ -4,14 +4,20 @@
     }
 </style>
 <p>{{doctor}}</p>
-<mat-card class="demo-inline-calendar-card">
-    <mat-calendar (selectedChange)="dateselected($event)" [(selected)]="selected"></mat-calendar>
-</mat-card>
 
-@for (slot of slots; track slot) {
-<button (click)="timeSelected(slot['ID'])">{{slot['AppointmentTime']}}</button>
-}
+<div class="row">
+    <div class="col-sm-4">
+        <mat-card class="demo-inline-calendar-card">
+            <mat-calendar (selectedChange)="dateselected($event)" [(selected)]="selected"></mat-calendar>
+        </mat-card>
+    </div>
+    <div class="col-sm-8">
+        @for (slot of slots; track slot) {
+        <button (click)="timeSelected(slot['ID'])">{{slot['AppointmentTime']}}</button>
+        }
 
-<div>
-    <button (click)="onBookAppointment()">Book Appointment</button>
+        <div>
+            <button (click)="onBookAppointment()">Book Appointment</button>
+        </div>
+    </div>
 </div>
