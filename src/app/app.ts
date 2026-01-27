@@ -12,7 +12,7 @@ import { MatMenuModule } from '@angular/material/menu';
 
 export interface MenuItem {
   name: string;
-  icon: string;
+  Icon: string;
   link: string;
 }
 
@@ -147,7 +147,6 @@ export class App {
   // Fetch menu from service
   getmenu() {
     this.tv = [];
-    this.tv.push({ T: "c10", V: "100" });
     this.srv.getdata("menu", this.tv).pipe(
       catchError((err) => {
         this.srv.openDialog("Menu", "e", "error while loading menu");

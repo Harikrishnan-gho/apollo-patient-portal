@@ -23,9 +23,9 @@ export const routes: Routes = [
     },
 
     {
-        path: 'cases',
+        path: 'schedule',
         pathMatch: 'full',
-        loadComponent: () => { return import('./cases/cases').then((m) => m.RevCases) },
+        loadComponent: () => { return import('./schedule/schedule').then((m) => m.Schedule) },
     },
 
 ]

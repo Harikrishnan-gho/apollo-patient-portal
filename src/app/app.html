@@ -206,7 +206,7 @@
       <tr class="nav" [ngClass]="{ 'selected' : selectedMenu === item.name }" (click)="onMenuClick(item)">
 
         <td class="text-center">
-          <mat-icon>{{ item.icon }}</mat-icon>
+          <mat-icon>{{ item.Icon }}</mat-icon>
         </td>
         <td class="item-text">{{ item.name }}</td>
 
@@ -294,7 +294,7 @@
     <table class="w-100">
       @for (item of menuItems; track item) {
       <tr class="nav" [ngClass]="{ 'selected' : selectedMenu === item.name }" (click)="onMobileMenuClick(item)">
-        <td><mat-icon>{{ item.icon }}</mat-icon></td>
+        <td><mat-icon>{{ item.Icon }}</mat-icon></td>
         <td>{{ item.name }}</td>
       </tr>
       }
