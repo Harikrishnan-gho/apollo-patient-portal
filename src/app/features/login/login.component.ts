@@ -196,9 +196,10 @@ export class LoginComponent implements OnInit {
   actn(a: any) {
     this.clearuser();
     this.usr.cntry = "";
-    if (a == 1) {
-      this.router.navigate(['/join']);
-    }
+    // if (a == 1) {
+    //   this.router.navigate(['/join']);
+    // }
+    if (a == 1) this.mode = "S";
     if (a == 2) this.mode = "L";
     if (a == 3) this.mode = "F";
   }
