@@ -274,8 +274,8 @@ export class LoginComponent implements OnInit {
     this.tv = [];
     this.tv.push({ T: "dk1", V: this.usr.id })
     this.tv.push({ T: "dk2", V: this.usr.pwd })
-    this.tv.push({ T: "c10", V: "91" })
-    this.srv.getdata("reviewer", this.tv).pipe
+    this.tv.push({ T: "c10", V: "9" })
+    this.srv.getdata("patient", this.tv).pipe
       (
         catchError((err) => { throw err })
       ).subscribe((r) => {
