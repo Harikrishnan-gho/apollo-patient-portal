@@ -145,13 +145,9 @@
 
             <mat-form-field class="w100" appearance="outline">
                 <mat-label>Name</mat-label>
-                <input matInput type="text" [(ngModel)]="usr.fname">
+                <input matInput type="text" [(ngModel)]="usr.fullname">
             </mat-form-field>
 
-            <!-- <mat-form-field class="w100" appearance="outline">
-                <mat-label>Last Name</mat-label>
-                <input matInput type="text" [(ngModel)]="usr.lname">
-            </mat-form-field> -->
 
             <mat-form-field class="w100" appearance="outline">
                 <mat-label>Date of Birth</mat-label>
@@ -167,24 +163,17 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field class="w100" appearance="outline">
-                <mat-label>Country</mat-label>
-                <mat-select [(ngModel)]="usr.cntry">
-                    @for (c of cntrys; track c) {
-                    <mat-option [value]="c.D">{{c.T}}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
-
-            <mat-form-field class="w100" appearance="outline">
+            <!-- <mat-form-field class="w100" appearance="outline">
                 <mat-label>Phone</mat-label>
                 <input matInput type="text" [(ngModel)]="usr.ph">
+            </mat-form-field> -->
+
+             <mat-form-field class="w100" appearance="outline">
+                <mat-label>Phone</mat-label>
+                <span class="country-code" matPrefix>+968&nbsp;</span>
+                <input matInput type="text" [(ngModel)]="usr.ph" placeholder="XXXXXXXX" maxlength="8">
             </mat-form-field>
 
-            <!-- <mat-form-field class="w100" appearance="outline">
-                <mat-label>Email</mat-label>
-                <input matInput type="text" [(ngModel)]="usr.id">
-            </mat-form-field> -->
 
             <mat-form-field class="w100" appearance="outline">
                 <mat-label>Password</mat-label>
