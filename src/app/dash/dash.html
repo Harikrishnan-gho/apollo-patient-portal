@@ -1,0 +1,257 @@
+<div class="bg-bluex text-whitex p-3 rounded">
+  <div class="row align-items-center g-3">
+    <div class="col-auto">
+      <div class="profile-pic">
+        @if (doctorInfo?._Url) {
+        <img [src]="doctorInfo._Url" alt="Profile" class="profile-img">
+        } @else {
+        <i class="bi bi-person-circle default-icon"></i>
+        }
+      </div>
+
+    </div>
+    <div class="col">
+      <p class="fw-bold mb-1">
+        Dr. {{doctorInfo?.FirstName}} {{doctorInfo?.LastName}}
+        <span class="badge bg-warning text-white ms-2">Tier-{{doctorInfo?.Tier}}</span>
+      </p>
+      <p class="mb-0 small">
+        {{doctorInfo?.Specialty}} &nbsp; | &nbsp; {{doctorInfo?.Experience}} Years Exp.
+      </p>
+    </div>
+  </div>
+</div>
+
+<p></p>
+<div class="row gx-4 gy-4 align-items-stretch pb20">
+  <!-- LEFT SECTION -->
+  <div class="col-12 col-lg-6 d-flex">
+    <div class="p-3  border-round  w-100 d-flex flex-column gap-3">
+
+      <div class="d-flex justify-content-between align-items-center mt-3 mb-3 flex-wrap">
+        <p class="mb-0 fw-semibold fs-5 text-dark">Performance Snapshot</p>
+      </div>
+
+      <div class="row gx-3 gy-3">
+
+        <!-- LEFT LARGE CARD -->
+        <div class="col-12 col-md-6">
+          <div class=" p-3 border-round shadow-sm d-flex flex-column justify-content-between h-100">
+
+            <div class="justify-content-between align-items-center lh-1">
+              <span class="fs-5 fw-semibold">Overview</span><br>
+              <small>You have {{ performanceData?.PendingCases }} pending cases.</small>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <div class="gauge">
+                <div class="gauge-fill"
+                  [style.transform]="'rotate(' + ((performanceData?.Percentage || 0) * 1.8) + 'deg)'">
+                </div>
+                <div class="gauge-cover text-center">
+                  <h3 class="text-primary fs-3 fw-bold">{{ performanceData?.Percentage }}%</h3>
+                  <small class="text-muted">Completion Rate</small>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <small class="fw-semibold">Keep it up! You're ahead of {{performanceData?.ReviewerPercentile}}% of
+                doctors</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT STACKED CARDS -->
+        <div class="col-12 col-md-6 d-flex flex-column gap-3">
+
+          <div class="border-round p-3  shadow-sm d-flex flex-column justify-content-between">
+            <div class="d-flex justify-content-between align-items-center lh-1">
+              <img class="logo" src="/dashboard/Frame.png" />
+            </div>
+            <div><span class="small fw-semibold">Avg. Review Time</span></div>
+            <div><small class="fs-3 fw-bold">{{ performanceData?.AvgResponseTime || "0" }}</small></div>
+          </div>
+
+          <div class="border-round p-3  shadow-sm d-flex flex-column justify-content-between">
+            <div class="d-flex justify-content-between align-items-center lh-1">
+              <img class="logo" src="/dashboard/Frame1.png" />
+            </div>
+            <div><span class="small fw-semibold">Total Earnings (SON)</span></div>
+            <div><small class="fs-3 fw-bold">${{ performanceData?.TotalEarnings || "0" }}</small></div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT SECTION -->
+  <div class="col-12 col-lg-6 d-flex">
+    <div class="border-round p-3  w100 d-flex flex-column">
+
+      <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+        <p class="mb-0 fw-semibold fs-5 text-dark">Key Performance Indicators</p>
+
+        <mat-form-field appearance="outline">
+          <mat-select [(ngModel)]="selectedRange" (selectionChange)="onRangeChange($event.value)">
+            @for (item of dateRanges; track item.ID) {
+            <mat-option [value]="item.ID">
+              {{ item.Txt }}
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      <div class="row gx-3 gy-3 h-100">
+
+        <!-- KPI Cards -->
+        <div (click)="naviagteToCase()" class="col-12 col-sm-6 cursor-pointer">
+          <div style="background-color: rgb(247, 248, 254);"
+            class="border border-primary p-3 rounded shadow-sm h-100 d-flex flex-column justify-content-between">
+            <div class="d-flex justify-content-between align-items-center lh-1">
+              <span class="small text-primary fw-semibold">Total Review</span>
+              <i class="bi bi-card-checklist fs-2 text-primary"></i>
+            </div>
+            <div><span class="fs-3 fw-bold lh-1 text-dark">{{statisticsData?.TotalReview || '0'}}</span></div>
+            <div><small>Compared to last month</small></div>
+          </div>
+        </div>
+
+        <div (click)="naviagteToCase()" class="col-12 col-sm-6 cursor-pointer">
+          <div style="background-color: rgb(248, 242, 239);"
+            class="border border-danger p-3 rounded shadow-sm h-100 d-flex flex-column justify-content-between">
+            <div class="d-flex justify-content-between align-items-center lh-1">
+              <span class="small text-danger fw-semibold">Pending Review</span>
+              <i class="bi bi-file-text-fill fs-2 text-danger"></i>
+            </div>
+            <div><span class="fs-3 fw-bold lh-1 text-dark">{{statisticsData?.PendingReview || '0'}}</span></div>
+            <div><small>Compared to last month</small></div>
+          </div>
+        </div>
+
+        <div (click)="naviagteToPayments()" class="col-12 col-sm-6 cursor-pointer">
+          <div style="background-color: rgb(222, 243, 223);"
+            class="border border-success p-3 rounded shadow-sm h-100 d-flex flex-column justify-content-between">
+            <div class="d-flex justify-content-between align-items-center lh-1">
+              <span class="small text-success fw-semibold">Total Revenue</span>
+              <i class="bi bi-graph-up-arrow fs-2 text-success"></i>
+            </div>
+            <div><span class="fs-3 fw-bold lh-1 text-dark">${{statisticsData?.Totalrevenue || '0'}}</span></div>
+            <div><small>Compared to last month</small></div>
+          </div>
+        </div>
+
+        <div (click)="naviagteToPayments()" class="col-12 col-sm-6 cursor-pointer">
+          <div style="background-color: rgb(244, 245, 247);"
+            class="border border-info p-3 rounded shadow-sm h-100 d-flex flex-column justify-content-between">
+            <div class="d-flex justify-content-between align-items-center lh-1">
+              <span class="small text-info fw-semibold">Next Payout</span>
+              <i class="bi bi-clock-history fs-2 text-info"></i>
+            </div>
+            <div><span class="fs-3 fw-bold lh-1 text-dark">${{statisticsData?.NextPayout || '0'}}</span></div>
+            <div><small>Compared to last month</small></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row gx-4 gy-4 align-items-stretch ">
+  <div class="col-12 col-lg-4 d-flex ">
+    <div class="   w-100 d-flex flex-column gap-3 ">
+      <div class="border-round p3 pb20">
+        <div class="cred-title  ">
+          Pending cases for your approval to work
+        </div>
+        <br>
+      </div>
+      <div class="border-round p3">
+
+        <div class="cred-title pr10 ">
+
+          <table class="w100">
+            <tr>
+              <td>Open cases</td>
+              <td class="right pointer green fs-3">
+                <button mat-mini-fab (click)="srv.navigate('/cases')" class="green small-btn no-shadow square-btn">
+                  <i class="fs-5 bi bi-arrows-angle-expand"></i>
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="pb10" style="max-height: 420px;  overflow-y: auto;">
+          <mat-list>
+            @for (ns of newCase; track ns) {
+            <mat-list-item class="pt-1" lines="2">
+              <span matListItemTitle> {{ ns.PatientName }} <span class="text-muted">({{ ns.Gender }}, {{ ns.Age
+                  }})</span></span>
+              <span>
+                Due Date: <strong>{{ ns.DueDate || '---' }}</strong>
+              </span>
+              <span> {{ ns.Description || 'No description available' }}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            }
+          </mat-list>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-4 d-flex">
+    <div class="border-round py-3  w100 d-flex flex-column">
+
+      <div class="chart-box">
+        <div class="graph-row">
+
+          <div class="left-col">
+            <div class="graph-head">{{ graphHeading }}</div>
+            <div class="graph-sub">{{ graphSubHeading }}</div>
+          </div>
+
+          <div class="right-col">
+
+          </div>
+
+        </div>
+
+        <apx-chart [series]="areaChartOptions.series" [chart]="areaChartOptions.chart" [xaxis]="areaChartOptions.xaxis"
+          [dataLabels]="areaChartOptions.dataLabels" [stroke]="areaChartOptions.stroke"
+          [tooltip]="areaChartOptions.tooltip" [yaxis]="areaChartOptions.yaxis">
+        </apx-chart>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="col-12 col-lg-4 d-flex">
+    <div class="border-round p-3  w100 d-flex flex-column">
+      <div class="chart-box">
+        <div class="graph-row">
+          <div class="left-col">
+            <div class="graph-head">{{ casesHeading }}</div>
+            <div class="graph-sub">{{ casesSubHeading }}</div>
+          </div>
+        </div>
+        <apx-chart #chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+          [dataLabels]="chartOptions.dataLabels" [stroke]="chartOptions.stroke" [tooltip]="chartOptions.tooltip">
+        </apx-chart>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<p class="pb20 pb10"></p>
