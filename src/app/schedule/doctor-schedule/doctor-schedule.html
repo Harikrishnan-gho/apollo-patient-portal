@@ -1,0 +1,17 @@
+<style>
+    .demo-inline-calendar-card {
+        width: 300px;
+    }
+</style>
+<p>{{doctor}}</p>
+<mat-card class="demo-inline-calendar-card">
+    <mat-calendar (selectedChange)="dateselected($event)" [(selected)]="selected"></mat-calendar>
+</mat-card>
+
+@for (slot of slots; track slot) {
+<button (click)="timeSelected(slot['ID'])">{{slot['AppointmentTime']}}</button>
+}
+
+<div>
+    <button (click)="onBookAppointment()">Book Appointment</button>
+</div>

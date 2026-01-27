@@ -1,0 +1,25 @@
+<div class="row">
+    @for (item of doctorList; track item) {
+    <div class="col-sm-3 center v100">
+
+        <mat-card appearance="outlined" class="p10">
+            <div>
+                <img style="width: 50%; border-radius: 50%;" src="{{item._url}}" alt="">
+            </div>
+
+            <mat-card-header>
+                <mat-card-title>{{item.Doctor}}</mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+                <p>{{item.Designation}}</p>
+            </mat-card-content>
+
+            <mat-card-footer>
+                <button (click)="onAppointmentClick(item)">Book Appointment</button>
+            </mat-card-footer>
+        </mat-card>
+
+    </div>
+    }
+</div>
