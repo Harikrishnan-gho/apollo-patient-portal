@@ -198,20 +198,21 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   signupclick(): void {
     this.tv = [
-      { T: 'dk1', V: this.usr.id },
-      { T: 'dk2', V: this.usr.pwd },
-      { T: 'c1', V: this.usr.fname },
-      { T: 'c2', V: this.usr.lname },
-      { T: 'c3', V: this.usr.cntry },
+      { T: 'c1', V: this.usr.fullname },
+      { T: 'c2', V: this.usr.dob },
+      { T: 'c3', V: this.usr.gender },
       { T: 'c4', V: this.usr.ph },
-      { T: 'c10', V: '90' },
+      { T: 'c5', V: this.usr.pwd },
+      { T: 'c10', V: '8' },
     ];
 
-    this.srv.getdata('reviewer', this.tv).pipe(
+    this.srv.getdata('patient', this.tv).pipe(
       catchError(err => { throw err; })
     ).subscribe(r => {
       if (r.Status === 1) {
-        this.mode = 'O'; 
+         const msg = r.Data[0][0]?.msg;
+        this.srv.openDialog('Signup', 's',msg);
+        this.mode = 'L'; 
       } else {
         this.srv.openDialog('Signup', 'w', r.Info);
       }
