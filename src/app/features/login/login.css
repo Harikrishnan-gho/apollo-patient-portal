@@ -141,14 +141,20 @@
 
 .logo-title-row {
     display: flex;
-    align-items: center;      /* vertical alignment */
-    gap: 5px;                /* space between logo and text */
+    align-items: center;      
+    gap: 5px;               
 }
 
 /* GLOBAL UTILS */
 .w100 {
     width: 100%;
 }
+
+.country-code {
+  color: #555;
+  margin-left: 10px;
+}
+
 
 .mt10 { margin-top: 10px; }
 .mt20 { margin-top: 20px; }
