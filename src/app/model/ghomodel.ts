@@ -32,13 +32,26 @@ export class user
 {
   id: string ="";
   pwd: string ="";
+  fullname: string = "";
   fname: string ="";
   lname: string ="";
   cntry: string ="";
   ph: string ="";
   otp:string ="";
+  gender: string = "";
+  dob: string = ""; 
 }
 
+
+// export class user {
+//   id: string ="";
+//   fullname: string = "";
+//   dob: string = "";      
+//   gender: string = "";
+//   ph: string ="";
+//   pwd: string = "";
+//   cntry: string ="";
+// }
 
 export class casemedication 
 {

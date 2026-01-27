@@ -144,13 +144,27 @@
             <h6>Create a New Account</h6>
 
             <mat-form-field class="w100" appearance="outline">
-                <mat-label>First Name</mat-label>
+                <mat-label>Name</mat-label>
                 <input matInput type="text" [(ngModel)]="usr.fname">
             </mat-form-field>
 
-            <mat-form-field class="w100" appearance="outline">
+            <!-- <mat-form-field class="w100" appearance="outline">
                 <mat-label>Last Name</mat-label>
                 <input matInput type="text" [(ngModel)]="usr.lname">
+            </mat-form-field> -->
+
+            <mat-form-field class="w100" appearance="outline">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput type="date" [(ngModel)]="usr.dob">
+            </mat-form-field>
+
+            <mat-form-field class="w100" appearance="outline">
+                <mat-label>Gender</mat-label>
+                <mat-select [(ngModel)]="usr.gender">
+                    <mat-option value="M">Male</mat-option>
+                    <mat-option value="F">Female</mat-option>
+                    <mat-option value="O">Other</mat-option>
+                </mat-select>
             </mat-form-field>
 
             <mat-form-field class="w100" appearance="outline">
@@ -167,10 +181,10 @@
                 <input matInput type="text" [(ngModel)]="usr.ph">
             </mat-form-field>
 
-            <mat-form-field class="w100" appearance="outline">
+            <!-- <mat-form-field class="w100" appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput type="text" [(ngModel)]="usr.id">
-            </mat-form-field>
+            </mat-form-field> -->
 
             <mat-form-field class="w100" appearance="outline">
                 <mat-label>Password</mat-label>
