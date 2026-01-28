@@ -1,0 +1,37 @@
+<form #bookingForm="ngForm" (ngSubmit)="confirmBooking(bookingForm)">
+    <div class="form-grid pt-3">
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Additional Notes</mat-label>
+            <input matInput [(ngModel)]="prescriptionDetails.additinalNotes" name="Additional Notes" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Patient Name</mat-label>
+            <input matInput [(ngModel)]="prescriptionDetails.name" name="patientName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Contact Number</mat-label>
+            <span class="country-code" matPrefix>+968&nbsp;</span>
+            <input matInput type="text" maxlength="8" [(ngModel)]="prescriptionDetails.phone" name="phone" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Home Address</mat-label>
+            <textarea matInput rows="3" [(ngModel)]="prescriptionDetails.address" name="address" required>
+      </textarea>
+        </mat-form-field>
+
+        <div class="actions d-flex justify-end gap-3 mt-3">
+            <button mat-stroked-button color="warn" type="button" (click)="closePopup()">
+                Cancel
+            </button>
+
+            <button mat-flat-button color="primary" type="submit" [disabled]="bookingForm.invalid">
+                Confirm Booking
+            </button>
+        </div>
+
+    </div>
+</form>
