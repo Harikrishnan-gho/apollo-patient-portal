@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mt-5 p10">
     <div class="col-sm-4">
         <mat-card class="calendar-card">
             <mat-calendar [(selected)]="selected" (selectedChange)="dateselected($event)">
@@ -6,7 +6,7 @@
         </mat-card>
     </div>
 
-    <div class="col-sm-8 mt-5">
+    <div class="col-sm-8">
         <div class="slots-buttons">
             <button *ngFor="let slot of slots" mat-raised-button (click)="timeSelected(slot['ID'])"
                 [class.selected]="selectedTimeId === slot['ID']">
