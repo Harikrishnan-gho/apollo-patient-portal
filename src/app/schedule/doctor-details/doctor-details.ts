@@ -43,10 +43,8 @@ export class DoctorDetails implements OnChanges {
       )
       .subscribe(r => {
         if (r?.Status === 1 && r.Data?.length) {
-          console.log(r)
           this.doctorDetails = r.Data[0][0];
           this.specialInterests=r.Data[1];
-          console.log(this.specialInterests)
         }
       });
   }

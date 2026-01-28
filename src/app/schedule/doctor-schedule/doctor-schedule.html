@@ -6,7 +6,7 @@
         </mat-card>
     </div>
 
-    <div class="col-sm-8">
+    <div class="col-sm-8 mt-5">
         <div class="slots-buttons">
             <button *ngFor="let slot of slots" mat-raised-button (click)="timeSelected(slot['ID'])"
                 [class.selected]="selectedTimeId === slot['ID']">

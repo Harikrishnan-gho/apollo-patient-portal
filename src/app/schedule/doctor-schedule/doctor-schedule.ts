@@ -1,4 +1,4 @@
-import { Component, inject, Input, model, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -13,26 +13,29 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'doctor-schedule',
   imports: [MatCardModule, MatDatepickerModule, CommonModule, MatButtonModule],
   providers: [provideNativeDateAdapter()],
-
   templateUrl: './doctor-schedule.html',
 })
-export class DoctorSchedule implements OnInit {
+export class DoctorSchedule implements OnInit, OnChanges {
 
   srv = inject(GHOService);
-  userid: string = "";
-  pw: string = "";
   tv: tags[] = [];
   res: ghoresult = new ghoresult();
-  doctorId: string;
-  selectedDate: string = formatDate(new Date(), 'dd/MM/yyyy', 'en-IN');
   slots: [] = [];
   selectedTimeId: any;
 
-
   selected: Date = new Date();
-  @Input() doctor: string;
-  ngOnInit(): void {
+  selectedDate: string = formatDate(new Date(), 'dd/MM/yyyy', 'en-IN');
 
+  @Input() doctor: string;
+
+  ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['doctor'] && this.doctor) {
+      console.log("Doctor input received:", this.doctor); 
+      this.loadSlotsForCurrentDate();
+    }
   }
 
   timeSelected(slotId: any) {
@@ -40,10 +43,11 @@ export class DoctorSchedule implements OnInit {
   }
 
   onBookAppointment() {
-    this.tv = [];
-    this.tv.push({ T: "dk1", V: this.selectedTimeId });
-    this.tv.push({ T: "dk2", V: this.srv.getsession('id') });
-    this.tv.push({ T: "c10", V: "1" });
+    this.tv = [
+      { T: "dk1", V: this.selectedTimeId },
+      { T: "dk2", V: this.srv.getsession('id') },
+      { T: "c10", V: "1" }
+    ];
 
     this.srv.getdata("appointment", this.tv).pipe(
       catchError((err) => {
@@ -52,24 +56,32 @@ export class DoctorSchedule implements OnInit {
       })
     ).subscribe((r) => {
       if (r.Status === 1) {
-        this.slots = r.Data[0];
-        this.srv.openDialog("Success", "s", "Appointment booked successfully!")
+        this.srv.openDialog("Success", "s", "Appointment booked successfully!");
       } else {
         this.srv.openDialog("Error", "e", "Failed to book appointment");
       }
     });
   }
 
-
   dateselected(e: any) {
     this.selectedDate = formatDate(e, 'dd/MM/yyyy', 'en-IN');
-    this.tv = [];
-    this.tv.push({ T: "dk1", V: this.doctor })
-    this.tv.push({ T: "dk2", V: this.selectedDate })
-    this.tv.push({ T: "c10", V: "11" });
+    this.loadSlots(this.selectedDate);
+  }
+
+  private loadSlotsForCurrentDate() {
+    this.loadSlots(this.selectedDate);
+  }
+
+  private loadSlots(date: string) {
+    this.tv = [
+      { T: "dk1", V: this.doctor },
+      { T: "dk2", V: date },
+      { T: "c10", V: "11" }
+    ];
+
     this.srv.getdata("prxcare", this.tv).pipe(
       catchError((err) => {
-        this.srv.openDialog("Slots Info", "e", "error while loading slot info");
+        this.srv.openDialog("Slots Info", "e", "Error while loading slot info");
         throw err;
       })
     ).subscribe((r) => {
