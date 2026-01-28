@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'doctor-schedule',
-  imports: [MatCardModule, MatDatepickerModule,CommonModule,MatButtonModule],
+  imports: [MatCardModule, MatDatepickerModule, CommonModule, MatButtonModule],
   providers: [provideNativeDateAdapter()],
 
   templateUrl: './doctor-schedule.html',
@@ -41,22 +41,26 @@ export class DoctorSchedule implements OnInit {
 
   onBookAppointment() {
     this.tv = [];
-    this.tv.push({ T: "dk1", V: this.selectedTimeId })
-    this.tv.push({ T: "dk2", V: this.srv.getsession('id') })
-
+    this.tv.push({ T: "dk1", V: this.selectedTimeId });
+    this.tv.push({ T: "dk2", V: this.srv.getsession('id') });
     this.tv.push({ T: "c10", V: "1" });
+
     this.srv.getdata("appointment", this.tv).pipe(
       catchError((err) => {
-        this.srv.openDialog("Slots Info", "e", "error while loading slot info");
+        this.srv.openDialog("Slots Info", "e", "Error while booking appointment");
         throw err;
       })
     ).subscribe((r) => {
       if (r.Status === 1) {
         this.slots = r.Data[0];
+        this.srv.openDialog("Success", "s", "Appointment booked successfully!")
+      } else {
+        this.srv.openDialog("Error", "e", "Failed to book appointment");
       }
     });
   }
-  
+
+
   dateselected(e: any) {
     this.selectedDate = formatDate(e, 'dd/MM/yyyy', 'en-IN');
     this.tv = [];
