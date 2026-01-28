@@ -6,10 +6,12 @@ import { tags, ghoresult } from '../../model/ghomodel';
 import { GHOService } from '../../services/ghosrvs';
 import { formatDate } from '@angular/common';
 import { catchError } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'doctor-schedule',
-  imports: [MatCardModule, MatDatepickerModule],
+  imports: [MatCardModule, MatDatepickerModule, CommonModule, MatButtonModule],
   providers: [provideNativeDateAdapter()],
 
   templateUrl: './doctor-schedule.html',
@@ -22,12 +24,12 @@ export class DoctorSchedule implements OnInit {
   tv: tags[] = [];
   res: ghoresult = new ghoresult();
   doctorId: string;
-  selectedDate = '';
+  selectedDate: string = formatDate(new Date(), 'dd/MM/yyyy', 'en-IN');
   slots: [] = [];
   selectedTimeId: any;
 
 
-  selected = model<Date | null>(null);
+  selected: Date = new Date();
   @Input() doctor: string;
   ngOnInit(): void {
 
@@ -39,21 +41,26 @@ export class DoctorSchedule implements OnInit {
 
   onBookAppointment() {
     this.tv = [];
-    this.tv.push({ T: "dk1", V: this.selectedTimeId })
-    this.tv.push({ T: "dk2", V: this.srv.getsession('id') })
-
+    this.tv.push({ T: "dk1", V: this.selectedTimeId });
+    this.tv.push({ T: "dk2", V: this.srv.getsession('id') });
     this.tv.push({ T: "c10", V: "1" });
+
     this.srv.getdata("appointment", this.tv).pipe(
       catchError((err) => {
-        this.srv.openDialog("Slots Info", "e", "error while loading slot info");
+        this.srv.openDialog("Slots Info", "e", "Error while booking appointment");
         throw err;
       })
     ).subscribe((r) => {
       if (r.Status === 1) {
         this.slots = r.Data[0];
+        this.srv.openDialog("Success", "s", "Appointment booked successfully!")
+      } else {
+        this.srv.openDialog("Error", "e", "Failed to book appointment");
       }
     });
   }
+
+
   dateselected(e: any) {
     this.selectedDate = formatDate(e, 'dd/MM/yyyy', 'en-IN');
     this.tv = [];
