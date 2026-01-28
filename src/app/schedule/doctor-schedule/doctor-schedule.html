@@ -1,13 +1,12 @@
 <style>
-    .demo-inline-calendar-card {
+    .calendar-card {
         width: 300px;
     }
 </style>
-<p>{{doctor}}</p>
 
 <div class="row">
     <div class="col-sm-4">
-        <mat-card class="demo-inline-calendar-card">
+        <mat-card class="calendar-card">
             <mat-calendar (selectedChange)="dateselected($event)" [(selected)]="selected"></mat-calendar>
         </mat-card>
     </div>

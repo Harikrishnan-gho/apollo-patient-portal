@@ -4,10 +4,6 @@
       max-width: 260px;
       height: 320px;
       padding: 16px;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
    }
 
    .doctor-card mat-card-footer {
@@ -58,8 +54,9 @@
       color: rgb(229, 229, 16);
    }
 </style>
+
 <div class="row">
-   <div class="col-sm-4 d-flex justify-content-center mb-3">
+   <div class="col-sm-4 p10  mb-3">
 
       <mat-card appearance="outlined" class="doctor-card text-center">
 
@@ -95,6 +92,32 @@
 
    </div>
    <div class="col-sm-8">
-      detail goes here
+      <div>
+         <div>
+            <img src="/dashboard/qualification.png" alt="">
+            <p>Qualification</p> : {{doctorDetails.Qualification}}
+         </div>
+         <div>
+            <img src="/dashboard/experience.png" alt="">
+            <p>Experience</p> : {{doctorDetails.Experience}}
+         </div>
+         <div>
+            <img src="/dashboard/gender.png" alt="">
+            <p>Gender</p> : {{doctorDetails.Gender}}
+         </div>
+         <div>
+            <img src="/dashboard/languages.png" alt="">
+            <p>Languages</p> : {{doctorDetails.Languages}}
+         </div>
+         <div>
+            <img src="/dashboard/hospital.png" alt="">
+            <p>Hospital</p> : {{doctorDetails.Hospital}}
+         </div>
+         <div>
+            <img src="/dashboard/clock.png" alt="">
+            <p>Working Hours</p> : {{doctorDetails.WorkingHours}}
+         </div>
+      </div>
+
    </div>
 </div>
