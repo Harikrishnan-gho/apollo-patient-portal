@@ -71,6 +71,9 @@ export class App {
 
 
   }
+  goToEmergency() {
+  this.router.navigate(['/emergenservices']);
+}
 
   naviagteToProfile() {
     this.router.navigate([`/profile`]);
