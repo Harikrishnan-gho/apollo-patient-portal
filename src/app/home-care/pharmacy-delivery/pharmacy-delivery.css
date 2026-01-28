@@ -1,0 +1,41 @@
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.d-flex {
+  display: flex;
+  gap: 12px;
+}
+
+.full-width {
+  flex: 1;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-half {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Time dropdowns inside time container */
+.flex-time {
+  flex: 1; /* Split remaining time container equally */
+  min-width: 0; /* Avoid overflow */
+}
+
+
+.actions {
+  display: flex;
+  justify-content: flex-end; /* aligns buttons to the right */
+  gap: 12px; /* space between buttons */
+  margin-top: 16px;
+}
+.country-code {
+  color: #555;
+  margin-left: 15px;
+}
