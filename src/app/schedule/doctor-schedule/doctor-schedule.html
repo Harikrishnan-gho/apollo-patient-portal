@@ -1,22 +1,36 @@
+<div class="row">
+    <div class="col-sm-4">
+        <mat-card class="calendar-card">
+            <mat-calendar (selectedChange)="dateselected($event)" [(selected)]="selected">
+            </mat-calendar>
+        </mat-card>
+    </div>
+
+    <div class="col-sm-8">
+        <div class="slots-buttons">
+            @for (slot of slots; track slot) {
+            <button mat-raised-button [color]="selectedTimeId === slot['ID'] ? 'primary' : undefined"
+                (click)="timeSelected(slot['ID'])" style="margin: 4px;">
+                {{ slot['AppointmentTime'] }}
+            </button>
+            }
+        </div>
+
+        <div class="mt-2">
+            <button mat-raised-button color="accent" (click)="onBookAppointment()">
+                Book Appointment
+            </button>
+        </div>
+    </div>
+
+</div>
+
 <style>
     .calendar-card {
         width: 300px;
     }
+
+    .slots-buttons button {
+        margin: 4px 4px 4px 0;
+    }
 </style>
-
-<div class="row">
-    <div class="col-sm-4">
-        <mat-card class="calendar-card">
-            <mat-calendar (selectedChange)="dateselected($event)" [(selected)]="selected"></mat-calendar>
-        </mat-card>
-    </div>
-    <div class="col-sm-8">
-        @for (slot of slots; track slot) {
-        <button (click)="timeSelected(slot['ID'])">{{slot['AppointmentTime']}}</button>
-        }
-
-        <div>
-            <button (click)="onBookAppointment()">Book Appointment</button>
-        </div>
-    </div>
-</div>
