@@ -191,6 +191,7 @@
     box-sizing: border-box;
     background-color: white;
   }
+
 </style>
 
 @if (showNavbar) {
@@ -221,7 +222,7 @@
     <!-- Top Navbar -->
     <nav class="navbar navbar-light bg-light px-3 py-3 sticky-top shadow-sm">
       <div class="d-flex align-items-center w-100 justify-content-between">
-
+ 
         <!-- Left: Mobile menu toggle or title -->
         <div class="d-flex align-items-center gap-2">
           <!-- Mobile menu toggle -->
@@ -237,6 +238,10 @@
         <div class="d-flex align-items-center gap-2">
           <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
             <mat-icon>notifications</mat-icon>
+          </button>
+          <button mat-icon-button class="hand">
+            <mat-icon>back_hand</mat-icon>
+
           </button>
 
           <mat-menu #notificationMenu="matMenu" class="notification-menu">
