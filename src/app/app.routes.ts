@@ -44,6 +44,16 @@ export const routes: Routes = [
     },
     
 
+    {
+        path: 'allergy',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./allergy/allergy').then((m) => m.Allergy) },
+    },
+    {
+        path: 'medication',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./medication/medication').then((m) => m.Medication) },
+    },
 ]
 
 
