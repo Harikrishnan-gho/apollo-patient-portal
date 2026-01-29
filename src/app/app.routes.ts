@@ -32,7 +32,17 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () => { return import('./emergencycontact/emergencycontact').then((m) => m.Emergencycontact) },
     },
-    
+    {
+        path: 'emergenservices',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./emergency-services/emergency-services').then((m) => m.EmergencyServices) },
+    },
+    {
+        path: 'allergy',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./allergy/allergy').then((m) => m.Allergy) },
+    },
+
 
 ]
 

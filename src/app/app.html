@@ -13,11 +13,11 @@
 
   .sidebar .nav mat-icon,
   .sidebar .nav .item-text {
-    color: #6495ED !important;
+    color: rgb(12,121,165) !important;
   }
 
   .sidebar .selected {
-    background-color: #6495ED !important;
+    background-color: rgb(12,121,165) !important;
     color: white !important;
     border-radius: 6px;
   }
@@ -239,7 +239,7 @@
           <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
             <mat-icon>notifications</mat-icon>
           </button>
-          <button mat-icon-button class="hand">
+          <button mat-icon-button (click)="goToEmergency()">
             <mat-icon>back_hand</mat-icon>
 
           </button>

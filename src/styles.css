@@ -4,7 +4,7 @@
     --border-color: #e0e0e0;
     --text-primary: #202124;
     --text-secondary: #5f6368;
-    --primary: #1a73e8;
+    --primary: #0C7DA1;
     --hover: #f1f3f4;
     --radius: 10px;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
@@ -522,4 +522,3 @@ mat-row:hover {
     border-top-right-radius: 10px;
 
 }
-
