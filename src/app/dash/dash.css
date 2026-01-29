@@ -3,29 +3,31 @@
 }
 .pharmacy-card{
   
-  background-color: rgb(127, 199, 199);
+  background-color: #B9DDDC;
 }
 .general-card{
-  background-color: rgb(187, 149, 223);
+  background-color: #CBB9F9;
 }
 .nursing-card{
-  background-color: rgb(129, 164, 230);
+  background-color: #BBCCF4;
 }
 .physiotherpy-card{
-  background-color: rgb(225,221,197);
+  background-color: #FFDDC5;
 }
 
 .lab-card{
-  background-color: rgb(242,184,215);
+  background-color: #F2B8D7;
 }
 
 .specialty-card{
-  background-color: rgb(177, 197, 234);
+  background-color: #d2f3f5;
 }
 .medicine-card{
-  background-color: rgb(201,229,255);
+  background-color: #C9E5FF;
 }
-
+.workoutImg{
+  height: 130px;
+}
 .carousel-container {
   position: relative;
   width: 100%;
@@ -74,4 +76,36 @@
 @media (max-width: 768px) {
   .carousel { height: 200px; }
   .prev, .next { padding: 6px 10px; }
+}
+
+.specialty-card {
+  background-color: #d2f3f5;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.specialty-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Image container */
+.specialty-card .img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Image control */
+.specialty-card .img-wrapper img {
+  max-width: 50px;      /* scales with screen size */
+  max-height: 50px;
+  object-fit: contain;
+}
+
+/* Card text */
+.specialty-card p {
+  font-size: 0.9rem;
+  word-break: break-word;
 }

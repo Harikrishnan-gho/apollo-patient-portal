@@ -109,6 +109,10 @@ export class RevDash implements OnInit {
   closeshowPhysiotherapyPopup() {
     this.showPhysiotherapyPopup = false;
   }
+
+  navigateToSpecialty(){
+    this.router.navigate(['specialty'])
+  }
 }
 
 

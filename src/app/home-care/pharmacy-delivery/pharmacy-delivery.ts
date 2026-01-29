@@ -27,14 +27,20 @@ export class PharmacyDelivery {
   utl = inject(GHOUtitity);
   tv: tags[] = [];
   res: ghoresult = new ghoresult();
+  userId = "";
   prescriptionDetails = {
     name: '',
     phone: '',
     address: '',
     additinalNotes: ''
   };
-
+   private service = inject(GHOService);
    @Output() close = new EventEmitter<void>();
+
+     ngOnInit(): void {
+    this.userId = this.service.getsession("id");
+  
+  }
 
   confirmBooking(form: NgForm) {
     if (form.invalid) {
@@ -43,25 +49,24 @@ export class PharmacyDelivery {
     }
 
     const tv = [
-      { T: 'dk2', V: '' },
-      { T: 'c1', V: '' },
-      { T: 'c2', V: '' },
-      { T: 'c3', V: '' },
+      { T: 'dk1', V: this.userId },
+      { T: 'dk2', V: this.prescriptionDetails.additinalNotes },
+      { T: 'c1', V: this.prescriptionDetails.name },
+      { T: 'c2', V: this.prescriptionDetails.phone },
+      { T: 'c3', V: this.prescriptionDetails.address },
       { T: 'c4', V: '' },
+      { T: 'c5', V: '' },
       { T: 'c10', V: '1' }
     ];
 
-    this.srv.getdata('generalphysician', tv)
+    this.srv.getdata('pharmacydelivery', tv)
       .pipe(catchError(err => { throw err; }))
       .subscribe(r => {
         if (r.Status === 1) {
           const msg = r.Data[0][0]?.msg;
           this.srv.openDialog('Booking Request', 's', msg);
-          form.resetForm({
-            hour: '09',
-            minute: '00',
-            ampm: 'AM'
-          });
+           this.close.emit();
+          form.resetForm({});
         } else {
           this.srv.openDialog('Booking Request', 'w', r.Info);
         }
