@@ -1,23 +1,41 @@
-<style>
-    .demo-inline-calendar-card {
-        width: 300px;
-    }
-</style>
-<p>{{doctor}}</p>
-
-<div class="row">
+<div class="row mt-5 p10">
     <div class="col-sm-4">
-        <mat-card class="demo-inline-calendar-card">
-            <mat-calendar (selectedChange)="dateselected($event)" [(selected)]="selected"></mat-calendar>
+        <mat-card class="calendar-card">
+            <mat-calendar [(selected)]="selected" (selectedChange)="dateselected($event)">
+            </mat-calendar>
         </mat-card>
     </div>
-    <div class="col-sm-8">
-        @for (slot of slots; track slot) {
-        <button (click)="timeSelected(slot['ID'])">{{slot['AppointmentTime']}}</button>
-        }
 
-        <div>
-            <button (click)="onBookAppointment()">Book Appointment</button>
+    <div class="col-sm-8">
+        <div class="slots-buttons">
+            <button *ngFor="let slot of slots" mat-raised-button (click)="timeSelected(slot['ID'])"
+                [class.selected]="selectedTimeId === slot['ID']">
+                {{ slot['AppointmentTime'] }}
+            </button>
+        </div>
+
+        <div class="mt-2">
+            <button mat-raised-button (click)="onBookAppointment()">
+                Book Appointment
+            </button>
         </div>
     </div>
 </div>
+
+<style>
+    .slots-buttons button {
+        margin: 4px;
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+    .slots-buttons button.selected {
+        background-color: #3f51b5;
+        color: white;
+        border-color: #3f51b5;
+    }
+</style>
