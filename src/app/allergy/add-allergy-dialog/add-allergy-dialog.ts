@@ -54,7 +54,7 @@ export class AddAllergyDialog {
   save() {
     this.tv = [
       { T: "dk1", V: this.srv.getsession('id') },
-      { T: "dk2", V: this.allergyId },
+      { T: "dk2", V: this.allergyId ? this.allergyId :"" },
       { T: "c1", V: this.allergyName },
       { T: "c2", V: this.reaction },
       { T: "c3", V: this.diagnosedBy },

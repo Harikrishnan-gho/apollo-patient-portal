@@ -48,7 +48,6 @@ export class Allergy implements OnInit {
   }
 
   editAllergy(allergy: any) {
-    console.log(allergy)
     const dialogRef = this.dialog.open(AddAllergyDialog, {
       width: '600px',
       disableClose: false,
