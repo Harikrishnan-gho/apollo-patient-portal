@@ -60,6 +60,7 @@
         /* perfect circle */
         font-weight: bold;
     }
+
     .contact-cardP {
         height: 100%;
         /* equal height */
@@ -88,34 +89,35 @@
     }
 
     .contact-name {
-        font-size: medium;
+        font-size: large;
         font-weight: bold;
         color: black;
     }
-   .contact-card {
-    height: 100%;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 16px;
-    background-color: #fcfcfc;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;   
-}
+    .contact-card {
+        height: 100%;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 16px;
+        background-color: #fcfcfc;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
-.contact-left {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.dots {
-    display: flex;
-    align-items: center; 
-    gap: 10px;
-}
+    .contact-left {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .dots {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 </style>
 
 <h2 class="title">Emergency help needed?</h2>
@@ -141,7 +143,8 @@
 
     <!-- PRIMARY CONTACT -->
     <div class="w-100 w-md-50 p-3 border contact-cardP">
-        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-between align-items-start align-items-sm-center">
+        <div
+            class="d-flex flex-column flex-sm-row gap-3 justify-content-between align-items-start align-items-sm-center">
             <div>
                 <h5 class="mb-1">Akbar Ali</h5>
                 <p class="mb-0 ">+936 783e7832</p>
@@ -157,71 +160,76 @@
             </div>
         </div>
     </div>
-    
+
 
 </div>
 
-<!-- all contacts -->
-<div>
-    <p class="fs-5">Your emergency Contacts</p>
-</div>
+<!-- ALL CONTACTS -->
+<p class="fs-5 mt-3">Your emergency contacts</p>
 <div class="container mt-3">
     <div class="row g-4">
-     <div class="col-12 col-md-3 col-lg-4">
-    <div class="contact-card">
-        <!-- LEFT -->
-        <div class="contact-left">
-            <p class="contact-name">Akbar Ali</p>
-            <p class="text-secondary">+91 9876543210</p>
-            <p class="text-secondary">Friend</p>
-        </div>
 
-        <!-- RIGHT -->
-        <div class="dots">
-            <button class="primary">
-                <span class="add">
-                    <img src="single-dot.svg" alt="">
-                </span>
-                Primary
-            </button>
-            <img src="threedots.svg" alt="">
+        @for (contact of emergencyContacts; track contact) {
+        <div class="col-12 col-md-6 col-lg-4">
+
+            <div class="contact-card">
+
+                <!-- LEFT -->
+                <div class="contact-left">
+                    <p class="contact-name">{{ contact.FirstName }}</p>
+                    <p class="text-secondary">+91 {{ contact.Phone}}</p>
+                    <p class="text-secondary">{{ contact.Relationship}}</p>
+                </div>
+
+                <!-- RIGHT -->
+                <div class="dots">
+
+                    @if (contact.ContactPrefernce === 'primary') {
+                    <button class="primary">
+                        <span class="add">
+                            <img src="single-dot.svg" alt="">
+                        </span>
+                        Primary
+                    </button>
+                    }
+                    <div class="flex-col">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_horiz</mat-icon>
+                        </button>
+
+                        <!-- Menu -->
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item >
+                                <mat-icon>star_border</mat-icon>
+                                <span>Set as Primary</span>
+                            </button>
+                            <button mat-menu-item >
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+
+                            
+                        </mat-menu>
+
+                        <div class="mt-3 ms-2 " (click)="deleteContact(contact)">
+                            <mat-icon>delete</mat-icon>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
         </div>
+        }
+
     </div>
 </div>
 
-<div class="col-12 col-md-3 col-lg-4">
-    <div class="contact-card">
-        <div class="contact-left">
-            <p class="contact-name">Rahul Kumar</p>
-            <p class="text-secondary">+91 9876543210</p>
-            <p class="text-secondary">Friend</p>
-        </div>
-
-        <div class="dots">
-            <img src="threedots.svg" alt="">
-        </div>
-    </div>
-</div>
-<div class="col-12 col-md-3 col-lg-4">
-    <div class="contact-card">
-        <div class="contact-left">
-            <p class="contact-name">Rahul Kumar</p>
-            <p class="text-secondary">+91 9876543210</p>
-            <p class="text-secondary">Friend</p>
-        </div>
-
-        <div class="dots">
-            <img src="threedots.svg" alt="">
-        </div>
-    </div>
-</div>
-
-
-
-    </div>
-</div>
 <app-custom-dialog [show]="showEmergencyContactPopup" heading="Add Emergency contact"
-  subheading="This contact will be used in case of medical emergiencies or important updates." [hideActions]="true"
-  (close)="closeEmergencyContact()">
-  <app-add-emergency-contact  (close)="closeEmergencyContact()"></app-add-emergency-contact>
+    subheading="This contact will be used in case of medical emergiencies or important updates." [hideActions]="true"
+    (close)="closeEmergencyContact()">
+    <app-add-emergency-contact (close)="closeEmergencyContact()"></app-add-emergency-contact>
 </app-custom-dialog>

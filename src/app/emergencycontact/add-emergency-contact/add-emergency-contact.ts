@@ -24,34 +24,36 @@ export class AddEmergencyContact {
   private service = inject(GHOService);
 
   utl = inject(GHOUtitity);
-  tv: tags[] = [];
+
   res: ghoresult = new ghoresult();
   patientId="";
 
   contactDetails={
-    name: '',
-    relation:'',
-    phone: '',
-    address: '',
-    email:'',
+    FirstName: '',
+    Relationship:'',
+    Phone: '',
+    Address1: '',
+    Email:'',
   };
 
    @Output() close = new EventEmitter<void>();
   dialogRef: any;
-    
+       
   ngOnInit() {
     this.patientId=this.service.getsession("id")
+    
   }
+
 
   saveEmergencyContact(form: NgForm) {
     if (form.invalid) {
       form.control.markAllAsTouched();
       return;
     }
-
+  
    const tv = [
-      { T: 'dk2', V: this.patientId },
-      { T: 'c1', V: JSON.stringify(this.contactDetails) },
+      { T: 'dk1', V: this.patientId },
+      { T: 'c1', V: JSON.stringify(this.contactDetails)},
       { T: 'c10', V: '1' }
     ];
 
@@ -64,17 +66,29 @@ export class AddEmergencyContact {
         
       )
       .subscribe(r => {
+        
         if (r?.Status === 1) {
           const msg = r?.Data?.[0]?.[0]?.msg ?? 'Contact added successfully';
           this.srv.openDialog('Emergency Contact', 's', msg);
+          this.close.emit();
+
+
           form.resetForm();
-          this.dialogRef.close(true);
+         
+          this.closePopup()
         } else {
           this.srv.openDialog('Emergency Contact', 'w', r?.Info ?? 'Something went wrong');
         }
       });
+
+      
   }
 
+
+
+ closePopup() {
+    this.close.emit();
+  }
 
   
 }

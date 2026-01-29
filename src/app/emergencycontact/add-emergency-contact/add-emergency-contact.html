@@ -7,7 +7,7 @@
       <input
         matInput
         name="name"
-        [(ngModel)]="contactDetails.name"
+        [(ngModel)]="contactDetails.FirstName"
         required>
     </mat-form-field>
 
@@ -15,7 +15,7 @@
       <mat-label>Relationship </mat-label>
       <mat-select
         name="relation"
-        [(ngModel)]="contactDetails.relation"
+        [(ngModel)]="contactDetails.Relationship"
         required>
         <mat-option value="Father">Father</mat-option>
         <mat-option value="Mother">Mother</mat-option>
@@ -33,7 +33,7 @@
         type="text"
         maxlength="8"
         name="phone"
-        [(ngModel)]="contactDetails.phone"
+        [(ngModel)]="contactDetails.Phone"
         required>
     </mat-form-field>
 
@@ -42,7 +42,7 @@
       <input
         matInput
         name="email"
-        [(ngModel)]="contactDetails.email">
+        [(ngModel)]="contactDetails.Email">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-span">
@@ -50,7 +50,7 @@
       <textarea
         matInput
         name="address"
-        [(ngModel)]="contactDetails.address">
+        [(ngModel)]="contactDetails.Address1">
       </textarea>
     </mat-form-field>
 
