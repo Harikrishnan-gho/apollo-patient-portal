@@ -45,8 +45,8 @@ export class AddAllergyDialog {
     if (data) {
       this.allergyId = data.ID;
       this.allergyName = data.AllergyName;
-      this.reaction = data.Reaction;
-      this.diagnosedBy = data.DiagnosedBy || '';
+      this.reaction = data.AllergicReaction;
+      this.diagnosedBy = data.ReportedInstitution || '';
       this.severity = data.Severity || '';
     }
   }
