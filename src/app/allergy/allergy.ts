@@ -47,6 +47,19 @@ export class Allergy implements OnInit {
 
   }
 
+  editAllergy(allergy: any) {
+    console.log(allergy)
+    const dialogRef = this.dialog.open(AddAllergyDialog, {
+      width: '600px',
+      disableClose: false,
+      data: allergy
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getAllergies();
+    });
+  }
+  
   deleteAllergy(id: any, name: string) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
@@ -84,9 +97,14 @@ export class Allergy implements OnInit {
   }
 
   addAllergy() {
-    this.dialog.open(AddAllergyDialog, {
+    const dialogRef = this.dialog.open(AddAllergyDialog, {
       width: '600px',
       disableClose: false,
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getAllergies();
+    });
   }
+
 }
