@@ -60,9 +60,7 @@ export class Emergencycontact implements OnInit {
     ).subscribe((r) => {
       if (r.Status === 1) {
         this.emergencyContacts = r.Data[0];
-        console.log('contatc details', this.emergencyContacts);
-
-      }
+        }
     });
 
   }
