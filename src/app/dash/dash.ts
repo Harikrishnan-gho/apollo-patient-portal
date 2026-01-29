@@ -9,48 +9,51 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
-import {
-    ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexNonAxisChartSeries,
-    ChartType, NgApexchartsModule
-} from "ng-apexcharts";
+
 import { Router, RouterLink } from "@angular/router";
 import { ghoresult, tags } from '../model/ghomodel';
 import { catchError } from 'rxjs';
 import { MatList, MatListItem } from "@angular/material/list";
 import { MatDividerModule } from '@angular/material/divider';
+import { CustomDialog } from '../shared/custom-dialog/custom-dialog';
+import { GeneralPhysician } from '../home-care/general-physician/general-physician';
+import { PharmacyDelivery } from '../home-care/pharmacy-delivery/pharmacy-delivery';
+import { NursingServices } from '../home-care/nursing-services/nursing-services';
+import { Physiotherapy } from '../home-care/physiotherapy/physiotherapy';
+import { LabCollection } from '../home-care/lab-collection/lab-collection';
 
-export type ChartOptions = {
-    series: ApexAxisChartSeries | ApexNonAxisChartSeries;
-    chart: ApexChart; xaxis: ApexXAxis; yaxis?: ApexYAxis; title: ApexTitleSubtitle; stroke?: ApexStroke;
-    dataLabels?: ApexDataLabels; tooltip?: ApexTooltip;
-};
+
 
 
 @Component({
-    selector: 'rev-dashboard',
-    templateUrl: './dash.html',
-    styleUrl: './dash.css',
-    imports: [CommonModule, MatTableModule, MatButtonModule, MatPaginatorModule,
-        MatFormFieldModule, MatIconModule, MatSelectModule, NgApexchartsModule,
-        FormsModule, MatList, MatListItem, MatDividerModule],
+  selector: 'rev-dashboard',
+  templateUrl: './dash.html',
+  standalone: true,
+  styleUrl: './dash.css',
+  imports: [CommonModule, MatTableModule, MatButtonModule, MatPaginatorModule,
+    MatFormFieldModule, MatIconModule, MatSelectModule,
+    FormsModule, MatList, MatListItem, MatDividerModule,
+    CustomDialog, GeneralPhysician, PharmacyDelivery, NursingServices,Physiotherapy,LabCollection],
 })
 export class RevDash implements OnInit {
-    srv = inject(GHOService);
-    userid: string = "";
-    pw: string = "";
-    tv: tags[] = [];
-    res: ghoresult = new ghoresult();
+  srv = inject(GHOService);
+  userid: string = "";
+  pw: string = "";
+  tv: tags[] = [];
+  res: ghoresult = new ghoresult();
 
-    private service = inject(GHOService);
-    fullpageLoader = inject(FullPageLoader);
+  showGeneralPhysicianPopup = false;
+  showPharmacyDeliveryPopup = false;
+  showNursingServicesPopup = false;
+  showPhysiotherapyPopup = false;
+  showScheduleLabPopup = false;
 
-    router = inject(Router)
-   ngOnInit(): void {
-  setInterval(() => {
-    this.next();
-  }, 3000);
-}
-
+  router = inject(Router)
+  ngOnInit(): void {
+    setInterval(() => {
+      this.next();
+    }, 3000);
+  }
 
 
   images = [
@@ -64,10 +67,47 @@ export class RevDash implements OnInit {
   next() {
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
   }
-
   prev() {
     this.currentIndex =
       (this.currentIndex - 1 + this.images.length) % this.images.length;
+  }
+
+
+
+  openGeneralPhysician() {
+    this.showGeneralPhysicianPopup = true;
+  }
+  closeGeneralPhysician() {
+    this.showGeneralPhysicianPopup = false;
+  }
+
+  openPharmacyDelivery() {
+    this.showPharmacyDeliveryPopup = true;
+  }
+  closePharmacyDelivery() {
+    this.showPharmacyDeliveryPopup = false;
+  }
+
+  openNursingServices() {
+    this.showNursingServicesPopup = true;
+  }
+  closeNursingServices() {
+    this.showNursingServicesPopup = false;
+  }
+
+    openScheduleLabPopup() {
+    this.showScheduleLabPopup = true;
+  }
+  closeScheduleLabPopup() {
+    this.showScheduleLabPopup = false;
+  }
+
+
+  openshowPhysiotherapyPopup() {
+    this.showPhysiotherapyPopup = true;
+  }
+  closeshowPhysiotherapyPopup() {
+    this.showPhysiotherapyPopup = false;
   }
 }
 
