@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { AddMedicationDialog } from './add-medication-dialog/add-medication-dialog';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog';
 
 
 @Component({
@@ -48,6 +49,54 @@ export class Medication implements OnInit {
     });
 
   }
+
+   editMedication(medication: any) {
+      const dialogRef = this.dialog.open(AddMedicationDialog, {
+        width: '600px',
+        disableClose: false,
+        data: medication
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        this.getMedications();
+      });
+    }
+
+  deleteMedication(id: any, name: string) {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Delete Medication',
+          message: `Are you sure you want to delete "${name}"?`,
+          confirmText: 'Delete',
+          cancelText: 'Cancel'
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (!result) return;
+  
+        this.tv = [
+          { T: "dk1", V: this.srv.getsession('id') },
+          { T: "dk2", V: id },
+          { T: "c10", V: "4" }
+        ];
+  
+        this.srv.getdata("patientmedication", this.tv).pipe(
+          catchError((err) => {
+            this.srv.openDialog("Medication Info", "e", "Error while deleting medication");
+            throw err;
+          })
+        ).subscribe((r) => {
+          if (r.Status === 1) {
+            this.srv.openDialog("Success", "s", "Medication Deleted Successfully");
+            this.getMedications()
+          } else {
+            this.srv.openDialog("Error", "e", "Failed to delete Medication");
+          }
+        });
+      });
+    }
 
   addMedication() {
     const dialogRef = this.dialog.open(AddMedicationDialog, {

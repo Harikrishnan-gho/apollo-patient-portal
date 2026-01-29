@@ -47,12 +47,12 @@
             <div class="date-row">
                 <mat-form-field appearance="outline">
                     <mat-label>DD</mat-label>
-                    <input matInput type="number" min="1" max="31" placeholder="DD" [(ngModel)]="day" />
+                    <input matInput type="number" min="1" max="31" placeholder="DD" [(ngModel)]="pday" required />
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label>MM</mat-label>
-                    <mat-select [(ngModel)]="month">
+                    <mat-select [(ngModel)]="pmonth">
                         <mat-option *ngFor="let m of months" [value]="m.value">
                             {{ m.label }}
                         </mat-option>
@@ -61,20 +61,21 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>YYYY</mat-label>
-                    <input matInput type="number" min="1900" max="2100" placeholder="YYYY" [(ngModel)]="year" />
+                    <input matInput type="number" min="1900" max="2100" placeholder="YYYY" [(ngModel)]="pyear"
+                        required />
                 </mat-form-field>
             </div>
 
 
             <mat-form-field appearance="outline">
                 <mat-label>Hospital Name</mat-label>
-                <input matInput required>
+                <input matInput required [(ngModel)]="hospitalName">
             </mat-form-field>
 
         </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
-            <button mat-raised-button color="primary" cdkFocusInitial>
+            <button mat-raised-button color="primary" cdkFocusInitial (click)="savePrescription()">
                 Add Prescription
             </button>
         </mat-dialog-actions>
@@ -106,7 +107,7 @@
         <div class="form-col mt-4">
             <mat-form-field appearance="outline">
                 <mat-label>Medication Name</mat-label>
-                <input matInput required>
+                <input matInput required [(ngModel)]="medicationName">
             </mat-form-field>
             <label>
                 Start Date <span class="required">*</span>
@@ -114,12 +115,12 @@
             <div class="date-row">
                 <mat-form-field appearance="outline">
                     <mat-label>DD</mat-label>
-                    <input matInput type="number" min="1" max="31" placeholder="DD" [(ngModel)]="day" />
+                    <input matInput type="number" min="1" max="31" placeholder="DD" [(ngModel)]="mday" />
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label>MM</mat-label>
-                    <mat-select [(ngModel)]="month">
+                    <mat-select [(ngModel)]="mmonth">
                         <mat-option *ngFor="let m of months" [value]="m.value">
                             {{ m.label }}
                         </mat-option>
@@ -128,13 +129,13 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>YYYY</mat-label>
-                    <input matInput type="number" min="1900" max="2100" placeholder="YYYY" [(ngModel)]="year" />
+                    <input matInput type="number" min="1900" max="2100" placeholder="YYYY" [(ngModel)]="myear" />
                 </mat-form-field>
             </div>
         </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
-            <button mat-raised-button color="primary" cdkFocusInitial>
+            <button mat-raised-button color="primary" cdkFocusInitial (click)="saveMedication()">
                 Add Medication
             </button>
         </mat-dialog-actions>
