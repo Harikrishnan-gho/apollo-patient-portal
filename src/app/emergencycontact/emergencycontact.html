@@ -131,7 +131,7 @@
     </div>
     <!-- ADD NEW CONTACT -->
     <div class="w-100 w-md-50 p-3 d-flex justify-content-center align-items-center">
-        <div class="addNew-div text-center">
+        <div class="addNew-div text-center" (click)="openEmergencyContact()">
             <button class="addNew">
                 <span class="add">+</span>
                 Add new contact
@@ -220,3 +220,8 @@
 
     </div>
 </div>
+<app-custom-dialog [show]="showEmergencyContactPopup" heading="Add Emergency contact"
+  subheading="This contact will be used in case of medical emergiencies or important updates." [hideActions]="true"
+  (close)="closeEmergencyContact()">
+  <app-add-emergency-contact  (close)="closeEmergencyContact()"></app-add-emergency-contact>
+</app-custom-dialog>
