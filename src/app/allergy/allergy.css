@@ -1,5 +1,4 @@
 .allergyCard {
-    background-color: #eaf2f5;
     border: solid 1px #0C7DA1;
     border-left-width: 10px;
     border-radius: 10px;
@@ -11,6 +10,8 @@
     border: dashed 1px;
     padding: 15px;
     border-radius: 10px;
+    max-width: 250px;
+    width: 250px;
 }
 
 .contentCard p {
