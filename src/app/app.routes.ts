@@ -37,6 +37,13 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () => { return import('./emergency-services/emergency-services').then((m) => m.EmergencyServices) },
     },
+     {
+        path: 'specialty',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./specialty/specialty').then((m) => m.Specialty) },
+    },
+    
+
     {
         path: 'allergy',
         pathMatch: 'full',

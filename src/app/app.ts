@@ -95,8 +95,6 @@ export class App {
     }
   }
 
-
-
   @ViewChild('emailPopup') emailPopup!: EmailPopup;
 
   openEmailPopup() {
@@ -104,8 +102,6 @@ export class App {
   }
 
 
-
-  // Logout with confirmation dialog
   logout() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
@@ -158,6 +154,7 @@ export class App {
     ).subscribe((r) => {
       if (r.Status === 1) {
         this.menuItems = r.Data[0];
+        console.log('menuItems',this.menuItems);
       }
     });
   }
@@ -185,7 +182,7 @@ export class App {
   imports: [MatDialogModule, MatButtonModule],
   template: `
     <div class="dialog-container">
-      <div class=""> <img class="logo" src="/cred/rxlogo.png" /> </div>
+      <div class=""> <img class="logo" src="apollo-logo.png" /> </div>
       <h2 mat-dialog-title class="dialog-title">{{ data.title }}</h2>
       <mat-dialog-content class="dialog-content">{{ data.message }}</mat-dialog-content>
       <mat-dialog-actions align="end" class="dialog-actions">
@@ -226,7 +223,7 @@ export class App {
     }
 
   .btn-yes {
-  background-color: #1976d2 !important; 
+  background-color: rgb(12,121,165) !important; 
   color: #fff !important;              
   border-radius: 4px;
    cursor: pointer;
