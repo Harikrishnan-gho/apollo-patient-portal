@@ -13,11 +13,11 @@
 
   .sidebar .nav mat-icon,
   .sidebar .nav .item-text {
-    color: rgb(12,121,165) !important;
+    color: rgb(12, 121, 165) !important;
   }
 
   .sidebar .selected {
-    background-color: rgb(12,121,165) !important;
+    background-color: rgb(12, 121, 165) !important;
     color: white !important;
     border-radius: 6px;
   }
@@ -192,6 +192,34 @@
     background-color: white;
   }
 
+  .notification-item {
+    white-space: normal;
+    line-height: 1.4;
+    padding: 10px 12px;
+  }
+
+  .calendar-icon {
+    color: #0c79a5;
+    /* hospital blue */
+    font-size: 22px;
+    margin-top: 2px;
+  }
+
+  .notification-text {
+    flex: 1;
+  }
+
+  .notification-message {
+    margin: 0;
+    font-size: 13px;
+    color: #333;
+
+    /* clamp long text */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 </style>
 
 @if (showNavbar) {
@@ -222,7 +250,7 @@
     <!-- Top Navbar -->
     <nav class="navbar navbar-light bg-light px-3 py-3 sticky-top shadow-sm">
       <div class="d-flex align-items-center w-100 justify-content-between">
- 
+
         <!-- Left: Mobile menu toggle or title -->
         <div class="d-flex align-items-center gap-2">
           <!-- Mobile menu toggle -->
@@ -247,8 +275,18 @@
           <mat-menu #notificationMenu="matMenu" class="notification-menu">
             @if (notifications.length > 0) {
             @for (notif of notifications; track $index) {
-            <button mat-menu-item>
-              {{ notif.message }}
+            <button mat-menu-item class="notification-item">
+
+              <div class="d-flex align-items-start gap-2 w-100">
+                <mat-icon class="calendar-icon">event</mat-icon>
+                <div class="notification-text">
+                  <p class="notification-message">
+                    {{ notif.message }}
+                  </p>
+                </div>
+
+              </div>
+
             </button>
             }
             } @else {
@@ -257,22 +295,22 @@
           </mat-menu>
 
 
-          <div (click)="openEmailPopup()" class="icon-wrapper">
+          <!-- <div (click)="openEmailPopup()" class="icon-wrapper">
             <i class="bi bi-envelope-fill fs-5 text-dark"></i>
           </div>
-          <app-email-popup #emailPopup></app-email-popup>
+          <app-email-popup #emailPopup></app-email-popup> -->
 
           <div (click)="naviagteToProfile()" class="userInfo d-flex items-center gap-3">
             <div class="profile-pic">
-              @if (doctorInfo?._Url) {
-              <img [src]="doctorInfo._Url" alt="Profile" class="profile-img">
+              @if (userInfo?._url) {
+              <img [src]="userInfo._url" alt="Profile" class="profile-img">
               } @else {
               <i class="bi bi-person-circle default-icon"></i>
               }
             </div>
             <div class="flex flex-col lh-1">
               <p class="font-semibold fs-6 m-0">
-                Dr. {{ doctorInfo?.FirstName }} {{ doctorInfo?.LastName }}
+              {{ userInfo?.FirstName }} {{ userInfo?.LastName }}
               </p>
             </div>
           </div>

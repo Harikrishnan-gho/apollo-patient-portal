@@ -37,15 +37,14 @@ export class App {
   tv: tags[] = [];
   res: ghoresult = new ghoresult();
   menuItems: MenuItem[] = [];
-  doctorInfo: any = [];
+  userInfo: any = [];
   selectedItem: any = null;
   selectedMenu: string = 'Dashboard';
   selectedTab: number | null = null;
   doctorId: string = '';
 
     notifications = [
-    { message: 'New message received' },
-    { message: 'Server backup completed' },
+    { message: 'Your Appointment(REF#Ap0018) with DR. Sofia John has been successfully scheduled on Feb 04, 2026 2:00 PM' },
   ];
 
   constructor(private router: Router, private dialog: MatDialog) {
@@ -83,7 +82,7 @@ export class App {
   ngOnInit(): void {
     this.doctorId = this.srv.getsession('id');
     if (this.doctorId) {
-      this.getDoctorDetails()
+      this.getUserDetails()
     }
     const navMain = document.getElementById('navbarCollapse');
     if (navMain) {
@@ -159,18 +158,18 @@ export class App {
     });
   }
 
-  getDoctorDetails() {
+  getUserDetails() {
     this.tv = [];
     this.tv.push({ T: "dk1", V: this.doctorId });
-    this.tv.push({ T: "c10", V: "7" });
-    this.srv.getdata("reviewer", this.tv).pipe(
+    this.tv.push({ T: "c10", V: "3" });
+    this.srv.getdata("patient", this.tv).pipe(
       catchError((err) => {
-        this.srv.openDialog("Doctor Info", "e", "error while loading doctor info");
+        this.srv.openDialog("User Info", "e", "error while loading User info");
         throw err;
       })
     ).subscribe((r) => {
       if (r.Status === 1) {
-        this.doctorInfo = r.Data[0][0];
+        this.userInfo = r.Data[0][0];
       }
     });
   }
