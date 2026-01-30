@@ -62,7 +62,16 @@ export const routes: Routes = [
     {
         path: 'consultationhistory',
         pathMatch: 'full',
-        loadComponent: () => { return import('./consultation-history/consultation-history').then((m) => m.ConsultationHistory) },
+        loadComponent: () => {
+            return import('./consultation-history/consultation-history').then((m) => m.ConsultationHistory)
+        }
+
+
+    },
+    {
+        path: 'insurance',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./insurance/insurance').then((m) => m.Insurance) },
     },
 ]
 
