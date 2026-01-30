@@ -28,6 +28,11 @@ export const routes: Routes = [
         loadComponent: () => { return import('./schedule/schedule').then((m) => m.Schedule) },
     },
     {
+        path: 'schedule/:id',
+        loadComponent: () =>
+            import('./schedule/schedule').then(m => m.Schedule)
+    },
+    {
         path: 'emergencycontact',
         pathMatch: 'full',
         loadComponent: () => { return import('./emergencycontact/emergencycontact').then((m) => m.Emergencycontact) },
@@ -37,12 +42,12 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () => { return import('./emergency-services/emergency-services').then((m) => m.EmergencyServices) },
     },
-     {
+    {
         path: 'specialty',
         pathMatch: 'full',
         loadComponent: () => { return import('./specialty/specialty').then((m) => m.Specialty) },
     },
-    
+
 
     {
         path: 'allergy',
