@@ -59,7 +59,16 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () => { return import('./medication/medication').then((m) => m.Medication) },
     },
-     {
+    {
+        path: 'consultationhistory',
+        pathMatch: 'full',
+        loadComponent: () => {
+            return import('./consultation-history/consultation-history').then((m) => m.ConsultationHistory)
+        }
+
+
+    },
+    {
         path: 'insurance',
         pathMatch: 'full',
         loadComponent: () => { return import('./insurance/insurance').then((m) => m.Insurance) },

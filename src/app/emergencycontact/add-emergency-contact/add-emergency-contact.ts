@@ -80,11 +80,8 @@ export class AddEmergencyContact {
           this.srv.openDialog('Emergency Contact', 'w', r?.Info ?? 'Something went wrong');
         }
       });
-
-      
+   
   }
-
-
 
  closePopup() {
     this.close.emit();
