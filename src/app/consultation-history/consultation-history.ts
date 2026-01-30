@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 
@@ -37,6 +37,13 @@ export class ConsultationHistory {
   tbidx: number = 0;
 
 selectedConsultation: any;
+private srv = inject(GHOService);
+  tv: { T: string; V: string; }[];
+  consultations: any;
+
+ngOnInit(){
+  this.getConsultation()
+}
 
   onSearchHistory(event: Event) {
     const value = (event.target as HTMLInputElement).value
@@ -52,32 +59,54 @@ selectedConsultation: any;
       specialty.SpecialtyName.toLowerCase().includes(value)
     );
   }
-consultations = [
-  {
-    name: 'Dr. Salim',
-    specialty: 'Consultant - Hepatobiliary Diseases',
-    date: '12 / 04 / 2024',
-    img: 'https://static.vecteezy.com/system/resources/thumbnails/026/375/249/small/ai-generative-portrait-of-confident-male-doctor-in-white-coat-and-stethoscope-standing-with-arms-crossed-and-looking-at-camera-photo.jpg'
-  },
-  {
-    name: 'Dr. Sayana',
-    specialty: 'Consultant - Obstetics & Gynaecology',
-    date: '12 / 05 / 2023',
-    img: 'https://images.unsplash.com/photo-1659353888906-adb3e0041693'
-  },
-  {
-    name: 'Dr. Salim',
-    specialty: 'Consultant - Hepatobiliary Diseases',
-    date: '12 / 02 / 2023',
-    img: 'https://static.vecteezy.com/system/resources/thumbnails/026/375/249/small/ai-generative-portrait-of-confident-male-doctor-in-white-coat-and-stethoscope-standing-with-arms-crossed-and-looking-at-camera-photo.jpg'
+
+patientId = this.srv.getsession('id');
+
+// get consultation history
+
+  getConsultation() {
+    this.tv = [
+      { T: "dk1", V: this.patientId },
+      { T: "c10", V: "5" }
+    ];
+    this.srv.getdata("prxcare", this.tv).pipe(
+      catchError((err) => {
+        this.srv.openDialog('Emergency Contacts', "e", 'Error while loading emergency contacts');
+        throw err;
+      })
+    ).subscribe((r) => {
+      if (r.Status === 1) {
+        // this.emergencyContacts = r.Data[0];
+       this.consultations=r.Data[0]
+        }
+    });
+
   }
-];
+
+// consultations = [
+//   {
+//     name: 'Dr. Salim',
+//     specialty: 'Consultant - Hepatobiliary Diseases',
+//     date: '12 / 04 / 2024',
+//     img: 'https://static.vecteezy.com/system/resources/thumbnails/026/375/249/small/ai-generative-portrait-of-confident-male-doctor-in-white-coat-and-stethoscope-standing-with-arms-crossed-and-looking-at-camera-photo.jpg'
+//   },
+//   {
+//     name: 'Dr. Sayana',
+//     specialty: 'Consultant - Obstetics & Gynaecology',
+//     date: '12 / 05 / 2023',
+//     img: 'https://images.unsplash.com/photo-1659353888906-adb3e0041693'
+//   },
+//   {
+//     name: 'Dr. Salim',
+//     specialty: 'Consultant - Hepatobiliary Diseases',
+//     date: '12 / 02 / 2023',
+//     img: 'https://static.vecteezy.com/system/resources/thumbnails/026/375/249/small/ai-generative-portrait-of-confident-male-doctor-in-white-coat-and-stethoscope-standing-with-arms-crossed-and-looking-at-camera-photo.jpg'
+//   }
+// ];
 
 openDetails(item: any) {
   this.selectedConsultation = item;
   this.tbidx = 1; 
 }
-  ngOnInit(): void {
-   
-  }
+
 }
