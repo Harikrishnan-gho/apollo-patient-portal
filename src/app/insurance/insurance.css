@@ -1,0 +1,61 @@
+.upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.upload-box {
+    border: 1px dashed #3f51b5;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    background: #f7f9fc;
+}
+
+
+.doc-icon {
+    font-size: 42px;
+    color: #3f51b5;
+}
+
+.file-name {
+    font-size: 13px;
+    text-align: center;
+    word-break: break-word;
+}
+
+.form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+.date-row {
+    display: flex;
+    gap: 12px;
+}
+
+.date-row mat-form-field {
+    flex: 1;
+}
+
+.preview-card {
+  position: relative;
+  object-fit: cover;
+}
+
+.preview-card button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #fff;
+  font-size: small;
+}

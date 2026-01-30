@@ -9,7 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ConfirmDialogComponent } from '../app';
+
 
 @Component({
   selector: 'app-emergencycontact',
@@ -65,8 +65,8 @@ export class Emergencycontact implements OnInit {
     });
 
   }
-  // update emergency contacts
-  editContacts() {
+// add contact
+    addEmergencyContact() {
     const dialogRef = this.dialog.open(AddEmergencyContact, {
       width: '600px',
       disableClose: false,
@@ -75,8 +75,23 @@ export class Emergencycontact implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.getEmergencyContact();
 
+
     }
     );
+  }
+  // update emergency contacts
+ editContacts(Contacts: any) {
+    const dialogRef = this.dialog.open(AddEmergencyContact, {
+      width: '600px',
+      disableClose: false,
+      data: Contacts,
+      
+    });
+      console.log('dta',Contacts)
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getEmergencyContact();
+    });
   }
 
   // delete emergency contacts
@@ -157,27 +172,11 @@ deleteContact(contact: any) {
     )
     .subscribe((r: any) => {
       if (r?.Status === 1) {
-        // update UI without refresh
-        // this.emergencyContacts = this.emergencyContacts.map(c => ({
-        //   ...c,
-        //   isPrimary: c.ID === contact.ID
-        // }));
+       
       }
     });
 }
 
 
-  addEmergencyContact() {
-    const dialogRef = this.dialog.open(AddEmergencyContact, {
-      width: '600px',
-      disableClose: false,
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.getEmergencyContact();
-
-
-    }
-    );
-  }
 }

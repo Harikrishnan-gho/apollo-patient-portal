@@ -23,7 +23,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class AddMedicationDialog {
   selectedFileName = '';
   selectedFile: File | null = null;
+  medicationId = '';
   uploadType: 'prescription' | 'medication' = 'prescription';
+  
 
   dialogRef = inject(MatDialogRef<AddMedicationDialog>);
 
@@ -34,6 +36,10 @@ export class AddMedicationDialog {
 
   hospitalName = '';
   medicationName = "";
+  fileType = '';
+  fileId = '';
+  uploadUrl = '';
+  fileUploadId = '';
 
   pday: number | null = null;
   pmonth: number | null = null;
@@ -71,61 +77,151 @@ export class AddMedicationDialog {
       this.pmonth,
       this.pyear
     );
+
     this.tv = [
-      { T: "dk1", V: this.srv.getsession('id') },
-      { T: "c1", V: prescriptionDate },
-      { T: "c2", V: this.hospitalName },
-      { T: "c10", V: "6" }
+      { T: 'dk1', V: this.srv.getsession('id') },
+      { T: 'c1', V: prescriptionDate },
+      { T: 'c2', V: this.hospitalName },
+      { T: 'c10', V: '6' },
     ];
 
-    this.srv.getdata("patientmedication", this.tv).pipe(
-      catchError((err) => {
-        this.srv.openDialog("Medication Info", "e", "Error while adding Medication");
-        throw err;
-      })
-    ).subscribe((r) => {
-      if (r.Status === 1) {
-        this.srv.openDialog("Success", "s", "Medication added successfully!");
-        this.dialogRef.close(true);
-      } else {
-        this.srv.openDialog("Error", "e", "Failed to add Medication");
-      }
+    this.srv.getdata('patientmedication', this.tv).subscribe({
+      next: (res: any) => {
+        if (res.Status !== 1) {
+          this.srv.openDialog('Error', 'e', 'Failed to save prescription');
+          return;
+        }
+
+        const prescriptionId = res.Data[0][0].id;
+
+        if (!this.selectedFile) {
+          this.srv.openDialog('Success', 's', 'Prescription saved successfully!');
+          this.dialogRef.close(true);
+          return;
+        }
+
+        this.tv = [
+          { T: 'dk1', V: this.srv.getsession('id') },
+          { T: 'dk2', V: prescriptionId },
+          { T: 'c1', V: '6' },
+          { T: 'c2', V: this.selectedFileName },
+          { T: 'c3', V: this.selectedFile.size.toString() },
+          { T: 'c10', V: '1' },
+        ];
+
+        this.srv.getdata('fileupload', this.tv).subscribe({
+          next: (fileRes: any) => {
+            if (fileRes.Status !== 1) {
+              this.srv.openDialog('Error', 'e', 'Failed to save file info');
+              return;
+            }
+
+            this.fileId = fileRes.Data[0][0].FileID;
+            this.fileType = fileRes.Data[0][0].FileType;
+            this.fileUploadId = fileRes.Data[0][0].id;
+
+            this.srv.uploadFile(this.fileId, this.fileType, this.selectedFile!)
+              .then((status) => {
+                if (status === 2) {
+                  this.tv = [
+                    { T: 'dk1', V: this.srv.getsession('id') },
+                    { T: 'dk2', V: '6' },
+                    { T: 'c1', V: this.fileUploadId },
+                    { T: 'c2', V: status.toString() },
+                    { T: 'c10', V: '2' },
+                  ];
+
+                  this.srv.getdata('fileupload', this.tv).subscribe();
+                }
+
+                this.srv.openDialog(
+                  'Success',
+                  's',
+                  'Prescription and file uploaded successfully!'
+                );
+                this.dialogRef.close(true);
+              });
+          },
+          error: () => this.srv.openDialog('Error', 'e', 'Error saving file info'),
+        });
+      },
+      error: () => this.srv.openDialog('Error', 'e', 'Error saving prescription'),
     });
   }
 
   saveMedication() {
-    const medicationDate = this.getFormattedDate(
-      this.mday,
-      this.mmonth,
-      this.myear
-    );
+    const medicationDate = this.getFormattedDate(this.mday, this.mmonth, this.myear);
+
     this.tv = [
-      { T: "dk1", V: this.srv.getsession('id') },
-      { T: "c1", V: this.medicationName },
-      { T: "c2", V: medicationDate },
-      { T: "c10", V: "1" }
+      { T: 'dk1', V: this.srv.getsession('id') },
+      { T: 'c1', V: this.medicationName },
+      { T: 'c2', V: medicationDate },
+      { T: 'c10', V: '1' },
     ];
 
-    this.srv.getdata("patientmedication", this.tv).pipe(
-      catchError((err) => {
-        this.srv.openDialog("Medication Info", "e", "Error while adding Medication");
-        throw err;
-      })
-    ).subscribe((r) => {
-      if (r.Status === 1) {
-        this.srv.openDialog("Success", "s", "Medication added successfully!");
-        this.dialogRef.close(true);
-      } else {
-        this.srv.openDialog("Error", "e", "Failed to add Medication");
-      }
+    this.srv.getdata('patientmedication', this.tv).subscribe({
+      next: (medRes: any) => {
+        if (medRes.Status !== 1) {
+          this.srv.openDialog('Error', 'e', 'Failed to add medication');
+          return;
+        }
+
+        this.medicationId = medRes.Data[0][0].id;
+
+        if (!this.selectedFile) {
+          this.srv.openDialog('Success', 's', 'Medication saved successfully!');
+          this.dialogRef.close(true);
+          return;
+        }
+
+        this.tv = [
+          { T: 'dk1', V: this.srv.getsession('id') },
+          { T: 'dk2', V: this.medicationId },
+          { T: 'c1', V: '5' },
+          { T: 'c2', V: this.selectedFileName },
+          { T: 'c3', V: this.selectedFile.size.toString() },
+          { T: 'c10', V: '1' },
+        ];
+
+        this.srv.getdata('fileupload', this.tv).subscribe({
+          next: (fileRes: any) => {
+            if (fileRes.Status !== 1) {
+              this.srv.openDialog('Error', 'e', 'Failed to save file info');
+              return;
+            }
+
+            this.fileId = fileRes.Data[0][0].FileID;
+            this.fileType = fileRes.Data[0][0].FileType;
+            this.fileUploadId = fileRes.Data[0][0].id;
+
+            this.srv.uploadFile(this.fileId, this.fileType, this.selectedFile).then((status) => {
+              if (status === 2) {
+                this.tv = [
+                  { T: 'dk1', V: this.srv.getsession('id') },
+                  { T: 'dk2', V: "5" },
+                  { T: 'c1', V: this.fileUploadId },
+                  { T: 'c2', V: status.toString() },
+                  { T: 'c10', V: '2' },
+                ];
+
+                this.srv.getdata('fileupload', this.tv).subscribe();
+              }
+
+              this.srv.openDialog('Success', 's', 'Medication and file uploaded successfully!');
+              this.dialogRef.close(true);
+            });
+
+          },
+          error: () => this.srv.openDialog('Error', 'e', 'Error saving file info')
+        });
+
+      },
+      error: () => this.srv.openDialog('Error', 'e', 'Error saving medication')
     });
   }
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
-
-    if (!file) return;
-
     this.selectedFile = file;
     this.selectedFileName = file.name;
   }

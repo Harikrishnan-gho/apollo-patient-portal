@@ -8,6 +8,9 @@ import { DialogAlert } from '../features/dialog/dialog';
 import { Router } from '@angular/router';
 
 interface ApiResponse { data: any; /* etc */ }
+interface AwsFileResponse {
+  Url: string;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -57,7 +60,7 @@ export class GHOService {
     return this.http.post<ghoresult>(this.url, gh, requestOptions)
   }
 
-  
+
 
   dialog = inject(MatDialog);
   openDialog(t: string, ty: string, m: string) {
@@ -93,7 +96,7 @@ export class GHOService {
     this.setsession("id", "0")
     this.setsession("tkn", "")
     this.navigate("/login");
-  
+
   }
   MONTHS = [
     { id: 1, name: 'January' },
@@ -110,7 +113,39 @@ export class GHOService {
     { id: 12, name: 'December' },
   ];
 
-  awsfileuploadinfo(id: string, typ: string): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(`https://ghoapps.com/api/file/upload-url?filename=${id}&filetype=${typ}`);
+  awsfileuploadinfo(id: string, typ: string): Observable<AwsFileResponse> {
+    return this.http.get<AwsFileResponse>(
+      `https://ghoapps.com/api/file/upload-url?filename=${id}&filetype=${typ}`
+    );
+  }
+
+  async uploadFile(fileId: string, fileType: string, file: File): Promise<number> {
+    try {
+      const getRes = await this.awsfileuploadinfo(fileId, fileType).toPromise();
+      const uploadUrl = getRes?.Url;
+      if (!uploadUrl) {
+        this.openDialog('Error', 'e', 'Upload URL missing');
+        return 0;
+      }
+
+      const response = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type },
+        body: file,
+      });
+
+    
+      if (response.status === 200) {
+        return 2; 
+      } else {
+        this.openDialog('Error', 'e', `Failed to upload file, status code: ${response.status}`);
+        return 0;
+      }
+
+    } catch (err) {
+      console.error(err);
+      this.openDialog('Error', 'e', 'Error uploading file');
+      return 0;
+    }
   }
 }
