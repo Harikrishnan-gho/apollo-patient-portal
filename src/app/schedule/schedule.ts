@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { GHOService } from '../services/ghosrvs';
 import { ghoresult, tags } from '../model/ghomodel';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,11 +12,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { DoctorDetails } from './doctor-details/doctor-details';
 import { DoctorSchedule } from './doctor-schedule/doctor-schedule';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @Component({
   selector: 'app-schedule',
-  imports: [MatCardModule, CommonModule, MatButtonModule, MatTabsModule, MatIconModule,DoctorDetails,DoctorSchedule],
+  imports: [MatCardModule, CommonModule, MatButtonModule, MatTabsModule, MatIconModule, DoctorDetails, DoctorSchedule, MatFormFieldModule,
+    MatInputModule, MatSelectModule],
   templateUrl: './schedule.html',
 })
 export class Schedule implements OnInit {
@@ -31,13 +35,28 @@ export class Schedule implements OnInit {
   patientId: string;
   tbidx: number = 0;
   selectedDoc: any;
-  docid:string="";
+  docid: string = "";
+  specialtyList: any[] = [];
+  doctorsBySpecialty: any = [];
+  selectedSpecialty: string | null = null;
+  allDoctors: any[] = [];
 
   private service = inject(GHOService);
   router = inject(Router)
+  route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this.getDoctorList()
+    // this.getDoctorList()
+    this.getSpecialites()
+    this.route.paramMap.subscribe(params => {
+      const specialtyId = params.get('id');
+      if (specialtyId) {
+        this.selectedSpecialty = specialtyId;
+        this.getDoctorsBySpecialites(specialtyId);
+      } else {
+        this.selectedSpecialty = null;
+      }
+    });
   }
 
   reviewerId = "";
@@ -61,9 +80,61 @@ export class Schedule implements OnInit {
       })
     ).subscribe((r) => {
       if (r.Status === 1) {
+        this.allDoctors = r.Data[0];
         this.doctorList = r.Data[0];
+
       }
     });
   }
+
+
+  getSpecialites() {
+    const tv = [{ T: 'c10', V: '3' }];
+
+    this.srv.getdata('specialty', tv)
+      .pipe(catchError(err => { throw err; }))
+      .subscribe(r => {
+        if (r.Status === 1) {
+          this.specialtyList = r.Data[0];
+          const specialtyId = this.route.snapshot.paramMap.get('id');
+          if (specialtyId) {
+            this.selectedSpecialty = specialtyId;
+            this.getDoctorsBySpecialites(specialtyId);
+          } else {
+            this.selectedSpecialty = null;
+            this.getDoctorList();
+          }
+        }
+      });
+  }
+
+
+  getDoctorsBySpecialites(specialtyId: string) {
+    const tv = [
+      { T: 'dk1', V: specialtyId },
+      { T: 'c10', V: '10' }
+    ];
+    this.srv.getdata('doctors', tv)
+      .pipe(catchError(err => { throw err; }))
+      .subscribe(r => {
+        if (r.Status === 1) {
+          this.doctorList = r.Data[0]
+        } else {
+          this.srv.openDialog('Specialty List', 'w', r.Info);
+        }
+      });
+  }
+
+  onSpecialtyChange(id: string | null) {
+    if (id) {
+      this.router.navigate(['schedule', id]);
+      this.getDoctorsBySpecialites(id);
+    } else {
+      this.router.navigate(['schedule']);
+      this.doctorList = this.allDoctors;
+    }
+  }
+
+
 
 }

@@ -32,8 +32,8 @@ import { LabCollection } from '../home-care/lab-collection/lab-collection';
   styleUrl: './dash.css',
   imports: [CommonModule, MatTableModule, MatButtonModule, MatPaginatorModule,
     MatFormFieldModule, MatIconModule, MatSelectModule,
-    FormsModule, MatList, MatListItem, MatDividerModule,
-    CustomDialog, GeneralPhysician, PharmacyDelivery, NursingServices,Physiotherapy,LabCollection],
+    FormsModule,MatListItem, MatDividerModule,
+    CustomDialog, GeneralPhysician, PharmacyDelivery, NursingServices, Physiotherapy, LabCollection],
 })
 export class RevDash implements OnInit {
   srv = inject(GHOService);
@@ -95,7 +95,7 @@ export class RevDash implements OnInit {
     this.showNursingServicesPopup = false;
   }
 
-    openScheduleLabPopup() {
+  openScheduleLabPopup() {
     this.showScheduleLabPopup = true;
   }
   closeScheduleLabPopup() {
@@ -110,8 +110,21 @@ export class RevDash implements OnInit {
     this.showPhysiotherapyPopup = false;
   }
 
-  navigateToSpecialty(){
+  navigateToSpecialty() {
     this.router.navigate(['specialty'])
+  }
+
+  getCardiologyDoctors(specialtyId: string) {
+    this.router.navigate(['schedule', specialtyId]);
+  }
+  getNeurologyDoctors(specialtyId: string) {
+    this.router.navigate(['schedule', specialtyId]);
+  }
+  getOncologyDoctors(specialtyId: string) {
+    this.router.navigate(['schedule', specialtyId]);
+  }
+  getOrthopaedicDoctors(specialtyId: string) {
+    this.router.navigate(['schedule', specialtyId]);
   }
 }
 

@@ -71,10 +71,25 @@
   .tab-content {
     overflow-x: hidden;
   }
+  
 </style>
 
 <div class="row">
+  <div class="d-flex align-items-center mb-2">
+    <mat-form-field appearance="outline" class="flex-half">
+      <mat-label>Select Specialty</mat-label>
+      <mat-select [(value)]="selectedSpecialty" (selectionChange)="onSpecialtyChange($event.value)">
+        <mat-option [value]="null">All</mat-option>
+        @for (specialty of specialtyList; track specialty.ID) {
+        <mat-option [value]="specialty.ID.toString()">
+          {{ specialty.SpecialtyName }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="border-round" [(selectedIndex)]="tbidx">
+
 
     <mat-tab label="Doctor List">
       <div class="row p10">
