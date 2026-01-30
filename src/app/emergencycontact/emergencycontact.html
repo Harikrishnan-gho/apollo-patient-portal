@@ -1,6 +1,4 @@
 <style>
-    /* emergency.css */
-
     .title {
         color: red;
         text-align: center;
@@ -47,7 +45,6 @@
         font-weight: 500;
     }
 
-
     .add {
         background-color: #fff;
         color: #0B7DA1;
@@ -61,17 +58,6 @@
         font-weight: bold;
     }
 
-    .contact-cardP {
-        height: 100%;
-        /* equal height */
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        padding: 16px;
-        background-color: #fffcfc;
-
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    }
-
     .contact-card h5 {
         margin-bottom: 6px;
         font-weight: 600;
@@ -83,14 +69,8 @@
         color: #444;
     }
 
-    .contact-details {
-        font-size: 13px;
-        color: #2a0a0a;
-    }
-
     .contact-name {
         font-size: large;
-        font-weight: bold;
         color: black;
     }
 
@@ -101,7 +81,6 @@
         padding: 16px;
         background-color: #fcfcfc;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -113,57 +92,73 @@
         gap: 4px;
     }
 
-    .dots {
-        display: flex;
+    .primaryacc {
+        justify-content: center;
         align-items: center;
-        gap: 10px;
+    }
+
+    .primaryIcon {
+        background-color: #dee5e7;
+        border-radius: 10%;
+        padding: 5px;
+    }
+
+    .dot {
+        height: 7px;
+        width: 7px;
+        margin-top: 8px;
+        margin-left: 3px;
+        background-color: #0B7DA1;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .primaryName {
+        font-size: large;
+        font-weight: bold;
+    }
+
+    .primaryPhone {
+        color: gray;
+        font-size: small;
+        font-weight: 400;
     }
 </style>
 
 <h2 class="title">Emergency help needed?</h2>
-
 <div class="call-img">
     <img src="call-icon.svg" alt="Call Icon" />
 </div>
 
-<div class="d-flex flex-column flex-md-row p-3 mt-2 gap-3">
-
+<!-- ADD NEW CONTACT -->
+<div class="w-100 w-md-50 p-3 d-flex justify-content-center align-items-center">
+    <div class="addNew-div text-center" (click)="openEmergencyContact()">
+        <button class="addNew">
+            <span class="add">+</span>
+            Add new contact
+        </button>
+    </div>
+</div>
+<!-- PRIMARY CONTACT -->
+  @for (contact of emergencyContacts; track contact) {
+<div>
     <div>
-
-    </div>
-    <!-- ADD NEW CONTACT -->
-    <div class="w-100 w-md-50 p-3 d-flex justify-content-center align-items-center">
-        <div class="addNew-div text-center" (click)="openEmergencyContact()">
-            <button class="addNew">
-                <span class="add">+</span>
-                Add new contact
-            </button>
-        </div>
-    </div>
-
-    <!-- PRIMARY CONTACT -->
-    <div class="w-100 w-md-50 p-3 border contact-cardP">
-        <div
-            class="d-flex flex-column flex-sm-row gap-3 justify-content-between align-items-start align-items-sm-center">
-            <div>
-                <h5 class="mb-1">Akbar Ali</h5>
-                <p class="mb-0 ">+936 783e7832</p>
+         @if (contact.ContactPrefernce === "Primary") {
+        <div class="d-flex primaryacc gap-2">
+            <div class="primaryName">
+                {{ contact.FirstName }} <br>
+                <span class="primaryPhone">+968 {{ contact.Phone}}</span>
             </div>
-
-            <div>
-                <button class="primary">
-                    <span class="add">
-                        <img src="single-dot.svg" alt="">
-                    </span>
-                    Primary
-                </button>
-            </div>
+            <span class="primaryIcon d-flex gap-1">
+                <span class="dot"></span> Primary
+            </span>
         </div>
+    }
     </div>
 
 
 </div>
-
+  }
 <!-- ALL CONTACTS -->
 <p class="fs-5 mt-3">Your emergency contacts</p>
 <div class="container mt-3">
@@ -176,21 +171,18 @@
 
                 <!-- LEFT -->
                 <div class="contact-left">
-                    <p class="contact-name">{{ contact.FirstName }}</p>
-                    <p class="text-secondary">+91 {{ contact.Phone}}</p>
+                    <h5 class="contact-name">{{ contact.FirstName }}</h5>
+                    <p class="text-secondary">+968 {{ contact.Phone}}</p>
                     <p class="text-secondary">{{ contact.Relationship}}</p>
                 </div>
 
                 <!-- RIGHT -->
                 <div class="dots">
 
-                    @if (contact.ContactPrefernce === 'primary') {
-                    <button class="primary">
-                        <span class="add">
-                            <img src="single-dot.svg" alt="">
-                        </span>
-                        Primary
-                    </button>
+                    @if (contact.ContactPrefernce === "Primary") {
+                    <span class="primaryIcon d-flex gap-1">
+                        <span class="dot"></span> Primary
+                    </span>
                     }
                     <div class="flex-col">
                         <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -199,21 +191,19 @@
 
                         <!-- Menu -->
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item >
+                            <button mat-menu-item (click)="setPrimaryContact(contact)">
                                 <mat-icon>star_border</mat-icon>
                                 <span>Set as Primary</span>
                             </button>
-                            <button mat-menu-item >
+                            <button mat-menu-item (click)="editContacts()">
                                 <mat-icon>edit</mat-icon>
                                 <span>Edit</span>
                             </button>
-
-                            
+                            <button mat-menu-item (click)="deleteContact(contact)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
                         </mat-menu>
-
-                        <div class="mt-3 ms-2 " (click)="deleteContact(contact)">
-                            <mat-icon>delete</mat-icon>
-                        </div>
 
                     </div>
 
