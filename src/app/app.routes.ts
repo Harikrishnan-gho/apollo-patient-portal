@@ -59,6 +59,11 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () => { return import('./medication/medication').then((m) => m.Medication) },
     },
+     {
+        path: 'insurance',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./insurance/insurance').then((m) => m.Insurance) },
+    },
 ]
 
 
