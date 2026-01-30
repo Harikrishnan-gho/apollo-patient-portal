@@ -25,6 +25,7 @@ export class AddMedicationDialog {
   selectedFile: File | null = null;
   medicationId = '';
   uploadType: 'prescription' | 'medication' = 'prescription';
+  
 
   dialogRef = inject(MatDialogRef<AddMedicationDialog>);
 
