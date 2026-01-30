@@ -59,22 +59,24 @@ export class Emergencycontact implements OnInit {
       })
     ).subscribe((r) => {
       if (r.Status === 1) {
-        this.emergencyContacts = r.Data[0];
+        // this.emergencyContacts = r.Data[0];
+        this.emergencyContacts = [...r.Data[0]];
         }
     });
 
   }
   // update emergency contacts
- editContacts(Contacts: any) {
+  editContacts() {
     const dialogRef = this.dialog.open(AddEmergencyContact, {
       width: '600px',
       disableClose: false,
-      data: Contacts
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.getEmergencyContact();
-    });
+
+    }
+    );
   }
 
   // delete emergency contacts
@@ -127,6 +129,42 @@ deleteContact(contact: any) {
       });
   }
 
+// set as primary contact
+
+ setPrimaryContact(contact: any) {
+  if (!contact?.ID) {
+    console.error('Contact ID missing');
+    return;
+  }
+
+  this.tv = [
+    { T: 'dk1', V: this.patientId },
+    { T: 'dk2', V: contact.ID }, 
+    { T: 'c1', V: '1' },         
+    { T: 'c10', V: '5' }
+  ];
+
+  this.srv.getdata('patientcontact', this.tv)
+    .pipe(
+      catchError(err => {
+        this.srv.openDialog(
+          'Emergency Contacts',
+          'e',
+          'Error while setting primary contact'
+        );
+        return throwError(() => err);
+      })
+    )
+    .subscribe((r: any) => {
+      if (r?.Status === 1) {
+        // update UI without refresh
+        // this.emergencyContacts = this.emergencyContacts.map(c => ({
+        //   ...c,
+        //   isPrimary: c.ID === contact.ID
+        // }));
+      }
+    });
+}
 
 
   addEmergencyContact() {
