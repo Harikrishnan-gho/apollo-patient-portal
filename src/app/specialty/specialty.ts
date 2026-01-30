@@ -11,7 +11,7 @@ import { ghoresult, tags } from '../model/ghomodel';
 import { catchError } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
-import { CustomDialog } from '../shared/custom-dialog/custom-dialog';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-specialty',
@@ -19,7 +19,7 @@ import { CustomDialog } from '../shared/custom-dialog/custom-dialog';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule, MatIconModule, MatDividerModule, CustomDialog],
+    MatButtonModule, MatIconModule, MatDividerModule,MatTabsModule],
   templateUrl: './specialty.html',
   styleUrl: './specialty.css',
 })
@@ -36,6 +36,8 @@ export class Specialty {
   selectedSpecialty: string;
   showDoctorBySpecialtyPopup = false;
   doctorsBySpecialty: any = []
+  tbidx: number = 0;
+
 
   onSearchSpecialty(event: Event) {
     const value = (event.target as HTMLInputElement).value
@@ -82,12 +84,9 @@ export class Specialty {
     if (this.selectedSpecialtyId) {
       this.getDoctorsBySpecialites(this.selectedSpecialtyId)
     }
-    this.showDoctorBySpecialtyPopup = true;
+    this.tbidx = 1
   }
-  closeDoctorBySpecialty() {
-    this.showDoctorBySpecialtyPopup = false;
-    this.doctorsBySpecialty=[]
-  }
+
 
   getDoctorsBySpecialites(specialtyId: string) {
     const tv = [

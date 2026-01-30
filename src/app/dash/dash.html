@@ -80,7 +80,7 @@
       <button (click)="navigateToSpecialty()" class="btn btn-link p-0">See all</button>
     </div>
     <div class="row g-3 g-md-4 pt-3">
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <div (click)="getCardiologyDoctors('4')" class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="specialty-card border rounded-4 p-3 h-100 d-flex flex-column align-items-center text-center">
           <div class="img-wrapper mb-2">
             <img src="dashboard/heart.png" class="img-fluid" alt="Cardiology">
@@ -88,7 +88,7 @@
           <p class="pt-2 mb-0 fw-medium">Cardiology</p>
         </div>
       </div>
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <div (click)="getNeurologyDoctors('24')" class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="specialty-card border rounded-4 p-3 h-100 d-flex flex-column align-items-center text-center">
           <div class="img-wrapper mb-2">
             <img src="dashboard/brain.png" class="img-fluid" alt="Neurology">
@@ -96,7 +96,7 @@
           <p class="pt-2 mb-0 fw-medium">Neurology</p>
         </div>
       </div>
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <div (click)="getOncologyDoctors('27')" class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="specialty-card border rounded-4 p-3 h-100 d-flex flex-column align-items-center text-center">
           <div class="img-wrapper mb-2">
             <img src="dashboard/ribbon.png" class="img-fluid" alt="Oncology">
@@ -104,7 +104,7 @@
           <p class="pt-2 mb-0 fw-medium">Oncology</p>
         </div>
       </div>
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <div (click)="getOrthopaedicDoctors('29')" class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="specialty-card border rounded-4 p-3 h-100 d-flex flex-column align-items-center text-center">
           <div class="img-wrapper mb-2">
             <img src="dashboard/kidney.png" class="img-fluid" alt="Orthopaedic">
