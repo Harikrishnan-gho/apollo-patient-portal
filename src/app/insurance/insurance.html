@@ -4,37 +4,51 @@
 </div>
 
 <div class="upload-box mt-2" (click)="fileInput.click()">
-    <input type="file" #fileInput hidden accept="image/*,application/pdf" (change)="onFileSelected($event)" />
+    <input type="file" #fileInput hidden multiple accept="image/*,application/pdf" (change)="onFilesSelected($event)" />
 
     <mat-icon class="doc-icon">description</mat-icon>
 
     <button matButton type="button" (click)="$event.stopPropagation(); fileInput.click()">
         <mat-icon>upload</mat-icon>
-        Upload File
+        Upload Files
     </button>
-    <p class="text-muted fs-6">(File Supported : PDF,JPEG,DCM)</p>
 
-    <span class="file-name text-muted">
-        {{ selectedFileName }}
-    </span>
+    <p class="text-muted fs-6">(File Supported : PDF, JPEG)</p>
 </div>
 
 <div class="mt-3">
     <p class="text-muted">Upload front & back side of your insurance card</p>
-    <div>
-        <!-- display cards here -->
+
+    <div class="d-flex gap-3 flex-wrap">
+        @for (file of previewFiles; track file.id; let i = $index) {
+        <div class="preview-card">
+            <img *ngIf="file.isImage" [src]="file.preview" class="img-thumbnail"
+                style="width:150px;height:100px;object-fit:cover;" />
+
+            <iframe *ngIf="file.isPdf" [src]="file.preview" width="150" height="100" style="border:1px solid #ccc;">
+            </iframe>
+
+
+            <button mat-icon-button color="warn">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        }
     </div>
+
+
 </div>
+
 
 <div class="form-col mt-4">
     <mat-form-field appearance="outline">
         <mat-label>Insurance Provider Name</mat-label>
-        <input matInput required>
+        <input matInput required [(ngModel)]="insurance['InsuranceProviderName']">
     </mat-form-field>
 
     <mat-form-field appearance="outline">
         <mat-label>Policy Number</mat-label>
-        <input matInput required>
+        <input matInput required [(ngModel)]="insurance['PolicyNumber']">
     </mat-form-field>
     <label>
         Expiry Date <span class="required">*</span>
@@ -42,12 +56,12 @@
     <div class="date-row">
         <mat-form-field appearance="outline">
             <mat-label>DD</mat-label>
-            <input matInput type="number" min="1" max="31" placeholder="DD" required />
+            <input matInput type="number" min="1" max="31" placeholder="DD" required [(ngModel)]="expiryDay" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="w-100">
             <mat-label>MM</mat-label>
-            <mat-select>
+            <mat-select [(ngModel)]="expiryMonth">
                 <mat-option *ngFor="let month of months" [value]="month.value">
                     {{ month.label }}
                 </mat-option>
@@ -56,14 +70,14 @@
 
         <mat-form-field appearance="outline">
             <mat-label>YYYY</mat-label>
-            <input matInput type="number" min="1900" max="2100" placeholder="YYYY" required />
+            <input matInput type="number" min="1900" max="2100" placeholder="YYYY" required [(ngModel)]="expiryYear" />
         </mat-form-field>
     </div>
 
     <div class="d-flex justify-content-end">
-         <button mat-button>Delete</button>
-            <button mat-raised-button color="primary" cdkFocusInitial>
-                Update Insurance
-            </button>
+        <button mat-button>Delete</button>
+        <button mat-raised-button color="primary" cdkFocusInitial>
+            Update Insurance
+        </button>
     </div>
 </div>

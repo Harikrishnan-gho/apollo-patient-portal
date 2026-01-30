@@ -46,3 +46,16 @@ mat-form-field {
 .date-row mat-form-field {
     flex: 1;
 }
+
+.preview-card {
+  position: relative;
+  object-fit: cover;
+}
+
+.preview-card button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #fff;
+  font-size: small;
+}
