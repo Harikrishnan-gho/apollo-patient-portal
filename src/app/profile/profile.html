@@ -1,0 +1,102 @@
+
+<!-- navbar -->
+<div class="d-flex main-heading mx-3">
+    <div class="d-flex gap-2">
+        <!-- <h2>Account</h2> -->
+    </div>
+    <div>
+        <mat-icon (click)="openSettings()" class="settings">settings</mat-icon>
+    </div>
+</div>
+
+<!-- Profile upload -->
+<div class="d-flex profile-upload">
+    <div class="profile-wrapper">
+  <img
+    class="profile-img"
+    [src]="previewImage || defaultImage"
+    alt="Profile"
+  />
+
+  <!-- Edit icon -->
+  <div class="edit-icon" (click)="fileInput.click()">
+    <mat-icon>edit</mat-icon>
+  </div>
+
+  <!-- Hidden file input -->
+  <input
+    type="file"
+    #fileInput
+    accept="image/*"
+    hidden
+    (change)="onImageChange($event)"
+  />
+</div>
+</div>
+
+    <h2 class="text-center">Name</h2>
+  <p class="text-center"> + 968 79071628</p>
+
+<!-- manage account -->
+<h4>Manage Account</h4>
+<div class="border-round mt-3 p-2">
+    <div class="d-flex gap-4 personal-info">
+        <div class="d-flex p-2 gap-4"> 
+            <mat-icon class="p-1">person</mat-icon>
+            <div>
+                <h5>Personal Information</h5>
+                <p class="text-secondary">Manage your account details</p>
+            </div>
+        </div>
+        <div class="pt-4">
+           <mat-icon>chevron_right</mat-icon>
+
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="d-flex gap-4 personal-info">
+        <div class="d-flex p-2 gap-4"> 
+            <mat-icon class="p-1">link</mat-icon>
+            <div>
+                <h5>Linked Accounts</h5>
+                <p class="text-secondary">Sync your accounts easily</p>
+            </div>
+        </div>
+        <div class="pt-4">
+           <mat-icon>chevron_right</mat-icon>
+
+        </div>
+    </div>
+</div>
+
+<!-- Account control -->
+<h4 class="mt-4">Account Control</h4>
+<div class="border-round mt-3 p-2">
+    <div class="d-flex gap-4 personal-info">
+        <div class="d-flex p-2 gap-4"> 
+            <mat-icon class="p-1">logout</mat-icon>
+            <div>
+                <h5>LogOut</h5>
+                <p class="text-secondary">Sign out from your account safely.</p>
+            </div>
+        </div>
+        <div class="pt-4">
+           <mat-icon>chevron_right</mat-icon>
+
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="d-flex gap-4 personal-info">
+        <div class="d-flex p-2 gap-4"> 
+            <mat-icon class="p-1">delete</mat-icon>
+            <div>
+                <h5>Delete Account</h5>
+                <p class="text-secondary">Close your account permanently.</p>
+            </div>
+        </div>
+        <div class="pt-4">
+           <mat-icon>chevron_right</mat-icon>
+
+        </div>
+    </div>
+</div>

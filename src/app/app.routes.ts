@@ -78,6 +78,16 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () => { return import('./insurance/insurance').then((m) => m.Insurance) },
     },
+    {
+        path: 'profile',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./profile/profile').then((m) => m.Profile) },
+    },
+    {
+        path: 'profile/settings',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./profile/settings/settings').then((m) => m.Settings) },
+    },
 ]
 
 
