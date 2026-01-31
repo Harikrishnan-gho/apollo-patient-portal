@@ -161,10 +161,6 @@ export class AddMedicationDialog {
 
     this.srv.getdata('patientmedication', this.tv).subscribe({
       next: (medRes: any) => {
-        if (medRes.Status !== 1) {
-          this.srv.openDialog('Error', 'e', 'Failed to add medication');
-          return;
-        }
 
         this.medicationId = medRes.Data[0][0].id;
 

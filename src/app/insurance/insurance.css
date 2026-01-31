@@ -54,8 +54,16 @@ mat-form-field {
 
 .preview-card button {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: -6px;
+  right: -6px;
   background: #fff;
-  font-size: small;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  padding: 0;
+}
+
+.preview-card mat-icon {
+  font-size: 14px;
+  line-height: 14px;
 }
