@@ -7,12 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GHOService } from '../../services/ghosrvs';
 import { ghoresult, tags } from '../../model/ghomodel';
-import { catchError } from 'rxjs';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
 
 @Component({
   selector: 'app-add-medication-dialog',
@@ -25,30 +22,23 @@ export class AddMedicationDialog {
   selectedFile: File | null = null;
   medicationId = '';
   uploadType: 'prescription' | 'medication' = 'prescription';
-  
-
-  dialogRef = inject(MatDialogRef<AddMedicationDialog>);
-
 
   srv = inject(GHOService);
   tv: tags[] = [];
   res: ghoresult = new ghoresult();
 
-  hospitalName = '';
-  medicationName = "";
+  name = '';
   fileType = '';
   fileId = '';
   uploadUrl = '';
   fileUploadId = '';
+  files: [] = [];
+  isEdit: boolean = true
 
-  pday: number | null = null;
-  pmonth: number | null = null;
-  pyear: number | null = null
+  day: number | null = null;
+  month: number | null = null;
+  year: number | null = null;
 
-
-  mday: number | null = null;
-  mmonth: number | null = null;
-  myear: number | null = null;
 
   months = [
     { label: 'Jan', value: 1 },
@@ -65,6 +55,38 @@ export class AddMedicationDialog {
     { label: 'Dec', value: 12 }
   ];
 
+  constructor(
+    public dialogRef: MatDialogRef<AddMedicationDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {
+    if (data) {
+      console.log(data)
+      this.uploadType = data.type || 'medication';
+
+      this.files = data.files || [];
+      this.isEdit = data.edit;
+
+      if (data.record) {
+        if (this.uploadType === 'medication') {
+          this.name = data.record.MedicationName || '';
+          if (data.record.StartDate) {
+            const startDate = new Date(data.record.StartDate);
+            this.day = startDate.getDate();
+            this.month = startDate.getMonth() + 1;
+            this.year = startDate.getFullYear();
+          }
+        } else if (this.uploadType === 'prescription') {
+          this.name = data.record.MedicationName || '';
+          if (data.record.StartDate) {
+            const presDate = new Date(data.record.StartDate);
+            this.day = presDate.getDate();
+            this.month = presDate.getMonth() + 1;
+            this.year = presDate.getFullYear();
+          }
+        }
+      }
+    }
+  }
 
   getFormattedDate(day: number | null, month: number | null, year: number | null): string | null {
     if (!day || !month || !year) return null;
@@ -72,16 +94,12 @@ export class AddMedicationDialog {
   }
 
   savePrescription() {
-    const prescriptionDate = this.getFormattedDate(
-      this.pday,
-      this.pmonth,
-      this.pyear
-    );
+    const date = this.getFormattedDate(this.day, this.month, this.year);
 
     this.tv = [
       { T: 'dk1', V: this.srv.getsession('id') },
-      { T: 'c1', V: prescriptionDate },
-      { T: 'c2', V: this.hospitalName },
+      { T: 'c1', V: date },
+      { T: 'c2', V: this.name },
       { T: 'c10', V: '6' },
     ];
 
@@ -92,7 +110,7 @@ export class AddMedicationDialog {
           return;
         }
 
-        const prescriptionId = res.Data[0][0].id;
+        const id = res.Data[0][0].id;
 
         if (!this.selectedFile) {
           this.srv.openDialog('Success', 's', 'Prescription saved successfully!');
@@ -102,7 +120,7 @@ export class AddMedicationDialog {
 
         this.tv = [
           { T: 'dk1', V: this.srv.getsession('id') },
-          { T: 'dk2', V: prescriptionId },
+          { T: 'dk2', V: id },
           { T: 'c1', V: '6' },
           { T: 'c2', V: this.selectedFileName },
           { T: 'c3', V: this.selectedFile.size.toString() },
@@ -134,11 +152,7 @@ export class AddMedicationDialog {
                   this.srv.getdata('fileupload', this.tv).subscribe();
                 }
 
-                this.srv.openDialog(
-                  'Success',
-                  's',
-                  'Prescription and file uploaded successfully!'
-                );
+                this.srv.openDialog('Success', 's', 'Prescription and file uploaded successfully!');
                 this.dialogRef.close(true);
               });
           },
@@ -150,18 +164,17 @@ export class AddMedicationDialog {
   }
 
   saveMedication() {
-    const medicationDate = this.getFormattedDate(this.mday, this.mmonth, this.myear);
+    const date = this.getFormattedDate(this.day, this.month, this.year);
 
     this.tv = [
       { T: 'dk1', V: this.srv.getsession('id') },
-      { T: 'c1', V: this.medicationName },
-      { T: 'c2', V: medicationDate },
+      { T: 'c1', V: this.name },
+      { T: 'c2', V: date },
       { T: 'c10', V: '1' },
     ];
 
     this.srv.getdata('patientmedication', this.tv).subscribe({
       next: (medRes: any) => {
-
         this.medicationId = medRes.Data[0][0].id;
 
         if (!this.selectedFile) {
@@ -210,12 +223,11 @@ export class AddMedicationDialog {
           },
           error: () => this.srv.openDialog('Error', 'e', 'Error saving file info')
         });
-
       },
       error: () => this.srv.openDialog('Error', 'e', 'Error saving medication')
     });
   }
-  
+
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
