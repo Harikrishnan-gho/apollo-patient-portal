@@ -33,7 +33,6 @@ export class DoctorSchedule implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['doctor'] && this.doctor) {
-      console.log("Doctor input received:", this.doctor); 
       this.loadSlotsForCurrentDate();
     }
   }

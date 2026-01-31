@@ -161,10 +161,6 @@ export class AddMedicationDialog {
 
     this.srv.getdata('patientmedication', this.tv).subscribe({
       next: (medRes: any) => {
-        if (medRes.Status !== 1) {
-          this.srv.openDialog('Error', 'e', 'Failed to add medication');
-          return;
-        }
 
         this.medicationId = medRes.Data[0][0].id;
 
@@ -219,6 +215,7 @@ export class AddMedicationDialog {
       error: () => this.srv.openDialog('Error', 'e', 'Error saving medication')
     });
   }
+  
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];

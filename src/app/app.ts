@@ -153,7 +153,6 @@ export class App {
     ).subscribe((r) => {
       if (r.Status === 1) {
         this.menuItems = r.Data[0];
-        console.log('menuItems',this.menuItems);
       }
     });
   }

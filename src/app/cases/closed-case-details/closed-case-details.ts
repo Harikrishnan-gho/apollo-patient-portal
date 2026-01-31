@@ -96,7 +96,6 @@ export class ClosedCaseDetails implements OnInit, OnChanges {
 
           this.patientRecords = (r.Data[3] ?? []).map((file: any) => {
             const ext = file.FileName.split('.').pop()?.toLowerCase() || '';
-            console.log('patientRecords',this.patientRecords);
             return {
               ...file,
               extension: ext,

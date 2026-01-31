@@ -4,7 +4,7 @@
 </div>
 
 <div class="upload-box mt-2" (click)="fileInput.click()">
-    <input type="file" #fileInput hidden multiple accept="image/*,application/pdf" (change)="onFilesSelected($event)" />
+    <input type="file" #fileInput hidden multiple accept="image/*,application/pdf" (change)="onFileSelected($event)" />
 
     <mat-icon class="doc-icon">description</mat-icon>
 
@@ -20,35 +20,40 @@
     <p class="text-muted">Upload front & back side of your insurance card</p>
 
     <div class="d-flex gap-3 flex-wrap">
-        @for (file of previewFiles; track file.id; let i = $index) {
-        <div class="preview-card">
-            <img *ngIf="file.isImage" [src]="file.preview" class="img-thumbnail"
-                style="width:150px;height:100px;object-fit:cover;" />
-
-            <iframe *ngIf="file.isPdf" [src]="file.preview" width="150" height="100" style="border:1px solid #ccc;">
-            </iframe>
-
-
-            <button mat-icon-button color="warn">
-                <mat-icon>close</mat-icon>
-            </button>
+        <div *ngIf="fileDetails.length > 0">
+            <div class="d-flex gap-3 flex-wrap">
+                @for (file of fileDetails; track file) {
+                <div class="preview-card">
+                    <img [src]="file._url" style="width:100px;height:auto;border-radius:6px" />
+                    <button mat-icon-button type="button">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                }
+            </div>
         </div>
-        }
+        <div *ngIf="uploadedPreviewUrl" class="mt-2">
+            <div class="preview-card">
+                <img [src]="uploadedPreviewUrl" style="width:100px;height:auto;border-radius:6px" />
+
+                <button mat-icon-button type="button" class="small-close-btn"
+                    (click)="uploadedPreviewUrl=null; selectedFile=null;">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </div>
     </div>
-
-
 </div>
-
 
 <div class="form-col mt-4">
     <mat-form-field appearance="outline">
         <mat-label>Insurance Provider Name</mat-label>
-        <input matInput required [(ngModel)]="insurance['InsuranceProviderName']">
+        <input matInput required [(ngModel)]="providerName">
     </mat-form-field>
 
     <mat-form-field appearance="outline">
         <mat-label>Policy Number</mat-label>
-        <input matInput required [(ngModel)]="insurance['PolicyNumber']">
+        <input matInput required [(ngModel)]="policyNumber">
     </mat-form-field>
     <label>
         Expiry Date <span class="required">*</span>
@@ -75,9 +80,10 @@
     </div>
 
     <div class="d-flex justify-content-end">
-        <button mat-button>Delete</button>
-        <button mat-raised-button color="primary" cdkFocusInitial>
-            Update Insurance
+        <button mat-button (click)="deleteInsurance()">Delete</button>
+
+        <button mat-raised-button color="primary" cdkFocusInitial (click)="saveInsurance()">
+            {{ isInsuranceEmpty ? 'Save Insurance' : 'Update Insurance' }}
         </button>
     </div>
 </div>

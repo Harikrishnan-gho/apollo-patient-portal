@@ -32,46 +32,29 @@ export class Insurance implements OnInit {
 
   insurance: any = {};
   fileDetails: any[] = [];
+  fileType = '';
+  fileId = '';
+  uploadUrl = '';
+  fileUploadId = '';
+  selectedFileName = '';
+  selectedFile: File | null = null;
 
   expiryDay!: number;
   expiryMonth!: number;
   expiryYear!: number;
 
-  setExpiryDate(dateStr: string) {
-    const parts = dateStr.replace(',', '').split(' ');
+  providerName = '';
+  policyNumber = "";
+  insuranceId = '';
+  uploadedPreviewUrl: string | null = null;
 
-    if (parts.length === 3) {
-      this.expiryDay = Number(parts[0]);
-      const monthLabel = parts[1];
-      this.expiryYear = Number(parts[2]);
+  isInsuranceEmpty: boolean = true
 
-      const monthObj = this.months.find(m => m.label === monthLabel);
-      this.expiryMonth = monthObj ? monthObj.value : 0;
-    }
+
+  getFormattedDate(day: number | null, month: number | null, year: number | null): string | null {
+    if (!day || !month || !year) return null;
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   }
-
-  get previewFiles() {
-    return [
-      ...this.fileDetails.map((f: any) => ({
-        id: f.id,
-        name: f.FileName,
-        preview: f._url,
-        isImage: /\.(jpg|jpeg|png)$/i.test(f.FileName),
-        isPdf: /\.pdf$/i.test(f.FileName),
-        fromApi: true
-      })),
-
-      ...this.files.map((f, index) => ({
-        id: `local-${index}`,
-        name: f.name,
-        preview: f.preview,
-        isImage: f.isImage,
-        isPdf: f.isPdf,
-        fromApi: false
-      }))
-    ];
-  }
-
 
   months = [
     { label: 'Jan', value: 1 },
@@ -92,6 +75,18 @@ export class Insurance implements OnInit {
     this.getInsurance()
   }
 
+  setExpiryDate(dateStr: string) {
+    const parts = dateStr.replace(',', '').split(' ');
+
+    if (parts.length === 3) {
+      this.expiryDay = Number(parts[0]);
+      this.expiryYear = Number(parts[2]);
+
+      const month = this.months.find(m => m.label === parts[1]);
+      this.expiryMonth = month ? month.value : undefined!;
+    }
+  }
+
   getInsurance() {
     this.tv = [
       { T: "dk1", V: this.srv.getsession('id') },
@@ -104,37 +99,127 @@ export class Insurance implements OnInit {
         throw err;
       })
     ).subscribe((r) => {
+      const insuranceData = r.Data?.[0];
+
+      if (!insuranceData || insuranceData.length === 0) {
+        this.isInsuranceEmpty = true;
+        this.insurance = {};
+        this.fileDetails = [];
+        return;
+      }
+      this.isInsuranceEmpty = false;
+      this.insurance = insuranceData[0];
+      this.fileDetails = r.Data?.[1] || [];
+      this.providerName = this.insurance.InsuranceProviderName || '';
+      this.policyNumber = this.insurance.PolicyNumber || '';
+      if (this.insurance.ExpiryDate) {
+        this.setExpiryDate(this.insurance.ExpiryDate);
+      }
+
+    });
+  }
+
+  deleteInsurance() {
+    this.tv = [
+      { T: 'dk1', V: this.srv.getsession('id') },
+      { T: 'dk2', V: this.insurance.ID || '' },
+      { T: 'c10', V: '4' },
+    ];
+
+    this.srv.getdata("PatientInsurance", this.tv).pipe(
+      catchError((err) => {
+        this.srv.openDialog("Insurance Info", "e", "Error while loading Insurance");
+        throw err;
+      })
+    ).subscribe((r) => {
       if (r.Status === 1) {
-        this.insurance = r.Data[0][0];
-        this.fileDetails = r.Data[1];
-        if (this.insurance?.ExpiryDate) {
-          this.setExpiryDate(this.insurance.ExpiryDate);
+        this.srv.openDialog("Success", "s", "Insurance Deleted successfully");
+      }
+      this.getInsurance()
+    });
+  }
+
+  saveInsurance() {
+    const expiryDate = this.getFormattedDate(
+      this.expiryDay,
+      this.expiryMonth,
+      this.expiryYear
+    );
+
+    this.tv = [
+      { T: 'dk1', V: this.srv.getsession('id') },
+      { T: 'dk2', V: this.insurance.ID || '' },
+      { T: 'c1', V: this.providerName },
+      { T: 'c2', V: this.policyNumber },
+      { T: 'c3', V: expiryDate },
+      { T: 'c10', V: this.isInsuranceEmpty ? '1' : '2' },
+    ];
+
+    this.srv.getdata("PatientInsurance", this.tv).pipe(
+      catchError((err) => {
+        this.srv.openDialog("Insurance Info", "e", "Error while loading Insurance");
+        throw err;
+      })
+    ).subscribe((r) => {
+      if (r.Status === 1) {
+        this.insuranceId = r.Data[0][0].id
+        if (!this.selectedFile) {
+          this.srv.openDialog('Success', 's', 'Insurance Updated successfully!');
+          return;
         }
+
+        this.tv = [
+          { T: 'dk1', V: this.srv.getsession('id') },
+          { T: 'dk2', V: this.insuranceId },
+          { T: 'c1', V: '4' },
+          { T: 'c2', V: this.selectedFileName },
+          { T: 'c3', V: this.selectedFile.size.toString() },
+          { T: 'c10', V: '1' },
+        ];
+        this.srv.getdata('fileupload', this.tv).subscribe({
+          next: (fileRes: any) => {
+            if (fileRes.Status !== 1) {
+              this.srv.openDialog('Error', 'e', 'Failed to save file info');
+              return;
+            }
+
+            this.fileId = fileRes.Data[0][0].FileID;
+            this.fileType = fileRes.Data[0][0].FileType;
+            this.fileUploadId = fileRes.Data[0][0].id;
+
+            this.srv.uploadFile(this.fileId, this.fileType, this.selectedFile!)
+              .then((status) => {
+                if (status === 2) {
+                  this.tv = [
+                    { T: 'dk1', V: this.srv.getsession('id') },
+                    { T: 'dk2', V: '4' },
+                    { T: 'c1', V: this.fileUploadId },
+                    { T: 'c2', V: status.toString() },
+                    { T: 'c10', V: '2' },
+                  ];
+
+                  this.srv.getdata('fileupload', this.tv).subscribe();
+                }
+
+                this.srv.openDialog(
+                  'Success',
+                  's',
+                  'Insurance and file uploaded successfully!'
+                );
+              });
+          },
+          error: () => this.srv.openDialog('Error', 'e', 'Error saving file info'),
+        });
+
+        this.srv.openDialog("Success", "s", "Insurance Updated Successfully");
       }
     });
-
   }
 
-  onFilesSelected(event: any) {
-    const selectedFiles: FileList = event.target.files;
-
-    for (let i = 0; i < selectedFiles.length; i++) {
-      const file = selectedFiles[i];
-
-      this.files.push({
-        file,
-        name: file.name,
-        preview: URL.createObjectURL(file),
-        isImage: file.type.startsWith('image/'),
-        isPdf: file.type === 'application/pdf'
-      });
-    }
-
-    event.target.value = '';
-  }
-
-  removeFile(index: number) {
-    URL.revokeObjectURL(this.files[index].preview);
-    this.files.splice(index, 1);
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    this.selectedFile = file;
+    this.selectedFileName = file.name;
+    this.uploadedPreviewUrl = URL.createObjectURL(file);
   }
 }
