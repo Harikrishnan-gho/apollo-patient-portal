@@ -1,4 +1,12 @@
 <div class="container">
+
+        <div class="loader-overlay" *ngIf="isLoadingFileUpload">
+        <mat-progress-spinner
+            mode="indeterminate"
+            diameter="50">
+        </mat-progress-spinner>
+    </div>
+
     <div class="row">
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="border-round pb-3"
             [(selectedIndex)]="tbidx">
@@ -21,6 +29,42 @@
                 </div>
             </mat-tab>
             <mat-tab label="My Uploads">
+                <div class="py-2">
+                    <label class="fw-semibold">
+                        Upload Medical Documents
+                    </label>
+
+                    <div class="upload-box mt-2 d-flex flex-column align-items-center justify-content-center"
+                        (click)="fileInput.click()">
+                        <input type="file" #fileInput hidden accept="image/*,application/pdf"
+                            (change)="onFileSelected($event)" />
+                        <mat-icon class="doc-icon mb-2">description</mat-icon>
+
+                        <button mat-raised-button color="primary" type="button"
+                            (click)="$event.stopPropagation(); fileInput.click()">
+                            <mat-icon>upload</mat-icon>
+                            Upload File
+                        </button>
+
+                        <p class="text-muted fs-6 mt-2">
+                            (Supported formats: PDF, JPEG, DCM)
+                        </p>
+
+                        
+                        <span *ngIf="selectedFileName" class="file-name text-muted mt-1">
+                            {{ selectedFileName }}
+                        </span>
+                    </div>
+
+                    <!-- Upload Action Button -->
+                    <div class="mt-3 text-end">
+                        <button mat-raised-button color="primary" type="button" [disabled]="!selectedFile"
+                            (click)="uploadMedicalRecord()">
+                            Upload Medical Record
+                        </button>
+                    </div>
+                </div>
+
                 <div class="list-container mt-3">
                     <div class="sticky-header rounded">
                         <mat-form-field appearance="outline" class="w-100">

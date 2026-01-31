@@ -87,7 +87,6 @@ export class Emergencycontact implements OnInit {
       data: Contacts,
       
     });
-      console.log('dta',Contacts)
 
     dialogRef.afterClosed().subscribe(result => {
       this.getEmergencyContact();

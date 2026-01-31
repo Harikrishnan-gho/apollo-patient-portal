@@ -215,6 +215,7 @@ export class AddMedicationDialog {
       error: () => this.srv.openDialog('Error', 'e', 'Error saving medication')
     });
   }
+  
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
