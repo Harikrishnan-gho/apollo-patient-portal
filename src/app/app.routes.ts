@@ -88,6 +88,16 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () => { return import('./profile/settings/settings').then((m) => m.Settings) },
     },
+    {
+        path: 'profile/settings/password',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./profile/settings/change-password/change-password').then((m) => m.ChangePassword) },
+    },
+    {
+        path: 'profile/linked-account',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./profile/linked-account/linked-account').then((m) => m.LinkedAccount) },
+    },
 ]
 
 
