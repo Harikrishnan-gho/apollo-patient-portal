@@ -2,7 +2,6 @@
 <!-- navbar -->
 <div class="d-flex main-heading mx-3">
     <div class="d-flex gap-2">
-        <!-- <h2>Account</h2> -->
     </div>
     <div>
         <mat-icon (click)="openSettings()" class="settings">settings</mat-icon>
@@ -10,13 +9,14 @@
 </div>
 
 <!-- Profile upload -->
+ @for(item of personalDetails;track item){
 <div class="d-flex profile-upload">
     <div class="profile-wrapper">
-  <img
-    class="profile-img"
-    [src]="previewImage || defaultImage"
-    alt="Profile"
-  />
+<img
+  class="profile-img"
+  [src]="item._url || defaultImage"
+  alt="Profile"
+/>
 
   <!-- Edit icon -->
   <div class="edit-icon" (click)="fileInput.click()">
@@ -34,9 +34,9 @@
 </div>
 </div>
 
-    <h2 class="text-center">Name</h2>
-  <p class="text-center"> + 968 79071628</p>
-
+    <h2 class="text-center"> {{ item.FirstName}}</h2>
+  <p class="text-center"> + 968 {{ item.Phone}}</p>
+ }
 <!-- manage account -->
 <h4>Manage Account</h4>
 <div class="border-round mt-3 p-2">

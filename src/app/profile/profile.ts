@@ -6,6 +6,7 @@ import { GHOService } from '../services/ghosrvs';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../app';
 import { ghoresult, tags } from 'c:/Users/Nandana/Downloads/Apollo/apollo-patient-portal/src/app/model/ghomodel';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -26,8 +27,12 @@ private srv = inject(GHOService);
   private dialog = inject(MatDialog);
     tv: tags[] = []
   deleteAccounts: any;
+  patientId = this.srv.getsession('id');
+  personalDetails: any[];
 
-
+  ngOnInit(){
+    this.getDetails()
+  }
   onImageChange(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
@@ -70,6 +75,27 @@ private srv = inject(GHOService);
       panelClass: 'custom-dialog',
     });
   }
+
+  // get details of profile
+  getDetails(){
+      this.tv = [
+        { T: "dk1", V: this.patientId },
+        { T: "c10", V: "3" }
+      ];
+      this.srv.getdata("patient", this.tv).pipe(
+        catchError((err) => {
+          this.srv.openDialog('Emergency Contacts', "e", 'Error while loading emergency contacts');
+          throw err;
+        })
+      ).subscribe((r) => {
+        if (r.Status === 1) {
+          this.personalDetails = [...r.Data[0]];
+          console.log('personal details',this.personalDetails);
+          
+          }
+      });
+  }
+
 
   // delete account
   deleteAccount(): void {
