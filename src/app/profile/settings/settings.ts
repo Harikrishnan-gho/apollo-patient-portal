@@ -21,4 +21,7 @@ export class Settings {
 account(){
   this.router.navigate(['profile'])
 }
+ChangePassword(){
+  this.router.navigate(['profile/settings/password'])
+}
 }
