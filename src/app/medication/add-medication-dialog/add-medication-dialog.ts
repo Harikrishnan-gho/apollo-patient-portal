@@ -61,11 +61,9 @@ export class AddMedicationDialog {
   ) {
     if (data) {
       console.log(data)
-      this.uploadType = data.type || 'medication';
-
+      this.uploadType = data?.type ?? 'prescription';
       this.files = data.files || [];
-      this.isEdit = data.edit;
-
+      this.isEdit = !!data?.edit;
       if (data.record) {
         if (this.uploadType === 'medication') {
           this.name = data.record.MedicationName || '';
@@ -95,7 +93,7 @@ export class AddMedicationDialog {
 
   savePrescription() {
     const date = this.getFormattedDate(this.day, this.month, this.year);
-    const ID = this.data.record.ID
+    const ID = this.data?.record?.ID || '';
 
     this.tv = [
       { T: 'dk1', V: this.srv.getsession('id') },
@@ -167,7 +165,7 @@ export class AddMedicationDialog {
 
   saveMedication() {
     const date = this.getFormattedDate(this.day, this.month, this.year);
-    const ID = this.data.record.ID
+    const ID = this.data?.record?.ID || '';
     this.tv = [
       { T: 'dk1', V: this.srv.getsession('id') },
       { T: 'dk2', V: ID || '' },
