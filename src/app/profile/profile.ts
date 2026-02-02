@@ -85,7 +85,7 @@ private srv = inject(GHOService);
       { T: 'c10', V: '13' }
     ];
 
-    this.srv.getdata('reviewer', tv).subscribe((r) => {
+    this.srv.getdata('patient', tv).subscribe((r) => {
       this.res = r;
 
       if (r.Status === 1) {
@@ -95,7 +95,6 @@ private srv = inject(GHOService);
           this.res.Info
         );
 
-        // ✅ close dialog correctly
         this.dialogRef.close();
 
         // logout user
