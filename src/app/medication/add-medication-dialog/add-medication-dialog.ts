@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GHOService } from '../../services/ghosrvs';
 import { ghoresult, tags } from '../../model/ghomodel';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-add-medication-dialog',
@@ -60,7 +61,6 @@ export class AddMedicationDialog {
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     if (data) {
-      console.log(data)
       this.uploadType = data?.type ?? 'prescription';
       this.files = data.files || [];
       this.isEdit = !!data?.edit;
@@ -85,6 +85,31 @@ export class AddMedicationDialog {
       }
     }
   }
+
+  deleteFile(file: any) {
+    this.tv = [
+      { T: 'dk1', V: this.srv.getsession('id') },
+      { T: 'dk2', V: file?.DocumentTypeID },
+      { T: 'c1', V: file?.id },
+      { T: 'c3', V: this.data?.record?.ID },
+      { T: 'c10', V: "4" },
+    ];
+
+    this.srv.getdata("fileupload", this.tv).pipe(
+      catchError((err) => {
+        this.srv.openDialog("Medication Info", "e", "Error while deleting medication");
+        throw err;
+      })
+    ).subscribe((r) => {
+      if (r.Status === 1) {
+        this.srv.openDialog("Success", "s", "Medication Deleted Successfully");
+        
+      } else {
+        this.srv.openDialog("Error", "e", "Failed to delete Medication");
+      }
+    });
+  };
+
 
   getFormattedDate(day: number | null, month: number | null, year: number | null): string | null {
     if (!day || !month || !year) return null;

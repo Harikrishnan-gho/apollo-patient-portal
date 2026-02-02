@@ -118,7 +118,26 @@ export class Insurance implements OnInit {
 
     });
   }
+  removeFile(file: any) {
+    this.tv = [
+      { T: 'dk1', V: this.srv.getsession('id') },
+      { T: 'dk2', V: file?.DocumentTypeID },
+      { T: 'c1', V: file?.id },
+      { T: 'c3', V: this.insurance?.ID },
+      { T: 'c10', V: "4" },
+    ];
 
+    this.srv.getdata("fileupload", this.tv).pipe(
+      catchError((err) => {
+        throw err;
+      })
+    ).subscribe((r) => {
+      if (r.Status === 1) {
+        this.getInsurance()
+      } else {
+      }
+    });
+  }
   deleteInsurance() {
     this.tv = [
       { T: 'dk1', V: this.srv.getsession('id') },
@@ -138,6 +157,8 @@ export class Insurance implements OnInit {
       this.getInsurance()
     });
   }
+
+
 
   saveInsurance() {
     const expiryDate = this.getFormattedDate(
