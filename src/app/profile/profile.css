@@ -61,3 +61,11 @@
     cursor: pointer;
 
 }
+.apollo-logo{
+    width: 30%;
+    height: 30%;
+}
+.delete-btn{
+    color: white;
+    background-color: rgba(152, 60, 60, 1);
+}

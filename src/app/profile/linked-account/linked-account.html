@@ -1,0 +1,40 @@
+<!-- navbar -->
+<div class="d-flex align-items-center main-heading mx-3">
+    <div class="d-flex align-items-center gap-2 heading" (click)="account()">
+        <mat-icon>arrow_back</mat-icon>
+        <p class="mb-0">Profile</p>
+    </div>
+</div>
+<h3 class="mt-4 text-center text-md-start ">Linked Accounts</h3>
+<p class="text-center text-md-start text-secondary">
+    Link and manage your Apollo patient accounts easily.
+</p>
+<div class="d-flex settings-profile p-3 border-round mt-4 mx-3">
+    <div class="d-flex gap-4">
+        <div>
+            <img class="profile-img" [src]="previewImage || defaultImage" alt="profile img">
+        </div>
+        <div>
+            <h5>Name</h5>
+            <span class="d-flex account-primary px-2">
+                <span>
+                    <mat-icon class="verified pt-1">verified</mat-icon>
+
+                </span>
+                <span>Primary</span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- link an account -->
+<div class="linkAccount border-round mt-3 mx-3 p-2">
+     <div class="d-flex gap-2  ">
+    <span>
+        <img src="link-icon.svg" alt="">
+    </span>
+    <span>
+        Link account
+    </span>
+ </div>
+</div>
