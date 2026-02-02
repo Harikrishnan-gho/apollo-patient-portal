@@ -24,8 +24,8 @@
             <div class="d-flex gap-3 flex-wrap">
                 @for (file of fileDetails; track file) {
                 <div class="preview-card">
-                    <img [src]="file._url" style="width:100px;height:auto;border-radius:6px" />
-                    <button mat-icon-button type="button">
+                    <img [src]="file._url" style="width:100px;height:auto;border-radius:6px"/>
+                    <button mat-icon-button type="button" (click)="removeFile(file)">
                         <mat-icon>close</mat-icon>
                     </button>
                 </div>
