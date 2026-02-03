@@ -15,7 +15,7 @@
         </div>
 
         <div class="mt-2">
-            <button mat-raised-button (click)="onBookAppointment()">
+            <button class="bookButton" (click)="onBookAppointment()">
                 Book Appointment
             </button>
         </div>
@@ -34,8 +34,20 @@
     }
 
     .slots-buttons button.selected {
-        background-color: #3f51b5;
+        background-color: #0c79a5;
         color: white;
         border-color: #3f51b5;
+    }
+
+    .bookButton {
+        padding: 10px 16px;
+        border-radius: 6px;
+        background-color: #0c79a5;
+        color: #ffffff;
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.2;
+        cursor: pointer;
     }
 </style>
