@@ -13,7 +13,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 @Component({
   selector: 'app-add-emergency-contact',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule],
+  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule,],
   templateUrl: './add-emergency-contact.html',
   styleUrls: ['./add-emergency-contact.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

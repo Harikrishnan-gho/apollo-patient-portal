@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CustomDialog } from '../shared/custom-dialog/custom-dialog';
 import { AddEmergencyContact } from './add-emergency-contact/add-emergency-contact';
@@ -29,7 +29,7 @@ export class Emergencycontact implements OnInit {
 
   private srv = inject(GHOService);
   tv: { T: string; V: string; }[];
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog,private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.patientId = this.srv.getsession('id');
@@ -159,7 +159,4 @@ export class Emergencycontact implements OnInit {
         }
       });
   }
-
-
-
 }
