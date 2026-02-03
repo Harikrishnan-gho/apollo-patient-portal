@@ -22,7 +22,7 @@ import { catchError, throwError } from 'rxjs';
     MatRadioButton
   ],
   templateUrl: './personal-info.html',
-  styleUrls: ['./personal-info.css'], // ✅ fixed
+  styleUrls: ['./personal-info.css'], 
 })
 export class PersonalInfo implements OnInit {
 
