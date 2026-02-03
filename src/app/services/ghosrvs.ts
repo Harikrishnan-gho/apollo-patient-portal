@@ -16,6 +16,9 @@ interface AwsFileResponse {
 })
 
 export class GHOService {
+  uploadImage(arg0: string, formData: FormData) {
+    throw new Error('Method not implemented.');
+  }
   http = inject(HttpClient);
   tkn: string = "";
   constructor(private ss: SessionService, public rt: Router) { }
