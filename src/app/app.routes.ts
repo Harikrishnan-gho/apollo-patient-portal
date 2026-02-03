@@ -98,6 +98,11 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () => { return import('./profile/linked-account/linked-account').then((m) => m.LinkedAccount) },
     },
+    {
+        path: 'profile/personalInfo',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./profile/personal-info/personal-info').then((m) => m.PersonalInfo) },
+    },
 ]
 
 

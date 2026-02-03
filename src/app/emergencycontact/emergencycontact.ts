@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CustomDialog } from '../shared/custom-dialog/custom-dialog';
 import { AddEmergencyContact } from './add-emergency-contact/add-emergency-contact';
@@ -29,7 +29,7 @@ export class Emergencycontact implements OnInit {
 
   private srv = inject(GHOService);
   tv: { T: string; V: string; }[];
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog,private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.patientId = this.srv.getsession('id');
@@ -61,7 +61,7 @@ export class Emergencycontact implements OnInit {
       if (r.Status === 1) {
         // this.emergencyContacts = r.Data[0];
         this.emergencyContacts = [...r.Data[0]];
-        }
+        }        
     });
 
   }
@@ -72,12 +72,13 @@ export class Emergencycontact implements OnInit {
       disableClose: false,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.getEmergencyContact();
+dialogRef.afterClosed().subscribe(result => {
+  if (result) {
+    this.getEmergencyContact();
+    this.cdr.detectChanges();
+  }
+});
 
-
-    }
-    );
   }
   // update emergency contacts
  editContacts(Contacts: any) {
@@ -127,11 +128,10 @@ deleteContact(contact: any) {
             'Contact deleted successfully'
           );
 
-
           this.emergencyContacts = this.emergencyContacts.filter(
             c => c.ID !== contact.ID
           );
-          this.getEmergencyContact()
+          
 
         } else {
           this.srv.openDialog(

@@ -22,7 +22,6 @@ private srv = inject(GHOService);
 
  defaultImage =
     'https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg';
-
   previewImage: string | ArrayBuffer | null = null;
   router = inject(Router)
   private dialog = inject(MatDialog);
@@ -56,6 +55,13 @@ private srv = inject(GHOService);
   linkedAccount(){
     this.router.navigate(['profile/linked-account'])
   }
+
+  // personal info
+  goToPersonalInfo(){
+   this.router.navigate(['profile/personalInfo'])
+  }
+
+  // logout
  logout() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',

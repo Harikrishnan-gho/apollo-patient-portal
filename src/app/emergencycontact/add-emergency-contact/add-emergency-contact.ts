@@ -13,7 +13,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 @Component({
   selector: 'app-add-emergency-contact',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule],
+  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule,],
   templateUrl: './add-emergency-contact.html',
   styleUrls: ['./add-emergency-contact.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,6 +71,8 @@ export class AddEmergencyContact {
           const msg = r?.Data?.[0]?.[0]?.msg ?? 'Contact added successfully';
           this.srv.openDialog('Emergency Contact', 's', msg);
           this.close.emit();
+          console.log('data added');
+
 
 
           form.resetForm();
