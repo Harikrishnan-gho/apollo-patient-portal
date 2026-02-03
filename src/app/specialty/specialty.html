@@ -1,16 +1,11 @@
 <div class="container specialty-page">
     <div class="sticky-header rounded">
-        <div class="d-flex align-items-center gap-2 mb-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
             <mat-icon (click)="navigateToDashboard()" class="cursor-pointer back-icon">
                 arrow_back
             </mat-icon>
             <p class="fs-5 fw-semibold mb-0">Find a Specialty</p>
         </div>
-        <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Find Specialty</mat-label>
-            <mat-icon matPrefix class="me-2">search</mat-icon>
-            <input (input)="onSearchSpecialty($event)" matInput />
-        </mat-form-field>
     </div>
 </div>
 
@@ -19,6 +14,14 @@
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="border-round pb-3"
             [(selectedIndex)]="tbidx">
             <mat-tab label="Available Specialities">
+
+              <div class="pt-3">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Find Specialty</mat-label>
+                    <mat-icon matPrefix class="me-2">search</mat-icon>
+                    <input (input)="onSearchSpecialty($event)" matInput />
+                </mat-form-field>
+              </div>
                 <div class="list-container mt-1">
                     @for (specialty of filteredSpecialtyList; track specialty.ID) {
                     <div (click)="openDoctorBySpecialty(specialty)" class="specialty-item">
@@ -35,7 +38,7 @@
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                         <div class="doctor-card position-relative">
 
-                            <div class="experience-badge">14+</div>
+                            <div class="experience-badge">{{ doctor.Experience }}+</div>
 
                             <div class="doctor-img">
                                 @if (doctor._url) {
@@ -59,6 +62,10 @@
                                 <span class="slots-chip">
                                     {{ doctor.AvailableSlots }} slots available
                                 </span>
+                                <div class="py-2">
+                                    <button (click)="bookAppointment(doctor)" class="bookButton">Book
+                                        Appointment</button>
+                                </div>
                             </div>
 
                         </div>

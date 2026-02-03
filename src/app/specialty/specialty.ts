@@ -19,7 +19,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule, MatIconModule, MatDividerModule,MatTabsModule],
+    MatButtonModule, MatIconModule, MatDividerModule, MatTabsModule],
   templateUrl: './specialty.html',
   styleUrl: './specialty.css',
 })
@@ -102,6 +102,10 @@ export class Specialty {
           this.srv.openDialog('Specialty List', 'w', r.Info);
         }
       });
+  }
+
+  bookAppointment(doctor: any) {
+    this.router.navigate(['/schedule/doctor', doctor.ID]);
   }
 
 }

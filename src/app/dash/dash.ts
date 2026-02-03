@@ -115,16 +115,16 @@ export class RevDash implements OnInit {
   }
 
   getCardiologyDoctors(specialtyId: string) {
-    this.router.navigate(['schedule', specialtyId]);
+    this.router.navigate(['schedule/specialty', specialtyId]);
   }
   getNeurologyDoctors(specialtyId: string) {
-    this.router.navigate(['schedule', specialtyId]);
+    this.router.navigate(['schedule/specialty', specialtyId]);
   }
   getOncologyDoctors(specialtyId: string) {
-    this.router.navigate(['schedule', specialtyId]);
+    this.router.navigate(['schedule/specialty', specialtyId]);
   }
   getOrthopaedicDoctors(specialtyId: string) {
-    this.router.navigate(['schedule', specialtyId]);
+    this.router.navigate(['schedule/specialty', specialtyId]);
   }
 }
 
