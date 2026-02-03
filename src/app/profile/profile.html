@@ -34,17 +34,17 @@
 </div>
 </div>
 
-    <h2 class="text-center"> {{ item.FirstName}}</h2>
+    <h4 class="text-center"> {{ item.FirstName}}</h4>
   <p class="text-center"> + 968 {{ item.Phone}}</p>
  }
 <!-- manage account -->
-<h4>Manage Account</h4>
+<h5>Manage Account</h5>
 <div class="border-round mt-3 p-2">
     <div class="d-flex gap-4 personal-info" (click)="goToPersonalInfo()">
         <div class="d-flex p-2 gap-4"> 
             <mat-icon class="p-1">person</mat-icon>
             <div>
-                <h5>Personal Information</h5>
+                <h5 class="heading">Personal Information</h5>
                 <p class="text-secondary">Manage your account details</p>
             </div>
         </div>
@@ -58,7 +58,7 @@
         <div class="d-flex p-2 gap-4"> 
             <mat-icon class="p-1">link</mat-icon>
             <div>
-                <h5>Linked Accounts</h5>
+                <h5 class="heading">Linked Accounts</h5>
                 <p class="text-secondary">Sync your accounts easily</p>
             </div>
         </div>
@@ -70,13 +70,13 @@
 </div>
 
 <!-- Account control -->
-<h4 class="mt-4">Account Control</h4>
+<h5 class="mt-4">Account Control</h5>
 <div class="border-round mt-3 p-2">
     <div class="d-flex gap-4 personal-info" (click)="logout()">
         <div class="d-flex p-2 gap-4"> 
             <mat-icon class="p-1">logout</mat-icon>
             <div>
-                <h5>LogOut</h5>
+                <h5 class="heading">LogOut</h5>
                 <p class="text-secondary">Sign out from your account safely.</p>
             </div>
         </div>
@@ -90,7 +90,7 @@
   <div class="d-flex p-2 gap-4">
     <mat-icon class="p-1">delete</mat-icon>
     <div>
-      <h5>Delete Account</h5>
+      <h5 class="heading">Delete Account</h5>
       <p class="text-secondary">Close your account permanently.</p>
     </div>
   </div>

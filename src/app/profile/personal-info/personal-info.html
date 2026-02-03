@@ -7,10 +7,10 @@
 </div>
 <div class="d-flex personal-info  p-2">
     <div class="pt-4 pl-3">
-        <h3>My Profile</h3>
+        <h4>My Profile</h4>
         <p>Manage your account details</p>
     </div>
-    <div class="profile-wrapper">
+    <div class="profile-wrapper mx-5">
         <img class="profile-img" [src]="photo || defaultImage" alt="Profile" />
         <!-- Edit icon -->
         <div class="edit-icon" (click)="fileInput.click()">
@@ -100,5 +100,5 @@
 </div>
 
 <div class="d-flex save">
-    <button class=" save-btn px-5 py-2 border-round">Save changes</button>
+    <button class=" save-btn px-5 py-2 border-round" (click)="updateProfile()">Save changes</button>
 </div>

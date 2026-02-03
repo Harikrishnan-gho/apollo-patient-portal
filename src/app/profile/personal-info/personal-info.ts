@@ -36,13 +36,14 @@ private srv = inject(GHOService);
   address: string = '';
   photo:string='';
 
+
   defaultImage =
     'https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg';
 
   previewImage: string | ArrayBuffer | null = null;
     patientId = this.srv.getsession('id');
   tv: { T: string; V: string; }[];
-  personalDetails: any[];
+
 
   ngOnInit(){
     this.getDetails()
@@ -88,5 +89,47 @@ private srv = inject(GHOService);
     }
   });
 }
+updateProfile() {
+  const updatePayload = {
+    FirstName: this.name,
+    Phone: this.phone,
+    Gender: this.gender.charAt(0).toUpperCase() + this.gender.slice(1), 
+    BirthDate: this.dob,
+    BloodGroup: this.bloodGroup,
+    Occupation: this.job,
+    MaritalStatus: this.maritalStatus,
+    Address: this.address,
+    City: '', 
+    State: '', 
+    // _url: this.photo || '' // image URL
+  };
 
+  const payload = [
+    { T: 'dk1', V: this.patientId },
+    { T: 'c1', V: JSON.stringify(updatePayload) }, 
+    { T: 'c10', V: '2' }
+  ];
+
+  this.srv.getdata('patient', payload).pipe(
+    catchError((err) => {
+      this.srv.openDialog(
+        'Profile',
+        'e',
+        'Error while saving profile'
+      );
+      throw err;
+    })
+  ).subscribe((res) => {
+    if (res.Status === 1) {
+      let msg = res.Data[0][0].msg
+      this.srv.openDialog( 
+        'Profile',
+        's',
+        msg
+      );
+    } else {
+      console.log('Update failed:', res);
+    }
+  });
+}
 }
