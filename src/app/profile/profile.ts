@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { GHOService } from '../services/ghosrvs';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../app';
-import { ghoresult, tags } from 'c:/Users/Nandana/Downloads/Apollo/apollo-patient-portal/src/app/model/ghomodel';
 import { catchError } from 'rxjs';
+import { ghoresult, tags } from '../model/ghomodel';
 
 
 @Component({
