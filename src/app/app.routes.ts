@@ -28,7 +28,12 @@ export const routes: Routes = [
         loadComponent: () => { return import('./schedule/schedule').then((m) => m.Schedule) },
     },
     {
-        path: 'schedule/:id',
+        path: 'schedule/specialty/:id',
+        loadComponent: () =>
+            import('./schedule/schedule').then(m => m.Schedule)
+    },
+    {
+        path: 'schedule/doctor/:id',
         loadComponent: () =>
             import('./schedule/schedule').then(m => m.Schedule)
     },

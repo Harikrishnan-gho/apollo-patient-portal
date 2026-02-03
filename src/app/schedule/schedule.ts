@@ -40,24 +40,55 @@ export class Schedule implements OnInit {
   doctorsBySpecialty: any = [];
   selectedSpecialty: string | null = null;
   allDoctors: any[] = [];
+  isDoctorRoute = false;
 
   private service = inject(GHOService);
   router = inject(Router)
   route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    // this.getDoctorList()
-    this.getSpecialites()
-    this.route.paramMap.subscribe(params => {
-      const specialtyId = params.get('id');
-      if (specialtyId) {
-        this.selectedSpecialty = specialtyId;
-        this.getDoctorsBySpecialites(specialtyId);
-      } else {
-        this.selectedSpecialty = null;
+
+    this.getSpecialites();
+    this.route.url.subscribe(url => {
+      const id = this.route.snapshot.paramMap.get('id');
+
+      this.isDoctorRoute = false;
+
+      if (url.some(segment => segment.path === 'doctor')) {
+        this.isDoctorRoute = true;
+        this.docid = id;
+        this.tbidx = 1;
+        this.loadDoctorDetails(id!);
+        return; 
+      }
+
+      if (url.some(segment => segment.path === 'specialty') && id) {
+        this.selectedSpecialty = id;
+        this.getDoctorsBySpecialites(id);
+        this.tbidx = 0;
       }
     });
   }
+
+
+
+  loadDoctorDetails(doctorId: string) {
+    const tv = [
+      { T: 'dk1', V: '' },
+      { T: 'dk2', V: doctorId },
+      { T: 'c10', V: '3' } 
+    ];
+
+    this.srv.getdata('doctors', tv).subscribe(r => {
+      if (r.Status === 1) {
+        this.selectedDoc = r.Data[0][0];
+      } else {
+        this.srv.openDialog('Doctor', 'w', r.Info);
+      }
+    });
+  }
+
+
 
   reviewerId = "";
   doctorList: any = [];
@@ -90,7 +121,6 @@ export class Schedule implements OnInit {
 
   getSpecialites() {
     const tv = [{ T: 'c10', V: '3' }];
-
     this.srv.getdata('specialty', tv)
       .pipe(catchError(err => { throw err; }))
       .subscribe(r => {
@@ -99,7 +129,7 @@ export class Schedule implements OnInit {
           const specialtyId = this.route.snapshot.paramMap.get('id');
           if (specialtyId) {
             this.selectedSpecialty = specialtyId;
-            this.getDoctorsBySpecialites(specialtyId);
+            // this.getDoctorsBySpecialites(specialtyId);
           } else {
             this.selectedSpecialty = null;
             this.getDoctorList();
