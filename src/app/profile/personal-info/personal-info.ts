@@ -6,6 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatOption, MatSelectModule } from '@angular/material/select';
+import { GHOService } from '../../services/ghosrvs';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-personal-info',
@@ -22,22 +24,69 @@ import { MatOption, MatSelectModule } from '@angular/material/select';
 })
 export class PersonalInfo {
   router = inject(Router);
+private srv = inject(GHOService);
 
-  name: string = 'Sana'; // ✅ default value
-  phone:number = 79071628;
-  gender: string = 'female'; // default selected
-bloodGroup: string = 'O+'; // default selection (optional)
-dob: string = '12/02/2000'; // default selection (optional)
-maritalStatus : string='Single';
-job : string='developer';
-address: string='edachira';
+ name: string = '';
+  phone: string = '';
+  gender: string = '';
+  bloodGroup: string = '';
+  dob: string = '';
+  maritalStatus: string = '';
+  job: string = '';
+  address: string = '';
+  photo:string='';
 
   defaultImage =
     'https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg';
 
   previewImage: string | ArrayBuffer | null = null;
+    patientId = this.srv.getsession('id');
+  tv: { T: string; V: string; }[];
+  personalDetails: any[];
+
+  ngOnInit(){
+    this.getDetails()
+  }
 
   account() {
     this.router.navigate(['profile']);
   }
+  getDetails() {
+  this.tv = [
+    { T: "dk1", V: this.patientId },
+    { T: "c10", V: "3" }
+  ];
+
+  this.srv.getdata("patient", this.tv).pipe(
+    catchError((err) => {
+      this.srv.openDialog(
+        'Personal Info',
+        "e",
+        'Error while loading personal details'
+      );
+      throw err;
+    })
+  ).subscribe((r) => {
+    if (r.Status === 1 && r.Data?.length) {
+
+     
+      const details = r.Data[0][0];
+
+      console.log('API DETAILS:', details);
+
+
+      this.name = details.FirstName?? '';
+      this.phone = details.Phone ?? '';
+      this.gender = (details.Gender ?? '').toLowerCase();
+      this.bloodGroup = details.BloodGroup ?? '';
+      this.dob = details.DOB ?? '';
+      this.maritalStatus = details.MaritalStatus ?? '';
+      this.job = details.Occupation ?? '';
+      this.address = details.Address ?? '';
+      this.photo = details._url ?? 'https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg';
+
+    }
+  });
+}
+
 }

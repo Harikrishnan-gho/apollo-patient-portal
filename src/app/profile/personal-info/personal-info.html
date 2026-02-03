@@ -11,7 +11,7 @@
         <p>Manage your account details</p>
     </div>
     <div class="profile-wrapper">
-        <img class="profile-img" [src]="defaultImage" alt="Profile" />
+        <img class="profile-img" [src]="photo || defaultImage" alt="Profile" />
         <!-- Edit icon -->
         <div class="edit-icon" (click)="fileInput.click()">
             <mat-icon>edit</mat-icon>
@@ -22,17 +22,17 @@
 </div>
 <!-- input form field -->
 <div class="row mt-3">
-    <div class="col-6">
+    <div class="col-6" >
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>First Name</mat-label>
-            <input matInput [(ngModel)]="name" name="firstName">
+            <input matInput [(ngModel)]="name" >
         </mat-form-field>
     </div>
 
     <div class="col-6">
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>Mobile Number</mat-label>
-            <input matInput [(ngModel)]="phone" name="lastName">
+            <input matInput [(ngModel)]="phone" name="Phone">
         </mat-form-field>
     </div>
 </div>
@@ -40,7 +40,7 @@
     <div class="col-6 mb-2">
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>Blood Group</mat-label>
-            <mat-select [(ngModel)]="bloodGroup" name="bloodGroup">
+            <mat-select [(ngModel)]="bloodGroup" >
                 <mat-option value="A+">A+</mat-option>
                 <mat-option value="B+">B+</mat-option>
                 <mat-option value="O+">O+</mat-option>
@@ -54,7 +54,7 @@
     </div>
 
     <div class="col-6">
-        <mat-radio-group [(ngModel)]="gender" name="gender">
+        <mat-radio-group [(ngModel)]="gender" >
             <mat-label>Gender</mat-label>
             <br>
             <mat-radio-button value="male">Male</mat-radio-button>
@@ -69,13 +69,13 @@
     <div class="col-6">
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>Date of Birth</mat-label>
-            <input matInput [(ngModel)]="dob" name="dob">
+            <input matInput [(ngModel)]="dob" >
         </mat-form-field>
     </div>
     <div class="col-6">
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>Marital Status</mat-label>
-            <mat-select [(ngModel)]="maritalStatus" name="maritalStatus">
+            <mat-select [(ngModel)]="maritalStatus" >
                 <mat-option value="Single">Single</mat-option>
                 <mat-option value="Married">Married</mat-option>
                 <mat-option value="Prefer Not to Say">Prefer Not to Say</mat-option>
@@ -87,14 +87,14 @@
     <div class="col-6">
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>Address</mat-label>
-            <textarea matInput [(ngModel)]="address" name="address" rows="3">
+            <textarea matInput [(ngModel)]="address"  rows="3">
   </textarea>
         </mat-form-field>
     </div>
     <div class="col-6">
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>Occupation</mat-label>
-            <input matInput [(ngModel)]="job" name="job">
+            <input matInput [(ngModel)]="job" >
         </mat-form-field>
     </div>
 </div>
