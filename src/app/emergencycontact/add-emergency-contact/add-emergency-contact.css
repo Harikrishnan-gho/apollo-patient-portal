@@ -11,6 +11,11 @@ mat-form-field {
   grid-column: span 2;
 }
 
+.country-code {
+  color: #555;
+  margin-left: 15px;
+}
+
 /* Mobile view */
 @media (max-width: 768px) {
   .form-grid {

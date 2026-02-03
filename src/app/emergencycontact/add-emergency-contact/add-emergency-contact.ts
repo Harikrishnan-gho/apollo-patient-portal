@@ -34,29 +34,25 @@ export class AddEmergencyContact {
     Phone: '',
     Address1: '',
     Email:'',
-  };
-
-   @Output() close = new EventEmitter<void>();
+  }; 
+   @Output() close = new EventEmitter<boolean>();
   dialogRef: any;
        
   ngOnInit() {
     this.patientId=this.service.getsession("id")
-    
+  
   }
-
 
   saveEmergencyContact(form: NgForm) {
     if (form.invalid) {
       form.control.markAllAsTouched();
       return;
     }
-  
    const tv = [
       { T: 'dk1', V: this.patientId },
       { T: 'c1', V: JSON.stringify(this.contactDetails)},
       { T: 'c10', V: '1' }
     ];
-
    this.srv.getdata('patientcontact', tv)
       .pipe(
         catchError(err => {
@@ -70,14 +66,8 @@ export class AddEmergencyContact {
         if (r?.Status === 1) {
           const msg = r?.Data?.[0]?.[0]?.msg ?? 'Contact added successfully';
           this.srv.openDialog('Emergency Contact', 's', msg);
-          this.close.emit();
-          console.log('data added');
-
-
-
           form.resetForm();
-         
-          this.closePopup()
+          this.close.emit(true);
         } else {
           this.srv.openDialog('Emergency Contact', 'w', r?.Info ?? 'Something went wrong');
         }
@@ -85,9 +75,7 @@ export class AddEmergencyContact {
    
   }
 
- closePopup() {
-    this.close.emit();
-  }
+
 
   
 }

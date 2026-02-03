@@ -96,9 +96,7 @@ private srv = inject(GHOService);
         })
       ).subscribe((r) => {
         if (r.Status === 1) {
-          this.personalDetails = [...r.Data[0]];
-          console.log('personal details',this.personalDetails);
-          
+          this.personalDetails = [...r.Data[0]];          
           }
       });
   }
