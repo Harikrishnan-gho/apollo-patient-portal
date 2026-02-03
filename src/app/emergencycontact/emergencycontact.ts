@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-emergencycontact',
   standalone: true,
   imports: [MatDialogModule, CustomDialog, AddEmergencyContact, CommonModule, MatIcon, MatMenuModule,
-    MatIconModule,MatButtonModule],
+    MatIconModule, MatButtonModule],
   templateUrl: './emergencycontact.html',
   styleUrls: ['./emergencycontact.css']
 })
@@ -40,8 +40,12 @@ export class Emergencycontact implements OnInit {
     this.showEmergencyContactPopup = true;
   }
 
-  closeEmergencyContact() {
+  closeEmergencyContact(refresh = false) {
     this.showEmergencyContactPopup = false;
+
+    if (refresh) {
+      this.getEmergencyContact(); // ✅ API recalled here
+    }
   }
 
 
@@ -61,31 +65,34 @@ export class Emergencycontact implements OnInit {
       if (r.Status === 1) {
         // this.emergencyContacts = r.Data[0];
         this.emergencyContacts = [...r.Data[0]];
-        }
+      }
     });
 
   }
-// add contact
-    addEmergencyContact() {
+  // add contact
+  addEmergencyContact() {
     const dialogRef = this.dialog.open(AddEmergencyContact, {
       width: '600px',
       disableClose: false,
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.getEmergencyContact();
-
-
+      if (result === true) {
+        this.getEmergencyContact();
+      }
     }
     );
   }
+
+
+
   // update emergency contacts
- editContacts(Contacts: any) {
+  editContacts(Contacts: any) {
     const dialogRef = this.dialog.open(AddEmergencyContact, {
       width: '600px',
       disableClose: false,
       data: Contacts,
-      
+
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -94,87 +101,64 @@ export class Emergencycontact implements OnInit {
   }
 
   // delete emergency contacts
-deleteContact(contact: any) {
+  deleteContact(contact: any) {
+    if (!contact?.ID) {
+      console.error('Contact ID missing');
+      return;
+    }
+    const tv = [
+      { T: 'dk1', V: this.patientId },
+      { T: 'dk2', V: contact.ID },
+      { T: 'c10', V: '4' }
+    ];
+    this.srv.getdata('patientcontact', tv)
+      .pipe(catchError(err => { throw err; }))
+      .subscribe(r => {
+        if (r.Status === 1) {
+          let msg = r.Data[0][0].msg
+          this.srv.openDialog('Medical Records', 's', msg);
+          this.getEmergencyContact()
+          this.emergencyContacts = this.emergencyContacts.filter(
+            c => c.ID !== contact.ID
+          );
+        } else {
+          this.srv.openDialog('Medical Records', 'w', r.Info);
+        }
+      });
+  }
 
+  // set as primary contact
+
+  setPrimaryContact(contact: any) {
     if (!contact?.ID) {
       console.error('Contact ID missing');
       return;
     }
 
-    const tv = [
-      { T: "dk1", V: this.patientId },
-      { T: "dk2", V: contact.ID },
-      { T: "c10", V: "4" }
+    this.tv = [
+      { T: 'dk1', V: this.patientId },
+      { T: 'dk2', V: contact.ID },
+      { T: 'c1', V: '1' },
+      { T: 'c10', V: '5' }
     ];
 
-    this.srv.getdata("patientcontact", tv)
+    this.srv.getdata('patientcontact', this.tv)
       .pipe(
         catchError(err => {
           this.srv.openDialog(
             'Emergency Contacts',
             'e',
-            'Error while deleting emergency contact'
+            'Error while setting primary contact'
           );
           return throwError(() => err);
         })
       )
-      .subscribe(r => {
+      .subscribe((r: any) => {
         if (r?.Status === 1) {
 
-          this.srv.openDialog(
-            'Emergency Contacts',
-            's',
-            'Contact deleted successfully'
-          );
-
-
-          this.emergencyContacts = this.emergencyContacts.filter(
-            c => c.ID !== contact.ID
-          );
-          this.getEmergencyContact()
-
-        } else {
-          this.srv.openDialog(
-            'Emergency Contacts',
-            'w',
-            r?.Info ?? 'Delete failed'
-          );
         }
       });
   }
-
-// set as primary contact
-
- setPrimaryContact(contact: any) {
-  if (!contact?.ID) {
-    console.error('Contact ID missing');
-    return;
-  }
-
-  this.tv = [
-    { T: 'dk1', V: this.patientId },
-    { T: 'dk2', V: contact.ID }, 
-    { T: 'c1', V: '1' },         
-    { T: 'c10', V: '5' }
-  ];
-
-  this.srv.getdata('patientcontact', this.tv)
-    .pipe(
-      catchError(err => {
-        this.srv.openDialog(
-          'Emergency Contacts',
-          'e',
-          'Error while setting primary contact'
-        );
-        return throwError(() => err);
-      })
-    )
-    .subscribe((r: any) => {
-      if (r?.Status === 1) {
-       
-      }
-    });
-}
 
 
 

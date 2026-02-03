@@ -49,7 +49,6 @@ account(){
       ).subscribe((r) => {
         if (r.Status === 1) {
           this.personalDetails = [...r.Data[0]];
-          console.log('personal details from settings',this.personalDetails);
           
           }
       });
