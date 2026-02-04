@@ -1,19 +1,17 @@
-import { FullPageLoader } from '../features/fullpage-loader/fullpage-loader';
 import { GHOService } from '../services/ghosrvs';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
 
-import { Router, RouterLink } from "@angular/router";
+import { Router } from "@angular/router";
 import { ghoresult, tags } from '../model/ghomodel';
-import { catchError } from 'rxjs';
-import { MatList, MatListItem } from "@angular/material/list";
+import { MatListItem } from "@angular/material/list";
 import { MatDividerModule } from '@angular/material/divider';
 import { CustomDialog } from '../shared/custom-dialog/custom-dialog';
 import { GeneralPhysician } from '../home-care/general-physician/general-physician';
@@ -21,8 +19,7 @@ import { PharmacyDelivery } from '../home-care/pharmacy-delivery/pharmacy-delive
 import { NursingServices } from '../home-care/nursing-services/nursing-services';
 import { Physiotherapy } from '../home-care/physiotherapy/physiotherapy';
 import { LabCollection } from '../home-care/lab-collection/lab-collection';
-
-
+import { WelcomeSection } from '../welcome-section/welcome-section';
 
 
 @Component({
@@ -32,7 +29,7 @@ import { LabCollection } from '../home-care/lab-collection/lab-collection';
   styleUrl: './dash.css',
   imports: [CommonModule, MatTableModule, MatButtonModule, MatPaginatorModule,
     MatFormFieldModule, MatIconModule, MatSelectModule,
-    FormsModule,MatListItem, MatDividerModule,
+    FormsModule, MatListItem, MatDividerModule,WelcomeSection,
     CustomDialog, GeneralPhysician, PharmacyDelivery, NursingServices, Physiotherapy, LabCollection],
 })
 export class RevDash implements OnInit {
