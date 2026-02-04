@@ -211,7 +211,7 @@ export class AddMedicationDialog {
 
         this.tv = [
           { T: 'dk1', V: this.srv.getsession('id') },
-          { T: 'dk2', V: this.medicationId },
+          { T: 'dk2', V: ID },
           { T: 'c1', V: '5' },
           { T: 'c2', V: this.selectedFileName },
           { T: 'c3', V: this.selectedFile.size.toString() },

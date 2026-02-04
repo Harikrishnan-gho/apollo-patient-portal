@@ -32,7 +32,7 @@
 
     <mat-dialog-actions align="end">
         <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial>
+        <button class="allergyBtn" (click)="save()" cdkFocusInitial>
             {{ allergyId ? 'Update Allergy' : 'Save Allergy' }}
         </button>
     </mat-dialog-actions>

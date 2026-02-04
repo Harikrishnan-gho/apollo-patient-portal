@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GHOService } from '../services/ghosrvs';
 import { ghoresult, tags } from '../model/ghomodel';
@@ -14,7 +14,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 
 @Component({
   selector: 'medication',
-  imports: [MatIconModule, MatButtonModule, MatTabsModule, CommonModule, MatChipsModule, MatDialogModule],
+  imports: [MatIconModule, MatButtonModule,MatButton , MatTabsModule, CommonModule, MatChipsModule, MatDialogModule],
   templateUrl: './medication.html',
   styleUrl: './medication.css',
 })
@@ -101,7 +101,7 @@ export class Medication implements OnInit {
         title: 'Delete Medication',
         message: `Are you sure you want to delete "${name}"?`,
         confirmText: 'Delete',
-        cancelText: 'Cancel'
+        cancelText: 'Cancel',
       }
     });
 

@@ -86,7 +86,7 @@
 }
 
 .doc-icon {
-  color: #757575;
+   color: #3f51b5;
 }
 
 .loader-overlay {
@@ -97,4 +97,22 @@
   align-items: center;
   justify-content: center;
   z-index: 2000; 
+}
+.uploadButton{
+     padding: 10px 16px;
+    border-radius: 6px;
+    background-color: #0c79a5;
+    color: #ffffff;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer; 
+}
+.uploadButton:disabled {
+  background-color: #cfd8dc;
+  color: #78909c;
+  cursor: not-allowed;
+  opacity: 0.65;
+  pointer-events: none;
 }

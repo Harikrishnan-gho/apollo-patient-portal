@@ -19,7 +19,7 @@
 
 
 .doc-icon {
-    font-size: 42px;
+   
     color: #3f51b5;
 }
 
@@ -81,4 +81,15 @@ mat-form-field {
   height: 80px;
   object-fit: cover;
   border-radius: 4px;
+}
+.addButton{
+      padding: 10px 16px;
+    border-radius: 6px;
+    background-color: #0c79a5;
+    color: #ffffff;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
 }
