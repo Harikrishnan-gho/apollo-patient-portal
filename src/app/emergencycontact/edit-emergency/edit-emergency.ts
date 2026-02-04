@@ -47,7 +47,6 @@ export class EditEmergency implements OnInit {
 
     console.log('Received Data:', this.data);
 
-    // ✅ Fill form from dialog data
     if (this.data) {
       this.contactId = this.data.ID;
 
@@ -101,24 +100,16 @@ export class EditEmergency implements OnInit {
     ).subscribe(res => {
 
       if (res.Status === 1) {
-
         const msg = res.Data[0][0].msg;
-
         this.srv.openDialog('Profile', 's', msg);
-
-        // ✅ Close dialog and refresh parent
         this.dialogRef.close(true);
-
       } else {
-
         console.error('Update failed:', res);
-
       }
     });
   }
 
-
-  // Optional: Cancel button
+  
   close() {
     this.dialogRef.close(false);
   }
