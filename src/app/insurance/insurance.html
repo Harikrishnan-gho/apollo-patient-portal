@@ -79,10 +79,10 @@
         </mat-form-field>
     </div>
 
-    <div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-end gap-2">
         <button mat-button (click)="deleteInsurance()">Delete</button>
 
-        <button mat-raised-button color="primary" cdkFocusInitial (click)="saveInsurance()">
+        <button class="insuranceButton" cdkFocusInitial (click)="saveInsurance()">
             {{ isInsuranceEmpty ? 'Save Insurance' : 'Update Insurance' }}
         </button>
     </div>

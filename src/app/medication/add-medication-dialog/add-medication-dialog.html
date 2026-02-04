@@ -101,7 +101,7 @@
         </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
-            <button mat-raised-button color="primary" cdkFocusInitial (click)="savePrescription()">
+            <button class="addButton" (click)="savePrescription()">
                 {{ isEdit ? 'Update Prescription' : 'Add Prescription' }}
             </button>
         </mat-dialog-actions>
@@ -131,7 +131,7 @@
         </div>
 
         @if (files?.length) {
-          <div class="mt-3">
+        <div class="mt-3">
             <label class="fw-semibold">Uploaded Files</label>
 
             <div class="d-flex gap-2 flex-wrap mt-2">
@@ -184,7 +184,7 @@
         </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
-            <button mat-raised-button color="primary" cdkFocusInitial (click)="saveMedication()">
+            <button class="addButton" cdkFocusInitial (click)="saveMedication()">
                 {{ isEdit ? 'Update Medication' : 'Add Medication' }}
             </button>
         </mat-dialog-actions>
