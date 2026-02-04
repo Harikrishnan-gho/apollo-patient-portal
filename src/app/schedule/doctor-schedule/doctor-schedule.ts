@@ -8,19 +8,31 @@ import { formatDate } from '@angular/common';
 import { catchError } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
+interface Slot {
+  ID: number;
+  AppointmentTime: string;
+}
 
 @Component({
   selector: 'doctor-schedule',
-  imports: [MatCardModule, MatDatepickerModule, CommonModule, MatButtonModule],
+  imports: [MatCardModule, MatDatepickerModule, CommonModule, MatButtonModule, MatIconModule],
   providers: [provideNativeDateAdapter()],
   templateUrl: './doctor-schedule.html',
 })
+
+
+
 export class DoctorSchedule implements OnInit, OnChanges {
+
+
 
   srv = inject(GHOService);
   tv: tags[] = [];
   res: ghoresult = new ghoresult();
-  slots: [] = [];
+  slots: Slot[] = [];
+
   selectedTimeId: any;
 
   selected: Date = new Date();

@@ -67,9 +67,8 @@ export class App {
       localStorage.setItem("tkn", "");
       localStorage.setItem("id", "");
     });
-
-
   }
+  
   goToEmergency() {
   this.router.navigate(['/emergenservices']);
 }
@@ -78,6 +77,9 @@ export class App {
     this.router.navigate([`/profile`]);
 
   }
+  bookAppointment() {
+  this.router.navigate(['/schedule']);
+}
 
   ngOnInit(): void {
     this.doctorId = this.srv.getsession('id');
@@ -93,6 +95,8 @@ export class App {
       }
     }
   }
+
+
 
   @ViewChild('emailPopup') emailPopup!: EmailPopup;
 
@@ -246,6 +250,6 @@ export class ConfirmDialogComponent {
     this.dialogRef.close(true);
   }
 
-  
+
   
 }
