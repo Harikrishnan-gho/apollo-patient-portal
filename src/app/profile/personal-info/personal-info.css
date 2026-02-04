@@ -42,3 +42,6 @@
     background-color: rgba(12, 125, 161, 1);
     color: white;
 }
+.backIcon{
+    cursor: pointer;
+}

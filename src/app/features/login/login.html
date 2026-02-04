@@ -30,7 +30,7 @@
                 </button>
             </mat-form-field>
 
-            <button class="w100 mt20" (click)="loginclick()" mat-flat-button color="primary">Login</button>
+            <button class="loginBtn w100 mt20" (click)="loginclick()">Login</button>
 
 
             <div class="mt20">
@@ -168,7 +168,7 @@
                 <input matInput type="text" [(ngModel)]="usr.ph">
             </mat-form-field> -->
 
-             <mat-form-field class="w100" appearance="outline">
+            <mat-form-field class="w100" appearance="outline">
                 <mat-label>Phone</mat-label>
                 <span class="country-code" matPrefix>+968&nbsp;</span>
                 <input matInput type="text" [(ngModel)]="usr.ph" placeholder="XXXXXXXX" maxlength="8">
@@ -195,12 +195,10 @@
 
     <div class="right-panel mobile-hide">
         <div class="right-content">
-
             <p class="right-text">
                 As a healthcare beacon in Oman, we set new quality standards, with facilities spanning Muscat
             </p>
-
-            <img src="login-photo.webp" class="right-image" alt="side image">
+            <img src="login-photo.png" class="right-image" alt="side image">
 
         </div>
 
