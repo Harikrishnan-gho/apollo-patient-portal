@@ -168,7 +168,11 @@ editContact(Contacts: any) {
       )
       .subscribe((r: any) => {
         if (r?.Status === 1) {
-
+          const msg = r?.Data?.[0]?.[0]?.msg ?? 'Contact added successfully';
+          this.srv.openDialog('Emergency Contact', 's', msg);
+          this.getEmergencyContact()
+        } else {
+          this.srv.openDialog('Emergency Contact', 'w', r?.Info ?? 'Something went wrong');
         }
       });
   }
