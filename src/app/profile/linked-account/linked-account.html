@@ -39,7 +39,7 @@
         </div>
         <div>
             <h5> {{item.Patient}}</h5>
-            @if(item.AccountPreference ==='Primary'){
+            @if(item.AccountPreference ==="Primary"){
             <span class="d-flex account-primary px-2">
                 <span>
                     <mat-icon class="verified pt-1">verified</mat-icon>
@@ -50,7 +50,7 @@
             }
         </div>
     </div>
-    @if( item.AccountPreference === 'Secondary'){
+    @if( item.AccountPreference === "Secondary"){
     <div class="p-4">
         <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>more_horiz</mat-icon>

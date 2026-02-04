@@ -21,11 +21,14 @@ export class LinkedAccount {
     'https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg';
 
   previewImage: string | ArrayBuffer | null = null;
-    personalDetails: any[]
+    personalDetails: any[] = [];
     private srv = inject(GHOService);
       tv: tags[] = []
     deleteAccounts: any;
     patientId = this.srv.getsession('id');
+    // primaryId = this.srv.getsession('id');
+    secondaryId=''
+      
     
     ngOnInit(){
       // this.getDetails()
@@ -52,40 +55,70 @@ export class LinkedAccount {
   //         }
   //     });
   // }
-  linkedAcc(){
-     this.tv = [
-        { T: "dk1", V: this.patientId },
-        { T: "c10", V: "25" }
-      ];
-      this.srv.getdata("patient", this.tv).pipe(
-        catchError((err) => {
-          this.srv.openDialog('Emergency Contacts', "e", 'Error while loading linked account');
-          throw err;
-        })
-      ).subscribe((r) => {
-        if (r.Status === 1) {
-          this.personalDetails = [...r.Data[0]];   
-          console.log('personaldetails',this.personalDetails);
-                 
-          }
-          
-      });
-  }
+linkedAcc() {
+  this.tv = [
+    { T: "dk1", V: this.patientId },
+    { T: "c10", V: "25" }
+  ];
 
-    setPrimaryContact(contact: any) {
-      if (!contact?.ID) {
-        console.error('Contact ID missing');
-        return;
+  this.srv.getdata("patient", this.tv)
+    .pipe(
+      catchError((err) => {
+        this.srv.openDialog(
+          'Emergency Contacts',
+          "e",
+          'Error while loading linked account'
+        );
+        throw err;
+      })
+    )
+    .subscribe((r) => {
+
+      if (r.Status === 1) {
+
+        this.personalDetails = [...r.Data[0]];
+
+        // ✅ Find primary
+        const primary = this.personalDetails.find(
+          item => item.AccountPreference === 'Primary'
+        );
+
+        // ✅ Find secondary
+        const secondary = this.personalDetails.find(
+          item => item.AccountPreference === 'Secondary'
+        );
+
+        if (primary) {
+          this.patientId = primary.PatientID; // or primary.ID if API needs
+        }
+
+        if (secondary) {
+          this.secondaryId = secondary.ID;
+        }
+
+        console.log('Primary:', primary);
+        console.log('Secondary:', secondary);
       }
+
+    });
+}
+
+
+
+    setPrimaryContact(item: any) {
+      
+        if (!item?.ID) {
+    console.error('Secondary ID missing');
+    return;
+  }
   
       this.tv = [
-        { T: 'dk1', V: contact.ID },
-        { T: 'dk2', V:  this.patientId},
-        { T: 'c1', V: '1' },
-        { T: 'c10', V: '5' }
+        { T: 'dk1', V: this.patientId },
+        { T: 'dk2', V:  this.secondaryId},
+        { T: 'c10', V: '26' }
       ];
   
-      this.srv.getdata('patientcontact', this.tv)
+      this.srv.getdata('patient', this.tv)
         .pipe(
           catchError(err => {
             this.srv.openDialog(
