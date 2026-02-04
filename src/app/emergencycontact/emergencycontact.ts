@@ -9,6 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { EditEmergency } from './edit-emergency/edit-emergency';
 
 
 @Component({
@@ -22,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class Emergencycontact implements OnInit {
 
   showEmergencyContactPopup = false;
+  showEditContactPopup = false;
 
   emergencyContacts: any[] = [];
   patientId: string;
@@ -39,12 +41,22 @@ export class Emergencycontact implements OnInit {
   openEmergencyContact() {
     this.showEmergencyContactPopup = true;
   }
+  openEditContact() {
+    this.showEmergencyContactPopup = true;
+  }
 
   closeEmergencyContact(refresh = false) {
     this.showEmergencyContactPopup = false;
 
     if (refresh) {
-      this.getEmergencyContact(); // ✅ API recalled here
+      this.getEmergencyContact();
+    }
+  }
+  closeEditContact(refresh = false) {
+    this.showEmergencyContactPopup = false;
+
+    if (refresh) {
+      this.getEmergencyContact();
     }
   }
 
@@ -87,18 +99,19 @@ export class Emergencycontact implements OnInit {
 
 
   // update emergency contacts
-  editContacts(Contacts: any) {
-    const dialogRef = this.dialog.open(AddEmergencyContact, {
-      width: '600px',
-      disableClose: false,
-      data: Contacts,
+editContact(Contacts: any) {
+  const dialogRef = this.dialog.open(EditEmergency, {
+    width: '600px',
+    disableClose: false,
+    data: Contacts,
+  
+  });
 
-    });
+  dialogRef.afterClosed().subscribe(result => {
+    this.getEmergencyContact();
+  });
+}
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.getEmergencyContact();
-    });
-  }
 
   // delete emergency contacts
   deleteContact(contact: any) {
