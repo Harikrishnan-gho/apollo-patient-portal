@@ -34,6 +34,9 @@ export class Settings {
 account(){
   this.router.navigate(['profile'])
 }
+viewProfile(){
+  this.router.navigate(['profile/personalInfo'])
+}
 
  // get details of profile
   getDetails(){
