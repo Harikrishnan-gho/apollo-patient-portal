@@ -5,8 +5,8 @@
 </style><!--
  navbar -->
 <div class="d-flex main-heading mx-3">
-    <div class="d-flex gap-2 heading">
-        <mat-icon class="" (click)="account()">arrow_back</mat-icon>
+    <div class="d-flex gap-2 heading" (click)="account()">
+        <mat-icon class="" >arrow_back</mat-icon>
         <p>Account</p>
     </div>
 
@@ -21,7 +21,7 @@
         </div>
         <div>
             <h5> {{ item.FirstName}}</h5>
-            <p class="text-secondary">View profile</p>
+            <p class="text-secondary backIcon" (click)="viewProfile()">View profile</p>
         </div>
     </div>
     <div class="percentatge-wrapper">

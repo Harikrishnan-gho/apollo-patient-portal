@@ -27,3 +27,6 @@
     font-weight: 500;
     font-size: large;
 }
+.backIcon{
+    cursor: pointer;
+}
