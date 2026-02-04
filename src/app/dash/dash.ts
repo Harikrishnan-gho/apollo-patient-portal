@@ -19,8 +19,7 @@ import { PharmacyDelivery } from '../home-care/pharmacy-delivery/pharmacy-delive
 import { NursingServices } from '../home-care/nursing-services/nursing-services';
 import { Physiotherapy } from '../home-care/physiotherapy/physiotherapy';
 import { LabCollection } from '../home-care/lab-collection/lab-collection';
-
-
+import { WelcomeSection } from '../welcome-section/welcome-section';
 
 
 @Component({
@@ -30,7 +29,7 @@ import { LabCollection } from '../home-care/lab-collection/lab-collection';
   styleUrl: './dash.css',
   imports: [CommonModule, MatTableModule, MatButtonModule, MatPaginatorModule,
     MatFormFieldModule, MatIconModule, MatSelectModule,
-    FormsModule, MatListItem, MatDividerModule,
+    FormsModule, MatListItem, MatDividerModule,WelcomeSection,
     CustomDialog, GeneralPhysician, PharmacyDelivery, NursingServices, Physiotherapy, LabCollection],
 })
 export class RevDash implements OnInit {
