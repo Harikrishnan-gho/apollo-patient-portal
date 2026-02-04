@@ -220,6 +220,17 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+    .bookButton {
+    padding: 10px 16px;
+    border-radius: 6px;
+    background-color: #0c79a5;
+    color: #ffffff;
+    border: none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.2;
+    cursor: pointer;
+  }
 </style>
 
 @if (showNavbar) {
@@ -264,6 +275,9 @@
 
         <!-- Right: Icons -->
         <div class="d-flex align-items-center gap-2">
+          <button (click)="bookAppointment()" class="bookButton" >
+            Book Appointment
+          </button>
           <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
             <mat-icon>notifications</mat-icon>
           </button>
