@@ -7,62 +7,54 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 import { ConfirmDialogComponent } from '../app';
 import { catchError } from 'rxjs';
 import { ghoresult, tags } from '../model/ghomodel';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-profile',
-  imports: [MatIcon, MatDividerModule,MatDialogModule],
+  imports: [CommonModule, MatIcon, MatDividerModule, MatDialogModule, MatProgressSpinnerModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
 export class Profile {
-private srv = inject(GHOService);
+  private srv = inject(GHOService);
   res: ghoresult = new ghoresult()
-    dialogRef!: MatDialogRef<any>
-
- defaultImage =
-    'https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg';
+  dialogRef!: MatDialogRef<any>
   previewImage: string | ArrayBuffer | null = null;
   router = inject(Router)
   private dialog = inject(MatDialog);
-    tv: tags[] = []
+  tv: tags[] = []
   deleteAccounts: any;
   patientId = this.srv.getsession('id');
   personalDetails: any[];
+  selectedFileName = '';
+  selectedFile: File | null = null;
+  fileType = '';
+  fileId = '';
+  fileUploadId = '';
+  isUploading = false;
+  isLoadingFileUpload = false;
 
-  ngOnInit(){
+
+  ngOnInit() {
     this.getDetails()
   }
-  onImageChange(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (!file) return;
 
-    // optional validation
-    if (!file.type.startsWith('image/')) {
-      alert('Only image files are allowed');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.previewImage = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
-  openSettings(){
+  openSettings() {
     this.router.navigate(['profile/settings'])
   }
-  linkedAccount(){
+  linkedAccount() {
     this.router.navigate(['profile/linked-account'])
   }
 
   // personal info
-  goToPersonalInfo(){
-   this.router.navigate(['profile/personalInfo'])
+  goToPersonalInfo() {
+    this.router.navigate(['profile/personalInfo'])
   }
 
   // logout
- logout() {
+  logout() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
       maxWidth: '90vw',
@@ -84,21 +76,21 @@ private srv = inject(GHOService);
   }
 
   // get details of profile
-  getDetails(){
-      this.tv = [
-        { T: "dk1", V: this.patientId },
-        { T: "c10", V: "3" }
-      ];
-      this.srv.getdata("patient", this.tv).pipe(
-        catchError((err) => {
-          this.srv.openDialog('Emergency Contacts', "e", 'Error while loading emergency contacts');
-          throw err;
-        })
-      ).subscribe((r) => {
-        if (r.Status === 1) {
-          this.personalDetails = [...r.Data[0]];          
-          }
-      });
+  getDetails() {
+    this.tv = [
+      { T: "dk1", V: this.patientId },
+      { T: "c10", V: "3" }
+    ];
+    this.srv.getdata("patient", this.tv).pipe(
+      catchError((err) => {
+        this.srv.openDialog('Emergency Contacts', "e", 'Error while loading emergency contacts');
+        throw err;
+      })
+    ).subscribe((r) => {
+      if (r.Status === 1) {
+        this.personalDetails = [...r.Data[0]];
+      }
+    });
   }
 
 
@@ -134,6 +126,92 @@ private srv = inject(GHOService);
         this.srv.openDialog('No account found', 'w', this.res.Info);
       }
     });
+  }
+
+  onImageChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    const file = input.files[0];
+
+    if (!file.type.startsWith('image/')) {
+      this.srv.openDialog('Error', 'e', 'Only image files are allowed');
+      return;
+    }
+
+    this.selectedFile = file;
+    this.selectedFileName = file.name;
+    this.fileType = file.type;
+
+    const reader = new FileReader();
+    reader.onload = () => (this.previewImage = reader.result);
+    reader.readAsDataURL(file);
+
+    this.isUploading = true;
+    this.uploadFileWithRecordId();
+  }
+
+
+  private uploadFileWithRecordId() {
+    if (!this.selectedFile) return;
+
+    const tv = [
+      { T: 'dk1', V: this.patientId },
+      { T: 'dk2', V: '' },
+      { T: 'c1', V: '1' },
+      { T: 'c2', V: this.selectedFileName },
+      { T: 'c3', V: this.selectedFile.size.toString() },
+      { T: 'c10', V: '1' }
+    ];
+
+    this.srv.getdata('fileupload', tv).subscribe({
+      next: (fileRes: any) => {
+        if (fileRes.Status !== 1) {
+          this.srv.openDialog('Error', 'e', 'Failed to save file info');
+          return;
+        }
+
+        this.fileId = fileRes.Data[0][0].FileID;
+        this.fileType = fileRes.Data[0][0].FileType;
+        this.fileUploadId = fileRes.Data[0][0].id;
+
+        this.uploadActualFile();
+      },
+      error: () => {
+        this.isUploading = false;
+        this.srv.openDialog('Error', 'e', 'Error saving file info');
+      }
+    });
+  }
+
+  private uploadActualFile() {
+    this.srv.uploadFile(this.fileId, this.fileType, this.selectedFile!)
+      .then(status => {
+
+        if (status === 2) {
+          const tv = [
+            { T: 'dk1', V: this.patientId },
+            { T: 'dk2', V: '1' },
+            { T: 'c1', V: this.fileUploadId },
+            { T: 'c2', V: status.toString() },
+            { T: 'c10', V: '2' }
+          ];
+
+          this.srv.getdata('fileupload', tv).subscribe({
+            complete: () => {
+              this.isUploading = false;
+            }
+          });
+        } else {
+          this.isUploading = false;
+        }
+        this.srv.openDialog('Success', 's', 'Profile picture uploaded successfully');
+        this.getDetails()
+      })
+      .catch(() => {
+        this.isUploading = false;
+        this.srv.openDialog('Error', 'e', 'Profile picture upload failed');
+      });
   }
 }
 
