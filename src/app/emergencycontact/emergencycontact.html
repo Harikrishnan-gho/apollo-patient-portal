@@ -1,6 +1,6 @@
 <style>
     .title {
-        color: red;
+        color: rgb(236, 64, 64);
         text-align: center;
         justify-content: center;
         margin-bottom: 1rem;
@@ -19,13 +19,10 @@
         padding: 8px 14px;
         border: none;
         border-radius: 12px;
-        /* cleaner than % */
         cursor: pointer;
-
         display: inline-flex;
         align-items: center;
         gap: 8px;
-
         font-size: 14px;
         font-weight: 500;
     }
@@ -133,8 +130,8 @@
 <!-- ADD NEW CONTACT -->
 <div class="w-100 w-md-50 p-3 d-flex justify-content-center align-items-center">
     <div class="addNew-div text-center" (click)="openEmergencyContact()">
-        <button class="addNew">
-            <span class="add">+</span>
+        <button class="addEmergencyBtn">
+             <mat-icon>add</mat-icon>
             Add new contact
         </button>
     </div>
