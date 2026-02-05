@@ -7,18 +7,25 @@
   </div>
 </div>
 
+<div class="loader-overlay" *ngIf="isUploading">
+  <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+</div>
+
 <!-- Profile upload -->
 @for(item of personalDetails;track item){
 <div class="d-flex profile-upload">
   <div class="profile-wrapper">
-    <img class="profile-img" [src]="item._url || defaultImage" alt="Profile" />
+    <img *ngIf="previewImage || item._url; else defaultIcon" class="profile-img" [src]="previewImage || item._url"
+      alt="Profile" />
 
-    <!-- Edit icon -->
+    <ng-template #defaultIcon>
+      <i class="bi bi-person-circle default-icon"></i>
+    </ng-template>
+
     <div class="edit-icon" (click)="fileInput.click()">
       <mat-icon>edit</mat-icon>
     </div>
 
-    <!-- Hidden file input -->
     <input type="file" #fileInput accept="image/*" hidden (change)="onImageChange($event)" />
   </div>
 </div>
