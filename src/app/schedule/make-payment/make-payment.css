@@ -1,0 +1,29 @@
+.doctor-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.doctor-img img,
+.fallback-img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+}
+
+.fallback-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f3f4;
+  color: #9aa0a6;
+}
+
+.doctor-name {
+  font-size: 15.5px;
+  font-weight: 600;
+}
+
+.doctor-specialty {
+  font-size: 14px;
+}

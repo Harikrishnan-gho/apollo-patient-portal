@@ -6,31 +6,18 @@
                 </mat-calendar>
             </mat-card>
         </div>
-
-        <!-- <div class="col-sm-8">
-            <div class="slots-buttons">
-                <button *ngFor="let slot of slots" mat-raised-button (click)="timeSelected(slot['ID'])"
-                    [class.selected]="selectedTimeId === slot['ID']">
-                    {{ slot['AppointmentTime'] }}
-                </button>
-            </div>
-
-
-            <div class="mt-3">
-                <button class="bookButton" (click)="onBookAppointment()">
-                    Book Appointment
-                </button>
-            </div>
-        </div> -->
         <div class="col-sm-8">
             @if (slots?.length > 0) {
 
             <div class="slots-buttons">
                 @for (slot of slots; track slot.ID) {
-                <button mat-raised-button (click)="timeSelected(slot['ID'])"
-                    [class.selected]="selectedTimeId === slot['ID']">
-                    {{ slot['AppointmentTime'] }}
-                </button>
+                <button
+  mat-raised-button
+  (click)="timeSelected(slot)"
+  [class.selected]="selectedTimeId === slot.ID">
+  {{ slot.AppointmentTime }}
+</button>
+
                 }
             </div>
 
@@ -49,11 +36,12 @@
 
             }
 
-            
+
         </div>
 
     </div>
 </div>
+
 
 <style>
     .slots-buttons {
@@ -90,36 +78,35 @@
     }
 
     .no-slots {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
-  padding: 32px 20px;
-  margin-top: 8px;
+        padding: 32px 20px;
+        margin-top: 8px;
 
-  border: 1px dashed #d0d7de;
-  border-radius: 10px;
+        border: 1px dashed #d0d7de;
+        border-radius: 10px;
 
-  background: #f9fbfc;
-  color: #5f6c7b;
+        background: #f9fbfc;
+        color: #5f6c7b;
 
-  text-align: center;
-}
+        text-align: center;
+    }
 
-.no-slots mat-icon {
-  font-size: 40px;
-  height: 40px;
-  width: 40px;
+    .no-slots mat-icon {
+        font-size: 40px;
+        height: 40px;
+        width: 40px;
 
-  color: #9aa4af;
-  margin-bottom: 10px;
-}
+        color: #9aa4af;
+        margin-bottom: 10px;
+    }
 
-.no-slots p {
-  margin: 0;
-  font-size: 14.5px;
-  font-weight: 500;
-}
-
+    .no-slots p {
+        margin: 0;
+        font-size: 14.5px;
+        font-weight: 500;
+    }
 </style>

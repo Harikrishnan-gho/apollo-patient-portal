@@ -1,0 +1,66 @@
+<div class="container">
+  <!-- Header -->
+  <p class="fs-4 fw-semibold mb-1 mt-1">Make Payment</p>
+  <p class="text-muted mb-4">make payment and confirm your appointment.</p>
+
+  <p class="fw-semibold mb-2">Booking Summary</p>
+
+  @if (doctorDetails) {
+    <div class="doctor-card p-3 position-relative">
+
+      <!-- Top Row -->
+      <div class="d-flex align-items-center gap-3">
+
+        <!-- Doctor Image -->
+        <div class="doctor-img">
+          @if (doctorDetails._url) {
+            <img
+              [src]="doctorDetails._url"
+              alt="Doctor"
+              class="rounded-circle"
+            />
+          } @else {
+            <div class="fallback-img rounded-circle">
+              <mat-icon>person</mat-icon>
+            </div>
+          }
+        </div>
+
+        <!-- Doctor Info -->
+        <div class="doctor-info flex-grow-1">
+          <p class="doctor-name mb-1">
+            Dr. {{ doctorDetails.Doctor }}
+          </p>
+
+          <p class="doctor-specialty mb-1 text-muted">
+            {{ doctorDetails.Designation }}
+          </p>
+
+          <p class="mb-1">
+            <strong>Specialty:</strong> {{ doctorDetails.Specialty }}
+          </p>
+
+          <p class="mb-0">
+            <strong>Consultation Fee:</strong>
+            {{ doctorDetails.ConsultationFee }} OMR
+          </p>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <hr class="my-3" />
+
+      <!-- Date & Time Row -->
+      <div class="d-flex align-items-center gap-2 text-muted">
+        <mat-icon class="calendar-icon">event</mat-icon>
+        <span>
+          {{ appointmentData?.selectedDate }} |
+          {{ appointmentData?.selectedTime }}
+        </span>
+      </div>
+
+    </div>
+  } @else {
+    <p class="text-muted">Loading doctor details…</p>
+  }
+</div>
