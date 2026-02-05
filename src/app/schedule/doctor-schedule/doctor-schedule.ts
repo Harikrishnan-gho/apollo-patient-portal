@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -9,11 +9,20 @@ import { catchError } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 interface Slot {
   ID: number;
   AppointmentTime: string;
 }
+
+interface AppointmentPayload {
+  doctorId: string;
+  selectedDate: string;
+  selectedTimeId: number;
+  selectedTime: string;
+}
+
 
 @Component({
   selector: 'doctor-schedule',
@@ -33,12 +42,16 @@ export class DoctorSchedule implements OnInit, OnChanges {
   res: ghoresult = new ghoresult();
   slots: Slot[] = [];
 
-  selectedTimeId: any;
-
+  selectedTimeId!: number;
+  selectedTime!: string;
+  router = inject(Router)
   selected: Date = new Date();
   selectedDate: string = formatDate(new Date(), 'dd/MM/yyyy', 'en-IN');
 
   @Input() doctor: string;
+
+
+ @Output() bookAppointment = new EventEmitter<AppointmentPayload>();
 
   ngOnInit(): void {
   }
@@ -49,28 +62,44 @@ export class DoctorSchedule implements OnInit, OnChanges {
     }
   }
 
-  timeSelected(slotId: any) {
-    this.selectedTimeId = slotId;
+  timeSelected(slot: Slot) {
+    this.selectedTimeId = slot.ID;
+    this.selectedTime = slot.AppointmentTime;
   }
 
-  onBookAppointment() {
-    this.tv = [
-      { T: "dk1", V: this.selectedTimeId },
-      { T: "dk2", V: this.srv.getsession('id') },
-      { T: "c10", V: "1" }
-    ];
 
-    this.srv.getdata("appointment", this.tv).pipe(
-      catchError((err) => {
-        this.srv.openDialog("Slots Info", "e", "Error while booking appointment");
-        throw err;
-      })
-    ).subscribe((r) => {
-      if (r.Status === 1) {
-        this.srv.openDialog("Success", "s", "Appointment booked successfully!");
-      } else {
-        this.srv.openDialog("Error", "e", "Failed to book appointment");
-      }
+  // onBookAppointment() {
+  //   this.tv = [
+  //     { T: "dk1", V: this.selectedTimeId },
+  //     { T: "dk2", V: this.srv.getsession('id') },
+  //     { T: "c10", V: "1" }
+  //   ];
+
+  //   this.srv.getdata("appointment", this.tv).pipe(
+  //     catchError((err) => {
+  //       this.srv.openDialog("Slots Info", "e", "Error while booking appointment");
+  //       throw err;
+  //     })
+  //   ).subscribe((r) => {
+  //     if (r.Status === 1) {
+  //       this.srv.openDialog("Success", "s", "Appointment booked successfully!");
+  //     } else {
+  //       this.srv.openDialog("Error", "e", "Failed to book appointment");
+  //     }
+  //   });
+  // }
+
+  onBookAppointment() {
+    if (!this.selectedTimeId) {
+      this.srv.openDialog('Slot Required', 'e', 'Please select a time slot');
+      return;
+    }
+
+    this.bookAppointment.emit({
+      doctorId: this.doctor,
+      selectedDate: this.selectedDate,
+      selectedTimeId: this.selectedTimeId,
+      selectedTime: this.selectedTime
     });
   }
 
@@ -101,4 +130,12 @@ export class DoctorSchedule implements OnInit, OnChanges {
       }
     });
   }
+
+  // navigateToMakePayment() {
+  //   this.router.navigate([
+  //     'make-payment/slot',
+  //     this.selectedTimeId
+  //   ]);
+  // }
+
 }

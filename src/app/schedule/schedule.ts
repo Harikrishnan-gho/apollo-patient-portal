@@ -15,12 +15,13 @@ import { DoctorSchedule } from './doctor-schedule/doctor-schedule';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MakePayment } from './make-payment/make-payment';
 
 
 @Component({
   selector: 'app-schedule',
   imports: [MatCardModule, CommonModule, MatButtonModule, MatTabsModule, MatIconModule, DoctorDetails, DoctorSchedule, MatFormFieldModule,
-    MatInputModule, MatSelectModule],
+    MatInputModule, MatSelectModule,MakePayment],
   templateUrl: './schedule.html',
 })
 export class Schedule implements OnInit {
@@ -41,6 +42,11 @@ export class Schedule implements OnInit {
   selectedSpecialty: string | null = null;
   allDoctors: any[] = [];
   isDoctorRoute = false;
+  appointmentData: any = null;
+
+  searchText = '';
+filteredDoctors: any[] = [];
+
 
   private service = inject(GHOService);
   router = inject(Router)
@@ -99,6 +105,11 @@ export class Schedule implements OnInit {
     this.docid = doctor["ID"]
   }
 
+  onBookAppointment(data: any) {
+  this.appointmentData = data;
+  this.tbidx = 2; 
+}
+
   getDoctorList() {
     this.tv = [];
     this.tv.push({ T: "dk1", V: this.srv.getsession("id") })
@@ -113,6 +124,7 @@ export class Schedule implements OnInit {
       if (r.Status === 1) {
         this.allDoctors = r.Data[0];
         this.doctorList = r.Data[0];
+         this.filteredDoctors = [...this.allDoctors];
 
       }
     });
@@ -149,6 +161,7 @@ export class Schedule implements OnInit {
       .subscribe(r => {
         if (r.Status === 1) {
           this.doctorList = r.Data[0]
+           this.filteredDoctors = [...this.doctorList];
         } else {
           this.srv.openDialog('Specialty List', 'w', r.Info);
         }
@@ -156,15 +169,42 @@ export class Schedule implements OnInit {
   }
 
   onSpecialtyChange(id: string | null) {
-    if (id) {
-      this.router.navigate(['schedule', id]);
-      this.getDoctorsBySpecialites(id);
-    } else {
-      this.router.navigate(['schedule']);
-      this.doctorList = this.allDoctors;
-    }
+  this.selectedSpecialty = id;
+
+  if (id) {
+    this.router.navigate(['schedule', id]);
+    this.getDoctorsBySpecialites(id);
+  } else {
+    this.router.navigate(['schedule']);
+    this.doctorList = this.allDoctors;
+    this.applyFilters();
+  }
+}
+
+  applyFilters() {
+  let list = this.selectedSpecialty
+    ? this.doctorList
+    : this.allDoctors;
+
+  if (this.searchText) {
+    const value = this.searchText.toLowerCase();
+    list = list.filter(doc =>
+      doc.Doctor?.toLowerCase().includes(value) ||
+      doc.Designation?.toLowerCase().includes(value)
+    );
   }
 
+  this.filteredDoctors = [...list];
+}
+
+
+onSearchDoctor(event: Event) {
+  this.searchText = (event.target as HTMLInputElement).value
+    .toLowerCase()
+    .trim();
+
+  this.applyFilters();
+}
 
 
 }
