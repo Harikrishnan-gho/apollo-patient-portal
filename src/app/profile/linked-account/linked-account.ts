@@ -9,134 +9,172 @@ import { MatMenu, MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-linked-account',
-  standalone:true,
-  imports: [MatIcon,MatIconButton,MatMenuModule,MatIconModule,MatButtonModule,MatMenu],
+  standalone: true,
+  imports: [
+    MatIcon,
+    MatIconButton,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenu
+  ],
   templateUrl: './linked-account.html',
   styleUrl: './linked-account.css',
 })
 export class LinkedAccount {
-  router = inject(Router)
+
+  router = inject(Router);
+  private srv = inject(GHOService);
 
   defaultImage =
     'https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg';
 
   previewImage: string | ArrayBuffer | null = null;
-    personalDetails: any[] = [];
-    private srv = inject(GHOService);
-      tv: tags[] = []
-    deleteAccounts: any;
-    patientId = this.srv.getsession('id');
-    // primaryId = this.srv.getsession('id');
-    secondaryId=''
-      
-    
-    ngOnInit(){
-      // this.getDetails()
-      this.linkedAcc()
-    }
+
+  personalDetails: any[] = [];
+  primaryAccount: any = null;
+  secondaryAccounts: any[] = [];
+
+  tv: tags[] = [];
+
+  patientId = this.srv.getsession('id');
+
+  activeId: string = '';
+  token: string = '';
+
+  ngOnInit() {
+    this.linkedAcc();
+  }
 
   account() {
-    this.router.navigate(['profile'])
+    this.router.navigate(['profile']);
   }
-   // get details of profile
-  // getDetails(){
-  //     this.tv = [
-  //       { T: "dk1", V: this.patientId },
-  //       { T: "c10", V: "3" }
-  //     ];
-  //     this.srv.getdata("patient", this.tv).pipe(
-  //       catchError((err) => {
-  //         this.srv.openDialog('Emergency Contacts', "e", 'Error while loading emergency contacts');
-  //         throw err;
-  //       })
-  //     ).subscribe((r) => {
-  //       if (r.Status === 1) {
-  //         this.personalDetails = [...r.Data[0]];          
-  //         }
-  //     });
-  // }
-linkedAcc() {
-  this.tv = [
-    { T: "dk1", V: this.patientId },
-    { T: "c10", V: "25" }
-  ];
 
-  this.srv.getdata("patient", this.tv)
-    .pipe(
-      catchError((err) => {
-        this.srv.openDialog(
-          'Emergency Contacts',
-          "e",
-          'Error while loading linked account'
-        );
-        throw err;
-      })
-    )
-    .subscribe((r) => {
+  // ============================
+  // Load Linked Accounts
+  // ============================
+  linkedAcc() {
 
-      if (r.Status === 1) {
+    this.tv = [
+      { T: 'dk1', V: this.patientId },
+      { T: 'c10', V: '25' }
+    ];
 
-        this.personalDetails = [...r.Data[0]];
+    this.srv.getdata('patient', this.tv)
+      .pipe(
+        catchError((err) => {
 
-        // ✅ Find primary
-        const primary = this.personalDetails.find(
-          item => item.AccountPreference === 'Primary'
-        );
+          this.srv.openDialog(
+            'Linked Accounts',
+            'e',
+            'Error while loading linked account'
+          );
 
-        // ✅ Find secondary
-        const secondary = this.personalDetails.find(
-          item => item.AccountPreference === 'Secondary'
-        );
+          throw err;
+        })
+      )
+      .subscribe((r: any) => {
 
-        if (primary) {
-          this.patientId = primary.PatientID; // or primary.ID if API needs
-        }
+        console.log('API Response:', r);
 
-        if (secondary) {
-          this.secondaryId = secondary.ID;
-        }
+        if (r && r.Status === 1 && r.Data?.length) {
 
-        console.log('Primary:', primary);
-        console.log('Secondary:', secondary);
-      }
+          const accounts = r.Data[0];
 
-    });
-}
+          // All accounts
+          this.personalDetails = [...accounts];
 
+          // Primary account
+          this.primaryAccount = accounts.find(
+            (acc: any) => acc.AccountPreference === 'Primary'
+          );
 
+          // Secondary accounts
+          this.secondaryAccounts = accounts.filter(
+            (acc: any) => acc.AccountPreference === 'Secondary'
+          );
 
-    setPrimaryContact(item: any) {
-      
-        if (!item?.ID) {
-    console.error('Secondary ID missing');
-    return;
-  }
-  
-      this.tv = [
-        { T: 'dk1', V: this.patientId },
-        { T: 'dk2', V:  this.secondaryId},
-        { T: 'c10', V: '26' }
-      ];
-  
-      this.srv.getdata('patient', this.tv)
-        .pipe(
-          catchError(err => {
-            this.srv.openDialog(
-              'Emergency Contacts',
-              'e',
-              'Error while setting primary contact'
-            );
-            return throwError(() => err);
-          })
-        )
-        .subscribe((r: any) => {
-          if (r?.Status === 1) {
-            const msg = r?.Data?.[0]?.[0]?.msg ?? 'Contact added successfully';
-            this.srv.openDialog('Emergency Contact', 's', msg);
-            this.linkedAcc()
-          } else {
-            this.srv.openDialog('Emergency Contact', 'w', r?.Info ?? 'Something went wrong');
+          // Active ID
+          this.activeId = this.primaryAccount?.ID || '';
+
+          
+          if (this.primaryAccount?.ID) {
+
+            this.srv.setsession('id', this.primaryAccount.ID);
+            this.patientId = this.primaryAccount.ID;
+
           }
-        });
+
+          console.log('Primary:', this.primaryAccount);
+          console.log('Secondary:', this.secondaryAccounts);
+
+        } else {
+
+          console.error('Invalid response', r);
+
+          this.personalDetails = [];
+          this.primaryAccount = null;
+          this.secondaryAccounts = [];
+
+        }
+
+      });
+
+  }
+
+  // ============================
+  // Switch Account
+  // ============================
+  switchAccount(item: any) {
+
+    const targetId = item.ID;
+
+    // ✅ Always use latest primary
+    const currentPrimary = this.primaryAccount;
+
+    if (!currentPrimary) {
+      console.error('No primary found');
+      return;
     }
+
+    const tags: tags[] = [
+      { T: 'dk1', V: currentPrimary.ID },
+      { T: 'dk2', V: targetId },
+      { T: 'c10', V: '26' }
+    ];
+
+    this.srv.getdata('patient', tags)
+      .pipe(
+        catchError((err) => {
+
+          this.srv.openDialog(
+            'Linked Accounts',
+            'e',
+            'Error while switching account'
+          );
+
+          throw err;
+        })
+      )
+      .subscribe((res: any) => {
+
+        console.log('Switch Response:', res);
+
+        if (res && res.Status === 1) {
+
+          console.log('Switch success. Reloading accounts...');
+
+          
+          this.linkedAcc();
+
+        } else {
+
+          console.error('Switch failed', res);
+
+        }
+
+      });
+
+  }
+
 }

@@ -10,43 +10,60 @@
     Link and manage your Apollo patient accounts easily.
 </p>
 
-@for( item of personalDetails;track item) {
+@for (item of personalDetails; track item) {
+
 <div class="d-flex secondaryAcc p-3 border-round mt-4 mx-3">
 
     <div class="d-flex gap-4">
         <div>
-            <img class="profile-img" [src]=" item. _url || defaultImage" alt="Profile" />
+            <img class="profile-img"
+                 [src]="item._url || defaultImage"
+                 alt="Profile" />
         </div>
-        <div>
-            <h5> {{item.Patient}}</h5>
-            @if(item.AccountPreference ==="Primary"){
-            <span class="d-flex account-primary px-2">
-                <span>
-                    <mat-icon class="verified pt-1">verified</mat-icon>
 
-                </span>
+        <div>
+            <h5>{{ item.Patient }}</h5>
+
+            @if (item.AccountPreference === 'Primary') {
+            <span class="d-flex account-primary px-2">
+                <mat-icon class="verified pt-1">verified</mat-icon>
                 <span>Primary</span>
             </span>
             }
         </div>
     </div>
-    @if( item.AccountPreference === "Secondary"){
+
+    <!-- Only for Secondary -->
+    @if (item.AccountPreference === 'Secondary') {
+
     <div class="p-4">
-        <button mat-icon-button [matMenuTriggerFor]="menu">
+
+        <button mat-icon-button
+                [matMenuTriggerFor]="menuRef">
             <mat-icon>more_horiz</mat-icon>
         </button>
+
+        <!-- Menu -->
+        <mat-menu #menuRef="matMenu">
+
+            <button mat-menu-item
+                    (click)="switchAccount(item)">
+
+                <mat-icon>star_border</mat-icon>
+                <span>Set as Primary</span>
+
+            </button>
+
+        </mat-menu>
+
     </div>
-    <!-- Menu -->
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="setPrimaryContact(item)">
-            <mat-icon>star_border</mat-icon>
-            <span>Set as Primary</span>
-        </button>
-        
-    </mat-menu>
+
     }
+
 </div>
+
 }
+
 <!-- link an account -->
 <div class="linkAccount border-round mt-3 mx-3 p-2">
     <div class="d-flex gap-2  ">
