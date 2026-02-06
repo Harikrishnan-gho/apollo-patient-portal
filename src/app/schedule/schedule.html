@@ -134,7 +134,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="search-field">
-      <mat-label>
+      <mat-label class="px-2">
         <mat-icon matPrefix>search</mat-icon>
         Search doctors
       </mat-label>
@@ -144,7 +144,7 @@
   </div>
 
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="border-round" [(selectedIndex)]="tbidx">
-    <mat-tab label="Doctor List">
+    <mat-tab label="Select Doctor">
       <div class="row p10">
         @for (item of filteredDoctors; track item.ID) {
         <div class="col-sm-3 mb-3">
@@ -183,15 +183,13 @@
 
         </div>
         }
-
       </div>
 
     </mat-tab>
 
-    <mat-tab label="Timings">
+    <mat-tab label="Choose Time Slot">
 
       <doctor-details [docinfo]='selectedDoc'></doctor-details>
-      <!-- <doctor-schedule [doctor]="docid"></doctor-schedule> -->
       <doctor-schedule [doctor]="docid" (bookAppointment)="onBookAppointment($event)">
       </doctor-schedule>
     </mat-tab>
@@ -200,7 +198,6 @@
       <app-make-payment [appointmentData]="appointmentData">
       </app-make-payment>
     </mat-tab>
-
 
   </mat-tab-group>
 </div>
