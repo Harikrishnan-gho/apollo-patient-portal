@@ -1,66 +1,268 @@
 <div class="container">
-  <!-- Header -->
+  <!-- Page Header -->
   <p class="fs-4 fw-semibold mb-1 mt-1">Make Payment</p>
-  <p class="text-muted mb-4">make payment and confirm your appointment.</p>
+  <p class="text-muted mb-4">
+    Make payment and confirm your appointment.
+  </p>
 
-  <p class="fw-semibold mb-2">Booking Summary</p>
+  <!-- Payment Mode -->
+  <div class="payment-section mt-4">
+    <p class="fw-semibold mb-3">Payment Method</p>
+    <div class="payment-options pb-2">
 
-  @if (doctorDetails) {
-    <div class="doctor-card p-3 position-relative">
+      <label class="radio-card">
+        <input type="radio" name="paymentMode" value="insurance" [(ngModel)]="paymentMode" />
+        <span>Proceed with Insurance</span>
+      </label>
 
-      <!-- Top Row -->
-      <div class="d-flex align-items-center gap-3">
+      <label class="radio-card">
+        <input type="radio" name="paymentMode" value="cash" [(ngModel)]="paymentMode" />
+        <span>Proceed with Cash</span>
+      </label>
 
-        <!-- Doctor Image -->
-        <div class="doctor-img">
-          @if (doctorDetails._url) {
-            <img
-              [src]="doctorDetails._url"
-              alt="Doctor"
-              class="rounded-circle"
-            />
-          } @else {
+    </div>
+
+    @if (paymentMode === 'insurance') {
+    <div class="payment-box my-2">
+      <p class="fw-semibold mb-2">Patient Insurance</p>
+      @if (patientInsurance) {
+      <div class="insurance-card mt-3">
+
+        <div class="d-flex align-items-start gap-3">
+
+          <div class="insurance-logo">
+            <img src="insurance-logo.jpg" alt="Insurance" />
+          </div>
+
+          <div class="flex-grow-1">
+
+            <p class="fw-semibold mb-1 insurance-name">
+              {{ patientInsurance.InsuranceProviderName }}
+            </p>
+
+            <p class="text-muted mb-1">
+              Policy No: {{ patientInsurance.PolicyNumber }}
+            </p>
+
+            <p class="mb-0">
+              <strong>Expiry:</strong>
+              {{ patientInsurance.ExpiryDate }}
+            </p>
+
+          </div>
+
+          <div class="status-chip" [ngClass]="{
+              'valid': patientInsurance.ValidationStatus === 'Valid',
+              'invalid': patientInsurance.ValidationStatus !== 'Valid'
+            }">
+            {{ patientInsurance.ValidationStatus }}
+          </div>
+
+        </div>
+
+      </div>
+
+      }
+      @else {
+      <p class="text-muted mb-2">
+        No insurance found for this patient
+      </p>
+      }
+      <div class="py-2">
+        <button mat-stroked-button color="primary">
+          + Add Insurance
+        </button>
+      </div>
+
+    </div>
+    }
+    @if (paymentMode === 'cash') {
+    <div class="payment-box my-2 cash-box ">
+      <div class="cash-summary">
+
+        <p class="fw-semibold mb-1">
+          Pay with Cash
+        </p>
+
+        <p class="cash-amount mb-0">
+          Amount:
+          <span class="amount">
+            OMR {{ doctorDetails.ConsultationFee }}
+          </span>
+          <span class="separator">•</span>
+          <span class="hint">
+            Pay at hospital (cash)
+          </span>
+        </p>
+
+      </div>
+
+    </div>
+    }
+
+  </div>
+  <div class="summary-card p-3 p-md-4">
+
+    <div class="row g-4">
+
+      <div class="col-md-6 border-end">
+
+        <p class="section-title">
+          <mat-icon>medical_services</mat-icon>
+          Booking Summary
+        </p>
+
+        @if (doctorDetails) {
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="doctor-img">
+            @if (doctorDetails._url) {
+            <img [src]="doctorDetails._url" alt="Doctor" class="rounded-circle" />
+            } @else {
             <div class="fallback-img rounded-circle">
               <mat-icon>person</mat-icon>
             </div>
-          }
+            }
+          </div>
+
+          <div>
+            <p class="mb-0 fw-semibold">
+              Dr. {{ doctorDetails.Doctor }}
+            </p>
+            <p class="text-muted mb-0">
+              {{ doctorDetails.Designation }}
+            </p>
+            <p class="mb-0">
+              <strong>Specialty:</strong> {{ doctorDetails.Specialty }}
+            </p>
+          </div>
         </div>
 
-        <!-- Doctor Info -->
-        <div class="doctor-info flex-grow-1">
-          <p class="doctor-name mb-1">
-            Dr. {{ doctorDetails.Doctor }}
+        <div class="info-box">
+          <div class="info-row">
+            <mat-icon>event</mat-icon>
+            <span>
+              {{ appointmentData?.selectedDate }} |
+              {{ appointmentData?.selectedTime }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <mat-icon>payments</mat-icon>
+            <span>
+              {{ doctorDetails.ConsultationFee }} OMR
+            </span>
+          </div>
+        </div>
+
+        } @else {
+        <p class="text-muted">Loading doctor details…</p>
+        }
+
+      </div>
+
+      <div class="col-md-6">
+
+        <div class="patient-section">
+
+          <p class="section-title py-1">
+            <mat-icon>person</mat-icon>
+            Patient Details
           </p>
 
-          <p class="doctor-specialty mb-1 text-muted">
-            {{ doctorDetails.Designation }}
-          </p>
+          @if (patientDetails) {
 
-          <p class="mb-1">
-            <strong>Specialty:</strong> {{ doctorDetails.Specialty }}
-          </p>
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="patient-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
 
-          <p class="mb-0">
-            <strong>Consultation Fee:</strong>
-            {{ doctorDetails.ConsultationFee }} OMR
-          </p>
+            <div>
+              <p class="mb-0 fw-semibold">
+                {{ patientDetails.Patient }}
+              </p>
+              <p class="text-muted mb-0">
+                {{ patientDetails.Info }}
+              </p>
+            </div>
+          </div>
+
+          <div class="info-box mt-4">
+            <div class="row g-2">
+
+              <div class="col-12">
+                <div class="info-row">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{ patientDetails.Address }}</span>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="info-row">
+                  <mat-icon>phone</mat-icon>
+                  <span>{{ patientDetails.Phone }}</span>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="info-row">
+                  <mat-icon>badge</mat-icon>
+                  <span>{{ patientDetails.Info }}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          } @else {
+          <p class="text-muted">Loading patient details…</p>
+          }
+
         </div>
       </div>
 
-      <!-- Divider -->
-      <hr class="my-3" />
+    </div>
+  </div>
+  <div class="py-3">
+    @if (paymentMode === 'insurance') {
+    <div>
+      <p>Please arrive at the reception desk 15 minutes before your appointment time to complete registration.</p>
+    </div>
+    }
+    @if (paymentMode === 'cash') {
+    <div class="confirm-payment-box ">
 
-      <!-- Date & Time Row -->
-      <div class="d-flex align-items-center gap-2 text-muted">
-        <mat-icon class="calendar-icon">event</mat-icon>
+      <p class="fw-semibold mb-3">Payment Summary</p>
+
+      <div class="payment-row">
+        <div class="row-left">
+          <mat-icon class="row-icon">medical_services</mat-icon>
+          <span>Consultation Fee</span>
+        </div>
+        <span>OMR {{ doctorDetails.ConsultationFee }}</span>
+      </div>
+
+      <div class="payment-row">
+        <div class="row-left">
+          <mat-icon class="row-icon">add_circle_outline</mat-icon>
+          <span>Additional Charges</span>
+        </div>
+        <span>OMR 5.00</span>
+      </div>
+
+      <hr class="payment-divider" />
+
+      <div class="payment-row total">
+        <span>Total Payable</span>
         <span>
-          {{ appointmentData?.selectedDate }} |
-          {{ appointmentData?.selectedTime }}
+          OMR {{ doctorDetails.ConsultationFee + 5 }}
         </span>
       </div>
 
     </div>
-  } @else {
-    <p class="text-muted">Loading doctor details…</p>
-  }
+    }
+    <div class="pt-2">
+      <button (click)="bookAppointment()" [disabled]="!paymentMode" class="confirmBtn">Confirm Booking</button>
+    </div>
+  </div>
 </div>
