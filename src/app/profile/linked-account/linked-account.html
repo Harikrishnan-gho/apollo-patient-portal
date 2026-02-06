@@ -1,8 +1,8 @@
 <!-- navbar -->
 <div class="d-flex align-items-center main-heading mx-3">
-    <div class="d-flex align-items-center gap-2 heading" (click)="account()">
+    <div class="backIcon d-flex align-items-center gap-2 heading" (click)="account()">
         <mat-icon>arrow_back</mat-icon>
-        <p class="mb-0">Profile</p>
+        <p class="mb-0 fw-semibold">Profile</p>
     </div>
 </div>
 <h4 class="mt-4 text-center text-md-start ">Linked Accounts</h4>
@@ -16,9 +16,7 @@
 
     <div class="d-flex gap-4">
         <div>
-            <img class="profile-img"
-                 [src]="item._url || defaultImage"
-                 alt="Profile" />
+            <img class="profile-img" [src]="item._url || defaultImage" alt="Profile" />
         </div>
 
         <div>
@@ -38,16 +36,14 @@
 
     <div class="p-4">
 
-        <button mat-icon-button
-                [matMenuTriggerFor]="menuRef">
+        <button mat-icon-button [matMenuTriggerFor]="menuRef">
             <mat-icon>more_horiz</mat-icon>
         </button>
 
         <!-- Menu -->
         <mat-menu #menuRef="matMenu">
 
-            <button mat-menu-item
-                    (click)="switchAccount(item)">
+            <button mat-menu-item (click)="switchAccount(item)">
 
                 <mat-icon>star_border</mat-icon>
                 <span>Set as Primary</span>

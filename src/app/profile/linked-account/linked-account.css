@@ -23,3 +23,6 @@
 .secondaryAcc{
     justify-content: space-between;
 }
+.backIcon{
+    cursor: pointer;
+}
