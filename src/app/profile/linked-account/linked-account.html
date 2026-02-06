@@ -53,6 +53,13 @@
                 <span>Set as Primary</span>
 
             </button>
+            <button mat-menu-item
+                    (click)="removeAcc(item)">
+
+                <mat-icon>delete</mat-icon>
+                <span>delete Account</span>
+
+            </button>
 
         </mat-menu>
 
@@ -66,7 +73,7 @@
 
 <!-- link an account -->
 <div class="linkAccount border-round mt-3 mx-3 p-2">
-    <div class="d-flex gap-2  ">
+    <div class="d-flex gap-2 " (click)="linkAccountLogin()">
         <span>
             <img src="link-icon.svg" alt="">
         </span>

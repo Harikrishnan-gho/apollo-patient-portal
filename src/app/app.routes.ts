@@ -108,6 +108,12 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () => { return import('./profile/personal-info/personal-info').then((m) => m.PersonalInfo) },
     },
+    {
+        path: 'linked-login',
+        pathMatch: 'full',
+        loadComponent: () => { return import('./login-linked/login-linked').then((m) => m.LoginLinked) },
+    },
+
 ]
 
 

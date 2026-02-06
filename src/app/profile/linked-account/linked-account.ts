@@ -41,6 +41,7 @@ export class LinkedAccount {
 
   activeId: string = '';
   token: string = '';
+  item: any;
 
   ngOnInit() {
     this.linkedAcc();
@@ -129,7 +130,7 @@ export class LinkedAccount {
 
     const targetId = item.ID;
 
-    // ✅ Always use latest primary
+    //Always use latest primary
     const currentPrimary = this.primaryAccount;
 
     if (!currentPrimary) {
@@ -175,6 +176,32 @@ export class LinkedAccount {
 
       });
 
+  }
+    linkAccountLogin(){
+    this.router.navigate(['linked-login'])
+  }
+
+  removeAcc(item:any){
+    if (!item?.ID) {
+      console.error('Contact ID missing');
+      return;
+    }
+     const tv = [
+      { T: 'dk1', V: item.ID },
+      { T: 'c10', V: '30' }
+    ];
+    this.srv.getdata('patient', tv)
+      .pipe(catchError(err => { throw err; }))
+      .subscribe(r => {
+        if (r.Status === 1) {
+          let msg = r.Data[0][0].msg
+          this.srv.openDialog('Medical Records', 's', msg);
+          this.linkedAcc(); 
+                
+        } else {
+          this.srv.openDialog('Medical Records', 'w', r.Info);
+        }
+      });
   }
 
 }
