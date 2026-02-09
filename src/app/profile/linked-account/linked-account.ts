@@ -51,9 +51,7 @@ export class LinkedAccount {
     this.router.navigate(['profile']);
   }
 
-  // ============================
-  // Load Linked Accounts
-  // ============================
+
   linkedAcc() {
 
     this.tv = [
@@ -84,6 +82,8 @@ export class LinkedAccount {
 
           // All accounts
           this.personalDetails = [...accounts];
+          console.log('personal details',this.personalDetails);
+          
 
           // Primary account
           this.primaryAccount = accounts.find(
@@ -106,9 +106,6 @@ export class LinkedAccount {
 
           }
 
-          // console.log('Primary:', this.primaryAccount);
-          // console.log('Secondary:', this.secondaryAccounts);
-
         } else {
 
           console.error('Invalid response', r);
@@ -123,63 +120,65 @@ export class LinkedAccount {
 
   }
 
-  // ============================
-  // Switch Account
-  // ============================
+
   switchAccount(item: any) {
 
-    const targetId = item.ID;
-
-    //Always use latest primary
-    const currentPrimary = this.primaryAccount;
-
-    if (!currentPrimary) {
-      console.error('No primary found');
-      return;
-    }
-
-    const tags: tags[] = [
-      { T: 'dk1', V: currentPrimary.ID },
-      { T: 'dk2', V: targetId },
-      { T: 'c10', V: '26' }
-    ];
-
-    this.srv.getdata('patient', tags)
-      .pipe(
-        catchError((err) => {
-
-          this.srv.openDialog(
-            'Linked Accounts',
-            'e',
-            'Error while switching account'
-          );
-
-          throw err;
-        })
-      )
-      .subscribe((res: any) => {
-
-        // console.log('Switch Response:', res);
-
-        if (res && res.Status === 1) {
-
-          console.log('Switch success. Reloading accounts...');
-
-          
-          this.linkedAcc();
-
-        } else {
-
-          console.error('Switch failed', res);
-
-        }
-
-      });
-
+  if (!item.ID || !this.patientId) {
+    console.error('Invalid account data');
+    return;
   }
-    linkAccountLogin(){
+
+  const targetId = item.ID;
+
+  const tags: tags[] = [
+    { T: 'dk1', V: targetId },
+    { T: 'c10', V: '26' }
+  ];
+
+  this.srv.getdata('patient', tags)
+    .pipe(
+      catchError((err) => {
+
+        this.srv.openDialog(
+          'Linked Accounts',
+          'e',
+          'Error while switching account'
+        );
+
+        throw err;
+      })
+    )
+    .subscribe((res: any) => {
+
+      console.log('Switch Response:', res);
+
+      if (res?.Status === 1) {
+
+        // Update session to new primary
+        this.srv.setsession('id', targetId);
+        this.patientId = targetId;
+
+        console.log('New Primary ID:', this.patientId);
+
+        // Reload accounts from backend
+        this.linkedAcc();
+
+      } else {
+
+        this.srv.openDialog(
+          'Linked Accounts',
+          'w',
+          res?.Error || 'Switch failed'
+        );
+      }
+    });
+}
+
+  linkAccountLogin(){
     this.router.navigate(['linked-login'])
   }
+
+  // delete account
 
   removeAcc(item:any){
     if (!item?.ID) {
