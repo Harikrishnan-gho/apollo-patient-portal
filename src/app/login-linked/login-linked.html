@@ -32,28 +32,22 @@
         }
 
         <!--  LOGIN MODE -->
-@if (mode === 'L') {
+        @if (mode === 'L') {
 
-<h3 class="text-center">Welcome Back</h3>
+        <h3 class="text-center">Welcome Back</h3>
 
-<p class="text-center">
-  Provide the registered mobile number to complete account linking
-</p>
+        <p class="text-center">
+            Provide the registered mobile number to complete account linking
+        </p>
 
-<mat-form-field class="w100" appearance="outline">
-  <mat-label>Phone</mat-label>
-  <span matPrefix>+968&nbsp;</span>
+        <mat-form-field class="w100" appearance="outline">
+            <mat-label>Phone</mat-label>
+            <span matPrefix>+968&nbsp;</span>
 
-  <input
-    matInput
-    type="text"
-    [(ngModel)]="phone"
-    maxlength="8"
-    placeholder="XXXXXXXX"
-  >
-</mat-form-field>
+            <input matInput type="text" [(ngModel)]="phone" maxlength="8" placeholder="XXXXXXXX">
+        </mat-form-field>
 
-<mat-form-field class="w100" appearance="outline">
+        <!-- <mat-form-field class="w100" appearance="outline">
   <mat-label>Password</mat-label>
 
   <input
@@ -61,25 +55,22 @@
     type="password"
     [(ngModel)]="password"
   >
-</mat-form-field>
+</mat-form-field> -->
 
-<button
-  class="continue-btn w100"
-  (click)="loginAcc()"
->
-  Continue
-</button>
+        <button class="continue-btn w100" (click)="loginAcc()">
+            Continue
+        </button>
 
-<p class="text-center link">
-  Login with Patient ID instead
-</p>
+        <p class="text-center link">
+            Login with Patient ID instead
+        </p>
 
-<div class="back-btn text-center" (click)="goBack1()">
-  <mat-icon>arrow_back</mat-icon>
-  <span>Go Back</span>
-</div>
+        <div class="back-btn text-center" (click)="goBack1()">
+            <mat-icon>arrow_back</mat-icon>
+            <span>Go Back</span>
+        </div>
 
-}
+        }
 
 
         <!--  OTP MODE-->
@@ -89,6 +80,7 @@
 
         <p class="text-center">
             We’ve sent a 6-digit code to +968 XXXXX X2436 {{dbmsg}}
+            {{ loginMessage }}
         </p>
 
         <div class="otp-inputs">
@@ -96,14 +88,12 @@
             @for (digit of otp; let i = $index; track i) {
 
             <input #otpInput class="otp-box" type="text" maxlength="1" inputmode="numeric" autocomplete="one-time-code"
-                [(ngModel)]="otp[i]" (input)="onInput($event, i)" (keydown)="onKeyDown($event,i)" />
-
+                [(ngModel)]="otp[i]" (input)="moveToNext($event, i)" />
             }
-
         </div>
 
-        <button class="continue-btn w100" (click)="submitOtp()" [disabled]="!isOtpComplete()">
-            Continue
+        <button class="continue-btn w100" (click)=" verifyOtp()">
+           Verify & Continue
         </button>
 
         <p class="text-center link">
@@ -122,17 +112,17 @@
 
         <mat-form-field class="w100" appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput [(ngModel)]="name" name="name">
+            <input matInput name="name" [(ngModel)]="name">
         </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
             <mat-label>Date of Birth</mat-label>
-            <input matInput type="date" [(ngModel)]="dob" name="dob">
+            <input matInput type="date" name="dob" [(ngModel)]="dob">
         </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
             <mat-label>Gender</mat-label>
-            <mat-select [(ngModel)]="gender" name="gender">
+            <mat-select name="gender" [(ngModel)]="gender">
                 <mat-option value="M">Male</mat-option>
                 <mat-option value="F">Female</mat-option>
                 <mat-option value="O">Other</mat-option>
@@ -142,12 +132,12 @@
         <mat-form-field class="w100" appearance="outline">
             <mat-label>Phone</mat-label>
             <span matPrefix>+968&nbsp;</span>
-            <input matInput [(ngModel)]="phone" maxlength="8" name="phone">
+            <input matInput maxlength="8" name="phone" [(ngModel)]="phone">
         </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput type="password" [(ngModel)]="password" name="password">
+            <input matInput type="password" name="password" [(ngModel)]="password">
         </mat-form-field>
 
         <button class="continue-btn mt-4" (click)="signUpNewAccount()">

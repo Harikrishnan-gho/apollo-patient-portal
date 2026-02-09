@@ -188,7 +188,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
         const u = r.Data[0][0];
         this.srv.setsession('tkn', u['Token']);
         this.srv.setsession('id', u['id']);
-
         this.router.navigate(['/dash']);
       } else {
         this.srv.openDialog('Login', 'w', r.Info);

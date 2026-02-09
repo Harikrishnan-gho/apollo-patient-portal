@@ -16,6 +16,8 @@ interface AwsFileResponse {
 })
 
 export class GHOService {
+  linkedAccounts: any;
+  loggedUser: any;
   uploadImage(arg0: string, formData: FormData) {
     throw new Error('Method not implemented.');
   }
@@ -41,6 +43,8 @@ export class GHOService {
     this.ss.set(T, V);
   }
 
+  // linked accounts
+  
   clearsession() {
     this.ss.clear();
   }

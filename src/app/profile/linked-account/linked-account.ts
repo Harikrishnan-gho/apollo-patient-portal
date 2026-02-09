@@ -106,8 +106,8 @@ export class LinkedAccount {
 
           }
 
-          console.log('Primary:', this.primaryAccount);
-          console.log('Secondary:', this.secondaryAccounts);
+          // console.log('Primary:', this.primaryAccount);
+          // console.log('Secondary:', this.secondaryAccounts);
 
         } else {
 
@@ -159,7 +159,7 @@ export class LinkedAccount {
       )
       .subscribe((res: any) => {
 
-        console.log('Switch Response:', res);
+        // console.log('Switch Response:', res);
 
         if (res && res.Status === 1) {
 

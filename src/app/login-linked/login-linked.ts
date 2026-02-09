@@ -45,6 +45,12 @@ export class LoginLinked {
   personalDetails: any[];
   dbmsg: any;
   newId: string;
+  patientId = this.srv.getsession('id');
+  loginMessage: any;
+  newPatientId: any;
+  OTP: any;
+  
+
 
 
   selectOption(option: 'existing' | 'new') {
@@ -65,65 +71,18 @@ export class LoginLinked {
     }
   }
 
-  onInput(event: Event, index: number): void {
-
-    const input = event.target as HTMLInputElement;
-    const value = input.value.replace(/\D/g, '').slice(0, 1);
-    input.value = value;
-    this.otp[index] = value;
-
-    if (value && index < this.otp.length - 1) {
-      this.focusInput(index + 1);
-    }
-  }
-
-  onKeyDown(event: KeyboardEvent, index: number): void {
-
-    if (event.key === 'Backspace' && !this.otp[index] && index > 0) {
-      this.focusInput(index - 1);
-    }
-  }
-
-  private focusInput(index: number) {
-    const inputs = this.otpInputs.toArray();
-    if (inputs[index]) {
-      inputs[index].nativeElement.focus();
-    }
-  }
-
-
-  isOtpComplete(): boolean {
-    return this.otp.every(d => d !== '');
-  }
-
-  submitOtp() {
-
-    if (!this.isOtpComplete()) return;
-
-    const finalOtp = this.otp.join('');
-
-    console.log('OTP:', finalOtp);
-
-    // Call API here
-  }
-
-
-
   goBack() {
     this.router.navigate(['/profile/linked-account']);
   }
-
 
   goBack1() {
     this.mode = 'SELECT';
   }
 
-
   goBackToSelect() {
     this.mode = 'SELECT';
     this.selectedOption = null;
   }
-
 
   onContinueHome() {
     this.router.navigate(['/dash']);
@@ -133,7 +92,7 @@ export class LoginLinked {
   loginAcc() {
 
     // Basic validation
-    if (!this.phone || !this.password) {
+    if (!this.phone) {
       this.srv.openDialog(
         'Login',
         'w',
@@ -141,11 +100,19 @@ export class LoginLinked {
       );
       return;
     }
-
+    // checking whether the same account
+    if (this.newPatientId == this.patientId) {
+      this.srv.openDialog(
+        'Login',
+        'w',
+        'entered number can not be the existing account'
+      );
+      return;
+    }
     // API payload
     this.tv = [
-      { T: 'dk1', V: this.phone },    
-      { T: 'dk2', V: this.password },  
+      { T: 'dk1', V: this.phone },
+      { T: 'dk2', V: 'otp' },
       { T: 'c10', V: '9' }
     ];
 
@@ -166,15 +133,16 @@ export class LoginLinked {
 
         if (r?.Status === 1 && r?.Data?.length) {
           const msg = r?.Data?.[0]?.[0]?.msg ?? '';
-          this.srv.openDialog('Emergency Contact', 's', msg);
-          // Save personal details
           this.personalDetails = [...r.Data[0]];
-         this.onContinueHome()
+          this.loginMessage = msg;
+          this.newPatientId = r?.Data?.[0]?.[0]?.id ?? '';
+          this.mode = 'O';
+
         } else {
           this.srv.openDialog(
             'Login Failed',
             'w',
-            'Invalid phone number or password'
+            'Invalid phone number'
           );
 
         }
@@ -182,25 +150,119 @@ export class LoginLinked {
       });
   }
 
+  // otp section
+  moveToNext(event: any, index: number) {
+
+    const input = event.target.value;
+
+   
+    if (!/^[0-9]$/.test(input)) {
+      this.otp[index] = '';
+      return;
+    }
+
+    // Move to next box
+    if (input && index < this.otpInputs.length - 1) {
+      this.otpInputs.toArray()[index + 1].nativeElement.focus();
+    }
+  }
+
+
+ verifyOtp() {
+
+ const enteredOtp = this.otp.join('').trim();
+
+  if (!enteredOtp || enteredOtp.length !== 6) {
+    this.srv.openDialog(
+      'OTP Error',
+      'w',
+      'Please enter complete 6-digit OTP'
+    );
+    return;
+  }
+
+  // Validate IDs
+  if (!this.newPatientId || !this.patientId) {
+    this.srv.openDialog(
+      'Error',
+      'e',
+      'Missing login information. Please login again.'
+    );
+    return;
+  }
+
+  this.tv = [
+    { T: 'dk1', V: this.newPatientId },
+    { T: 'dk2', V: enteredOtp }, 
+    { T: 'c1', V: '' },
+    { T: 'c2', V: this.patientId },
+    { T: 'c10', V: '10' }
+  ];
+
+  this.srv.getdata('patient', this.tv)
+    .pipe(
+      catchError((err) => {
+
+        console.error('OTP API Error:', err);
+
+        this.srv.openDialog(
+          'Login Error',
+          'e',
+          'OTP verification failed'
+        );
+
+        throw err;
+      })
+    )
+    .subscribe((r: any) => {
+
+      console.log('OTP Response:', r);
+
+      if (r?.Status === 1 && r?.Data?.length) {
+
+        const msg = r?.Data?.[0]?.[0]?.msg ?? 'Verified successfully';
+
+        this.personalDetails = [...r.Data[0]];
+
+        this.srv.openDialog('Success', 's', msg);
+
+        this.onContinueHome()
+
+
+
+      } else {
+
+        this.srv.openDialog(
+          'Login Failed',
+          'w',
+          'Invalid OTP'
+        );
+
+      }
+
+    });
+}
+
+
+
   // sign-up new linked account
-  name='';
-  dob='';
-  gender='';
-  
-formatDOB(date: string) {
-  if (!date) return '';
+  name = '';
+  dob = '';
+  gender = '';
 
-  const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year = d.getFullYear();
+  formatDOB(date: string) {
+    if (!date) return '';
 
-  return `${day}/${month}/${year}`;
-}
-cleanPhone(phone: string) {
-  return phone.replace(/\D/g, '');
-}
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
 
+    return `${day}/${month}/${year}`;
+  }
+  cleanPhone(phone: string) {
+    return phone.replace(/\D/g, '');
+  }
   signUpNewAccount() {
 
     if (!this.name || !this.dob || !this.gender || !this.phone || !this.password) {
@@ -208,54 +270,67 @@ cleanPhone(phone: string) {
       return;
     }
 
-    this.tv = [
-      { "T": "dk1", "V": this.newId || "" },
-      { "T": "c1", "V": this.name },
-      { "T": "c2", "V": this.formatDOB(this.dob) },
-      { "T": "c3", "V": this.gender },
-      { "T": "c4", "V": this.cleanPhone(this.phone) },
-      { "T": "c5", "V": this.password },
-      { "T": "c6", "V": "" },
-      { "T": "c10", "V": "8" }
-    ]
-    console.log('Signup Payload:', this.tv);
-    this.srv.getdata('patient', this.tv).pipe(
-      catchError((err) => {
-        this.srv.openDialog(
-          'Login Error',
-          'e',
-          'Unable to login. Please try again'
-        );
+    const payload = [
+      { T: "dk1", V: this.patientId },
+      { T: "c1", V: this.name },
+      { T: "c2", V: this.formatDOB(this.dob) },
+      { T: "c3", V: this.gender },
+      { T: "c4", V: this.phone },
+      { T: "c5", V: this.password },
+      { T: "c6", V: "" },
+      { T: "c10", V: "8" }
+    ];
 
-        throw err;
-      })
-    ).subscribe((r: any) => {
-       console.log('Signup Response:', r);
+    console.log('Signup Payload:', payload);
 
-      if (r?.Status === 1 && r?.Data?.length) {
-        const msg = r?.Data?.[0]?.[0]?.msg ?? '';
-        const newId = r?.Data?.[0]?.[0]?.Id ?? '';
-        console.log('new id',newId);
-        
-        this.srv.openDialog('new linked account', 's', msg);
-        // this.linkedAcc()
-        this.personalDetails = [...r.Data[0]];
-        this.signUpNewAccount()
-       if(newId){
-        this.onContinueHome()
+    this.srv.getdata('patient', payload)
+      .pipe(
+        catchError(err => {
 
-       }
-      } else {
-        this.srv.openDialog(
-          'Login Failed',
-          'w',
-          'Invalid phone number or password'
-        );
+          this.srv.openDialog(
+            'Signup Error',
+            'e',
+            'Unable to signup. Please try again'
+          );
 
-      }
+          throw err;
+        })
+      )
+      .subscribe((r: any) => {
 
-    });
+        console.log('Signup Response:', r);
+
+        if (r?.Status !== 1) {
+
+          this.srv.openDialog(
+            'Signup Failed',
+            'w',
+            r?.Error || 'Signup failed'
+          );
+
+          return;
+        }
+
+
+        const data = r?.Data?.[0]?.[0] || {};
+
+        const msg = data?.msg || 'Signup successful';
+        const createdId = data?.Id || '';
+
+        console.log('Created ID:', createdId);
+
+        this.srv.openDialog('Success', 's', msg);
+
+        //Store newly created ID
+        if (createdId) {
+          this.newId = createdId;
+          console.log('new id',this.newId);
+          
+        }
+
+        // Redirect to linked account page (refresh happens there)
+        this.router.navigate(['/profile/linked-account']);
+      });
   }
-
 
 }
