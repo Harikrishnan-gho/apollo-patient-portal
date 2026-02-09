@@ -168,8 +168,6 @@ export class LoginLinked {
   }
 
 
-
-
  verifyOtp() {
 
  const enteredOtp = this.otp.join('').trim();
@@ -200,8 +198,6 @@ export class LoginLinked {
     { T: 'c2', V: this.patientId },
     { T: 'c10', V: '10' }
   ];
-
-  console.log('VERIFY OTP PAYLOAD:', this.tv); // Debug
 
   this.srv.getdata('patient', this.tv)
     .pipe(
@@ -275,8 +271,7 @@ export class LoginLinked {
     }
 
     const payload = [
-      // Parent ID (main account)
-      { T: "dk1", V: this.newId ?? "" },
+      { T: "dk1", V: this.patientId },
       { T: "c1", V: this.name },
       { T: "c2", V: this.formatDOB(this.dob) },
       { T: "c3", V: this.gender },
@@ -329,6 +324,8 @@ export class LoginLinked {
         //Store newly created ID
         if (createdId) {
           this.newId = createdId;
+          console.log('new id',this.newId);
+          
         }
 
         // Redirect to linked account page (refresh happens there)
