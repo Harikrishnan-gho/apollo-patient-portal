@@ -42,28 +42,46 @@
 
         <mat-form-field class="w100" appearance="outline">
             <mat-label>Phone</mat-label>
-            <span matPrefix>+968&nbsp;</span>
+            <span matPrefix class="p-2">+968&nbsp;</span>
 
             <input matInput type="text" [(ngModel)]="phone" maxlength="8" placeholder="XXXXXXXX">
         </mat-form-field>
-
-        <!-- <mat-form-field class="w100" appearance="outline">
-  <mat-label>Password</mat-label>
-
-  <input
-    matInput
-    type="password"
-    [(ngModel)]="password"
-  >
-</mat-form-field> -->
 
         <button class="continue-btn w100" (click)="loginAcc()">
             Continue
         </button>
 
-        <p class="text-center link">
+        <p class="text-center link p-3 patientId-login" (click)="loginId()">
             Login with Patient ID instead
         </p>
+
+        <div class="back-btn text-center" (click)="goBack1()">
+            <mat-icon>arrow_back</mat-icon>
+            <span>Go Back</span>
+        </div>
+
+        }
+        <!--  LOGIN WITH ID MODE -->
+        @if (mode === 'ID') {
+
+        <h3 class="text-center">Link Patient Using ID</h3>
+
+        <p class="text-center">
+            Enter the Patient ID and Date of Birth to link the correct patient profile.
+        </p>
+
+        <mat-form-field class="w100" appearance="outline">
+            <mat-label>Patient ID</mat-label>
+            <input matInput type="text" maxlength="4" placeholder="XXXX" [(ngModel)]="linkedId">
+        </mat-form-field>
+        <mat-form-field class="w100" appearance="outline">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput type="date" name="dob" [(ngModel)]="dob">
+        </mat-form-field>
+
+        <button class="continue-btn w100" (click)="loginWithId()">
+            Continue
+        </button>
 
         <div class="back-btn text-center" (click)="goBack1()">
             <mat-icon>arrow_back</mat-icon>
@@ -93,10 +111,10 @@
         </div>
 
         <button class="continue-btn w100" (click)=" verifyOtp()">
-           Verify & Continue
+            Verify & Continue
         </button>
 
-        <p class="text-center link">
+        <p class="text-center link ">
             Login with Patient ID instead
         </p>
 
