@@ -49,7 +49,8 @@ export class LoginLinked {
   loginMessage: any;
   newPatientId: any;
   OTP: any;
-  
+  linkedId: any;
+
 
 
 
@@ -155,7 +156,7 @@ export class LoginLinked {
 
     const input = event.target.value;
 
-   
+
     if (!/^[0-9]$/.test(input)) {
       this.otp[index] = '';
       return;
@@ -168,80 +169,80 @@ export class LoginLinked {
   }
 
 
- verifyOtp() {
+  verifyOtp() {
 
- const enteredOtp = this.otp.join('').trim();
+    const enteredOtp = this.otp.join('').trim();
 
-  if (!enteredOtp || enteredOtp.length !== 6) {
-    this.srv.openDialog(
-      'OTP Error',
-      'w',
-      'Please enter complete 6-digit OTP'
-    );
-    return;
+    if (!enteredOtp || enteredOtp.length !== 6) {
+      this.srv.openDialog(
+        'OTP Error',
+        'w',
+        'Please enter complete 6-digit OTP'
+      );
+      return;
+    }
+
+    // Validate IDs
+    if (!this.newPatientId || !this.patientId) {
+      this.srv.openDialog(
+        'Error',
+        'e',
+        'Missing login information. Please login again.'
+      );
+      return;
+    }
+
+    this.tv = [
+      { T: 'dk1', V: this.newPatientId },
+      { T: 'dk2', V: enteredOtp },
+      { T: 'c1', V: '' },
+      { T: 'c2', V: this.patientId },
+      { T: 'c10', V: '10' }
+    ];
+
+    this.srv.getdata('patient', this.tv)
+      .pipe(
+        catchError((err) => {
+
+          console.error('OTP API Error:', err);
+
+          this.srv.openDialog(
+            'Login Error',
+            'e',
+            'OTP verification failed'
+          );
+
+          throw err;
+        })
+      )
+      .subscribe((r: any) => {
+
+        console.log('OTP Response:', r);
+
+        if (r?.Status === 1 && r?.Data?.length) {
+
+          const msg = r?.Data?.[0]?.[0]?.msg ?? 'Verified successfully';
+
+          this.personalDetails = [...r.Data[0]];
+
+          this.srv.openDialog('Success', 's', msg);
+
+          this.onContinueHome()
+
+
+
+        } else {
+
+          this.srv.openDialog(
+            'Login Failed',
+            'w',
+            'Invalid OTP'
+          );
+
+        }
+
+      });
   }
-
-  // Validate IDs
-  if (!this.newPatientId || !this.patientId) {
-    this.srv.openDialog(
-      'Error',
-      'e',
-      'Missing login information. Please login again.'
-    );
-    return;
-  }
-
-  this.tv = [
-    { T: 'dk1', V: this.newPatientId },
-    { T: 'dk2', V: enteredOtp }, 
-    { T: 'c1', V: '' },
-    { T: 'c2', V: this.patientId },
-    { T: 'c10', V: '10' }
-  ];
-
-  this.srv.getdata('patient', this.tv)
-    .pipe(
-      catchError((err) => {
-
-        console.error('OTP API Error:', err);
-
-        this.srv.openDialog(
-          'Login Error',
-          'e',
-          'OTP verification failed'
-        );
-
-        throw err;
-      })
-    )
-    .subscribe((r: any) => {
-
-      console.log('OTP Response:', r);
-
-      if (r?.Status === 1 && r?.Data?.length) {
-
-        const msg = r?.Data?.[0]?.[0]?.msg ?? 'Verified successfully';
-
-        this.personalDetails = [...r.Data[0]];
-
-        this.srv.openDialog('Success', 's', msg);
-
-        this.onContinueHome()
-
-
-
-      } else {
-
-        this.srv.openDialog(
-          'Login Failed',
-          'w',
-          'Invalid OTP'
-        );
-
-      }
-
-    });
-}
 
 
 
@@ -324,13 +325,71 @@ export class LoginLinked {
         //Store newly created ID
         if (createdId) {
           this.newId = createdId;
-          console.log('new id',this.newId);
-          
+          console.log('new id', this.newId);
+
         }
 
         // Redirect to linked account page (refresh happens there)
         this.router.navigate(['/profile/linked-account']);
       });
   }
+
+
+  // navigate to login with id section
+
+  loginId() {
+    this.mode = 'ID'
+  }
+
+  // id with login
+
+  loginWithId() {
+
+    if (!this.linkedId || !this.dob) {
+      this.srv.openDialog('Error', 'w', 'All fields are required');
+      return;
+    }
+
+    const payload = [
+      { T: "dk1", V: this.linkedId }, // ID
+      { T: "dk2", V: this.formatDOB(this.dob) }, // DOB
+      { T: "c1", V: "" },
+      { T: "c2", V: this.patientId }, // patient link id
+      { T: "c10", V: "20" }
+    ];
+
+    console.log('LoginId Payload:', payload);
+    this.srv.getdata('patient', payload)
+      .pipe(
+        catchError(err => {
+
+          this.srv.openDialog(
+            'LoginId Error',
+            'e',
+            'Unable to login. Please try again'
+          );
+
+          throw err;
+        })
+      )
+      .subscribe((r: any) => {
+
+        console.log('LoginId Response:', r);
+
+        if (r?.Status !== 1) {
+
+          this.srv.openDialog(
+            'Login Failed',
+            'w',
+            r?.Error || 'Login failed'
+          );
+
+          return;
+        }
+        this.router.navigate(['/profile/linked-account']);
+      });
+
+  }
+
 
 }
