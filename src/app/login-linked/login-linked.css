@@ -1,14 +1,12 @@
 /* MAIN LAYOUT */
 .login-container {
     display: flex;
-    min-height: 100vh;
-    flex-direction: row;
-
+    width: 100%;
+    min-height: 100vh; /* Full screen height */
 }
-.login-panel{
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
+.login-panel {
+    flex: 1;          /* Takes 50% */
+    padding: 30px;    /* Optional */
 }
 
 .continue-btn {
@@ -29,9 +27,29 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 3%;
+    padding: 2%;
+    cursor: pointer;
 }
-
+.howToContinue {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    justify-content: center;  
+    width: 100%;
+}
+.linkedAcc{
+    font-size: larger;
+    font-weight: 600;
+    
+}
+.loginPagetitle{
+    margin-left: 11%;
+    padding: 2%;
+    
+}
+.goBack{
+    cursor: pointer;
+}
 
 .logo img {
     width: 250px;
@@ -87,7 +105,8 @@
     background: linear-gradient(360deg, #72e7d1 0%, #0c79a5 100%);
     display: flex;
     justify-content: center;
-    padding: 60px 50px;
+    align-items: center;
+    padding: 40px; /* Keep equal padding */
 }
 .otp-box {
   width: 35px;       /* Reduce width */
@@ -172,6 +191,19 @@
     color: #0c79a5; 
     font-weight: 500;
     font-size: large;  
+    cursor: pointer;
+}
+ .dot {
+        height: 7px;
+        width: 7px;
+        margin-top: 8px;
+        margin-left: 3px;
+        background-color: gray;
+        border-radius: 50%;
+        display: inline-block;
+    }
+.chooseProfile{
+    justify-content: space-between;
     cursor: pointer;
 }
 
