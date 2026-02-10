@@ -36,7 +36,7 @@ export class LoginLinked {
   otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
   selectedOption: 'existing' | 'new' | null = null;
-  mode: 'SELECT' | 'L' | 'S' | 'O' | 'ID' = 'SELECT';
+  mode: 'SELECT' | 'L' | 'S' | 'O' | 'ID' | 'C' = 'SELECT';
   // usr: any = {};
   tv: { T: string; V: any; }[];
   phone: any;
@@ -50,12 +50,16 @@ export class LoginLinked {
   newPatientId: any;
   OTP: any;
   linkedId: any;
+  selectedProfile: 'choose' | '' |null=null;
 
 
 
 
   selectOption(option: 'existing' | 'new') {
     this.selectedOption = option;
+  }
+  selectProfile(option: 'choose' | '') {
+    this.selectedProfile = option;
   }
 
 
@@ -151,6 +155,11 @@ export class LoginLinked {
       });
   }
 
+  // choose profile section
+  // chooseProfile(){
+  //    this.onContinueHome()
+
+  // }
   // otp section
   moveToNext(event: any, index: number) {
 
@@ -228,7 +237,7 @@ export class LoginLinked {
           this.srv.openDialog('Success', 's', msg);
 
           this.onContinueHome()
-
+// this.mode='C'
 
 
         } else {
@@ -298,15 +307,15 @@ export class LoginLinked {
         })
       )
       .subscribe((r: any) => {
-
-        console.log('Signup Response:', r);
+          let message = r?.Data?.[0]?.Info ?? 'Verified successfully';
+        console.log('Signup Response:', message);
 
         if (r?.Status !== 1) {
 
           this.srv.openDialog(
             'Signup Failed',
             'w',
-            r?.Error || 'Signup failed'
+            r?.Info || 'Signup failed'
           );
 
           return;

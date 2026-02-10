@@ -1,61 +1,72 @@
 <div class="login-container">
-    <div class="login-panel">
+    <div class="login-panel pt-5">
 
         <!-- LOGO-->
-        <div class="logo">
+        <div class="logo text-center">
             <img src="apollo-logo.png" alt="Apollo">
         </div>
 
         <!--SELECT MODE -->
         @if (mode === 'SELECT') {
 
-        <h3>How would you like to continue?</h3>
+        <div class="loginPagetitle w-75">
+            <h5 class="">How would you like to continue?</h5>
 
-        <div class="option-card mt-3 text-center" (click)="selectOption('existing')">
-            <h5>I'm an existing Apollo Patient</h5>
-            <p>(Link my profile)</p>
         </div>
 
-        <div class="option-card mt-3 text-center" (click)="selectOption('new')">
-            <h5>I'm new to Apollo</h5>
-            <p>(Create new account)</p>
+        <div class="howToContinue">
+            <div class="option-card mt-3 text-center w-75" (click)="selectOption('existing')">
+                <p class="linkedAcc">I'm an existing Apollo Patient</p>
+                <p>(Link my profile)</p>
+            </div>
+
+            <div class="option-card mt-3 text-center w-75" (click)="selectOption('new')">
+                <p class="linkedAcc">I'm new to Apollo</p>
+                <p>(Create new account)</p>
+            </div>
+            <button class="continue-btn mt-4 w-75" (click)="onContinue()" [disabled]="!selectedOption">
+                Continue
+            </button>
         </div>
 
-        <button class="continue-btn mt-4" (click)="onContinue()" [disabled]="!selectedOption">
-            Continue
-        </button>
 
-        <div class="back-btn text-center" (click)="goBack()">
+
+        <div class="back-btn text-center d-flex gap-1" (click)="goBack()">
             <mat-icon>arrow_back</mat-icon>
-            <span>Go Back</span>
+            <span class="goBack">Go Back</span>
         </div>
         }
 
         <!--  LOGIN MODE -->
         @if (mode === 'L') {
 
-        <h3 class="text-center">Welcome Back</h3>
+        <div class="loginPagetitle w-75">
+            <h5 class="py-1">Welcome Back</h5>
 
-        <p class="text-center">
-            Provide the registered mobile number to complete account linking
-        </p>
+            <p class="">
+                Provide the registered mobile number to complete account linking
+            </p>
+        </div>
 
-        <mat-form-field class="w100" appearance="outline">
-            <mat-label>Phone</mat-label>
-            <span matPrefix class="p-2">+968&nbsp;</span>
+        <div class="howToContinue">
+            <mat-form-field class="w-75" appearance="outline">
+                <mat-label>Phone</mat-label>
+                <span matPrefix class="p-2">+968&nbsp;</span>
 
-            <input matInput type="text" [(ngModel)]="phone" maxlength="8" placeholder="XXXXXXXX">
-        </mat-form-field>
+                <input matInput type="text" [(ngModel)]="phone" maxlength="8" placeholder="XXXXXXXX">
+            </mat-form-field>
 
-        <button class="continue-btn w100" (click)="loginAcc()">
-            Continue
-        </button>
+            <button class="continue-btn w-75" (click)="loginAcc()">
+                Continue
+            </button>
+        </div>
+
 
         <p class="text-center link p-3 patientId-login" (click)="loginId()">
             Login with Patient ID instead
         </p>
 
-        <div class="back-btn text-center" (click)="goBack1()">
+        <div class="back-btn pt-1" (click)="goBack1()">
             <mat-icon>arrow_back</mat-icon>
             <span>Go Back</span>
         </div>
@@ -64,22 +75,64 @@
         <!--  LOGIN WITH ID MODE -->
         @if (mode === 'ID') {
 
-        <h3 class="text-center">Link Patient Using ID</h3>
 
-        <p class="text-center">
-            Enter the Patient ID and Date of Birth to link the correct patient profile.
+        <div class="loginPagetitle w-75">
+            <h5 class="">Link Patient Using ID</h5>
+
+            <p class="text-secondary">
+                Enter the Patient ID and Date of Birth to link the correct patient profile.
+            </p>
+        </div>
+        <div class="howToContinue">
+            <mat-form-field class="w-75" appearance="outline">
+                <mat-label>Patient ID</mat-label>
+                <input matInput type="text" maxlength="4" placeholder="XXXX" [(ngModel)]="linkedId">
+            </mat-form-field>
+            <mat-form-field class="w-75" appearance="outline">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput type="date" name="dob" [(ngModel)]="dob">
+            </mat-form-field>
+
+            <button class="continue-btn w-75" (click)="loginWithId()">
+                Continue
+            </button>
+        </div>
+
+
+        <div class="back-btn text-center d-flex gap-1" (click)="goBack1()">
+            <mat-icon>arrow_back</mat-icon>
+            <span>Go Back</span>
+        </div>
+
+        }
+        <!--  choose account -->
+        <!-- @if (mode === 'C') {
+
+        <h3 class="text-center">Choose a Patient Profile</h3>
+
+        <p class="text-secondary">
+           Select the profile you want to link with your Apollo account. You can link other patient profiles anytime from the Accounts section.
         </p>
 
-        <mat-form-field class="w100" appearance="outline">
-            <mat-label>Patient ID</mat-label>
-            <input matInput type="text" maxlength="4" placeholder="XXXX" [(ngModel)]="linkedId">
-        </mat-form-field>
-        <mat-form-field class="w100" appearance="outline">
-            <mat-label>Date of Birth</mat-label>
-            <input matInput type="date" name="dob" [(ngModel)]="dob">
-        </mat-form-field>
+        @for( item of personalDetails;track item){
+  <div class="d-flex chooseProfile px-4 py-3 mb-4 border-round" (click)="chooseProfile()">
+    <div class="d-flex gap-3">
+        <img src="user-img.svg" alt="">
+        <div>
+            <h5 [(ngModel)]="name"> {{ item.name}}</h5>
+            <span [(ngModel)]="dob"> {{ item.dob}} </span>
+            <span [(ngModel)]="gender"> <span class="dot"></span> {{ item.gender}}</span>
+        </div>
+    </div>
+     <div class="pt-4">
+      <mat-icon>chevron_right</mat-icon>
 
-        <button class="continue-btn w100" (click)="loginWithId()">
+    </div>
+
+  </div>
+} -->
+
+        <!-- <button class="continue-btn w100" (click)="loginWithId()">
             Continue
         </button>
 
@@ -88,18 +141,20 @@
             <span>Go Back</span>
         </div>
 
-        }
+        } -->
 
 
         <!--  OTP MODE-->
         @if (mode === 'O') {
 
-        <h3 class="text-center">Verify OTP</h3>
+        <div class="loginPagetitle w-75">
+            <h4>Verify OTP</h4>
 
-        <p class="text-center">
-            We’ve sent a 6-digit code to +968 XXXXX X2436 {{dbmsg}}
-            {{ loginMessage }}
-        </p>
+            <p>
+                We’ve sent a 6-digit code to +968 XXXXX X2436 {{dbmsg}}
+                {{ loginMessage }}
+            </p>
+        </div>
 
         <div class="otp-inputs">
 
@@ -110,35 +165,40 @@
             }
         </div>
 
-        <button class="continue-btn w100" (click)=" verifyOtp()">
-            Verify & Continue
-        </button>
+        <div class="howToContinue">
+            <button class="continue-btn w-75" (click)=" verifyOtp()">
+                Verify & Continue
+            </button>
 
-        <p class="text-center link ">
-            Login with Patient ID instead
-        </p>
+            <!-- <p class="text-center link mt-2">
+                Login with Patient ID instead
+            </p> -->
 
-        <div class="back-btn text-center" (click)="goBack1()">
-            <mat-icon>arrow_back</mat-icon>
-            <span>Go Back</span>
+            <div class="back-btn text-center d-flex gap-1" (click)="goBack1()">
+                <mat-icon>arrow_back</mat-icon>
+                <span>Go Back</span>
+            </div>
         </div>
+
         }
         <!-- SIGNUP MODE  -->
         @if (mode === 'S') {
+<div class="loginPagetitle w-75">
+        <h5>Create a New Account</h5>
 
-        <h3>Create a New Account</h3>
-
-        <mat-form-field class="w100" appearance="outline">
+</div>
+<div class="howToContinue">
+ <mat-form-field class="w-75" appearance="outline">
             <mat-label>Name</mat-label>
             <input matInput name="name" [(ngModel)]="name">
         </mat-form-field>
 
-        <mat-form-field class="w100" appearance="outline">
+        <mat-form-field class="w-75" appearance="outline">
             <mat-label>Date of Birth</mat-label>
             <input matInput type="date" name="dob" [(ngModel)]="dob">
         </mat-form-field>
 
-        <mat-form-field class="w100" appearance="outline">
+        <mat-form-field class="w-75" appearance="outline">
             <mat-label>Gender</mat-label>
             <mat-select name="gender" [(ngModel)]="gender">
                 <mat-option value="M">Male</mat-option>
@@ -147,44 +207,38 @@
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="w100" appearance="outline">
+        <mat-form-field class="w-75" appearance="outline">
             <mat-label>Phone</mat-label>
-            <span matPrefix>+968&nbsp;</span>
+            <span matPrefix class="p-2">+968&nbsp;</span>
             <input matInput maxlength="8" name="phone" [(ngModel)]="phone">
         </mat-form-field>
 
-        <mat-form-field class="w100" appearance="outline">
+        <mat-form-field class="w-75" appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput type="password" name="password" [(ngModel)]="password">
         </mat-form-field>
 
-        <button class="continue-btn mt-4" (click)="signUpNewAccount()">
+        <button class="continue-btn mt-4 w-75" (click)="signUpNewAccount()">
             Continue
         </button>
 
-        <div class="back-btn text-center" (click)="goBackToSelect()">
+        <div class="back-btn text-center w-75 d-flex gap-1" (click)="goBackToSelect()">
             <mat-icon>arrow_back</mat-icon>
             <span>Go Back</span>
         </div>
+</div>
+
+       
         }
 
     </div>
-
-
-
-
     <!-- main right side -->
-    <div class="right-panel mobile-hide">
+    <div class="right-panel mobile-hide ">
         <div class="right-content">
             <p class="right-text">
                 As a healthcare beacon in Oman, we set new quality standards, with facilities spanning Muscat
             </p>
             <img src="login-photo.png" class="right-image" alt="side image">
-
         </div>
-
-
     </div>
-
-
 </div>

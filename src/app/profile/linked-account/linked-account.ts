@@ -153,13 +153,13 @@ export class LinkedAccount {
       console.log('Switch Response:', res);
 
       if (res?.Status === 1) {
-
+        let msg=res?.Data[0][0].msg
         // Update session to new primary
         this.srv.setsession('id', targetId);
         this.patientId = targetId;
 
         console.log('New Primary ID:', this.patientId);
-
+this.srv.openDialog('Success','s',msg)
         // Reload accounts from backend
         this.linkedAcc();
 
